@@ -7,7 +7,6 @@
 # Config
 *.xcconfig
 .env
-*.ipa
 Haruhancut.app.dSYM.zip
 key/
 
