@@ -1,5 +1,4 @@
 # Privates 파일 다운로드
-
 Private_Repository=team-GitDeulida/Haruhancut-Private/master
 BASE_URL=https://raw.githubusercontent.com/$(Private_Repository)
     
@@ -28,4 +27,3 @@ _download-privates:
 
 	# 최상위 디렉토리에 test.txt 다운로드
 	$(call download_file,.,$$GITHUB_ACCESS_TOKEN,test.txt)
-	
