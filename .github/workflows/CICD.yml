@@ -1,0 +1,101 @@
+# This workflow will build a Swift project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-swift
+
+name: 🚀 Fastlane TestFlight Deployment
+
+on:
+  push:
+    branches:
+      - main  # ✅ main 브랜치에 push될 때 실행
+
+jobs:
+  build-and-deploy:
+    runs-on: macos-14  # ✅ 최신 macOS 환경 사용
+    env:
+      # Fastlane에 사용할 환경 변수들을 전역으로 주입합니다.
+      APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+      APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
+      APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      # 🔑 SSH 키 설정 (GitHub Private Repository 접근)
+      - name: 🔑 Setup SSH Key for GitHub
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.GIT_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      # 🔧 Set up Ruby and Bundler
+      - name: 🔧 Set up Ruby and Bundler
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1
+          bundler-cache: true
+
+      # 🔐 Configure Keychain
+      - name: 🔐 Configure Keychain
+        run: |
+          security create-keychain -p "" test.keychain
+          security list-keychains -s test.keychain
+          security default-keychain -s test.keychain
+          security unlock-keychain -p "" test.keychain
+          security set-keychain-settings -t 3600 -l ~/Library/Keychains/test.keychain
+
+      # 🔑 Import Certificate and Set Key Partition List
+      - name: 🔑 Import Certificate and Set Key Partition List
+        run: |
+          echo "$CERTIFICATE_P12" | base64 --decode > certificate.p12
+          security import certificate.p12 -k test.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: -s -k "" test.keychain
+        env:
+          CERTIFICATE_P12: ${{ secrets.CERTIFICATE_P12 }}
+          CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
+
+      # 📄 Install Provisioning Profile
+      - name: 📄 Install Provisioning Profile
+        run: |
+          echo "$PROVISIONING_PROFILE" | base64 --decode > provisioning.mobileprovision
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp provisioning.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+        env:
+          PROVISIONING_PROFILE: ${{ secrets.PROVISIONING_PROFILE }}
+
+      # 🛠 Setup Xcode
+      - name: 🛠 Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: "16.1.0"
+
+      # 🔓 Run Fastlane match (SSH 방식)
+      - name: 🔓 Run Fastlane match
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+        run: |
+          git clone git@github.com:team-GitDeulida/Jito-Private.git certs_repo
+          bundle exec fastlane match appstore --readonly
+
+      # 🔑 Create API Key File
+      - name: 🔑 Create API Key File
+        run: |
+          mkdir -p ~/.private_keys
+          echo "$APP_STORE_CONNECT_PRIVATE_KEY" > ~/.private_keys/AuthKey_${{ secrets.APP_STORE_CONNECT_API_KEY }}.p8
+          chmod 600 ~/.private_keys/AuthKey_${{ secrets.APP_STORE_CONNECT_API_KEY }}.p8
+        env:
+          APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
+
+      # 🐞 Debug Fastlane API Key Environment Variables
+      - name: Debug Fastlane API Key Environment Variables
+        run: |
+          if [ -z "$APP_STORE_CONNECT_API_KEY_ID" ]; then echo "APP_STORE_CONNECT_API_KEY_ID is not set"; else echo "APP_STORE_CONNECT_API_KEY_ID is set"; fi
+          if [ -z "$APP_STORE_CONNECT_API_KEY_ISSUER_ID" ]; then echo "APP_STORE_CONNECT_API_KEY_ISSUER_ID is not set"; else echo "APP_STORE_CONNECT_API_KEY_ISSUER_ID is set"; fi
+          if [ -z "$APP_STORE_CONNECT_API_KEY_CONTENT" ]; then echo "APP_STORE_CONNECT_API_KEY_CONTENT is not set"; else echo "APP_STORE_CONNECT_API_KEY_CONTENT is set"; fi
+
+      # 🚀 Fastlane Archive & Export
+      - name: 🚀 Fastlane Archive & Export
+        run: bundle exec fastlane beta
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          # 이미 전역 env에서 설정한 Fastlane API 키 변수들은 여기서도 사용됩니다.
