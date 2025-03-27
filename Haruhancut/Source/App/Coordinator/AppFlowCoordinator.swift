@@ -44,7 +44,7 @@ final class AppCoordinator: Coordinator {
     }
     
     func finish() {
-        <#code#>
+        
     }
     
     func showLoginFlow() {
