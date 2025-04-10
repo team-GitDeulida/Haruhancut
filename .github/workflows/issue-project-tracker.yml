@@ -38,7 +38,7 @@ jobs:
         uses: github/update-project-action@v3
         with:
           organization: team-GitDeulida
-          project_number: 1
+          project_number: 2
           operation: update
           content_id: ${{ github.event.issue.node_id }}
           field: "Status"
@@ -50,7 +50,7 @@ jobs:
         uses: github/update-project-action@v3
         with:
           organization: team-GitDeulida
-          project_number: 1
+          project_number: 2
           operation: update
           content_id: ${{ github.event.issue.node_id }}
           field: "End date"
