@@ -99,3 +99,4 @@ jobs:
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           # 이미 전역 env에서 설정한 Fastlane API 키 변수들은 여기서도 사용됩니다.
+          FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 60  # ⏱️ 타임아웃 1분으로 설정
