@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import RxKakaoSDKAuth
+import KakaoSDKAuth
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -18,14 +20,33 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         // guard let _ = (scene as? UIWindowScene) else { return }
         
+        // 1. scene 캡처
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        window = UIWindow(frame: UIScreen.main.bounds)
         
+        // 2. window scene을 가져오는 windowScene을 생성자를 사용해서 UIWindow를 생성
+        let window = UIWindow(windowScene: windowScene)
         
-        let viewController = ViewController()       // 처음 보일 viewController
-        window?.rootViewController = viewController // 위에서 만든 viewController를 첫 화면으로 띄우기
-        window?.makeKeyAndVisible()                 // 화면에 보이게끔
-        window?.windowScene = windowScene
+        // 3. view 계층을 프로그래밍 방식으로 만들기
+        let usecase = DIContainer.shared.resolve(LoginUsecase.self)
+        let viewModel = LoginViewModel(loginUsecase: usecase)
+        let rootVC = LoginViewController(loginViewModel: viewModel)
+        
+        // 4. viewController로 window의 root view controller를 설정
+        window.rootViewController = rootVC
+        
+        // 5. window를 설정하고 makeKeyAndVisible()
+        self.window = window
+        window.makeKeyAndVisible()
+    }
+    
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        
+        // 카카오 로그인
+        if let url = URLContexts.first?.url {
+            if (AuthApi.isKakaoTalkLoginUrl(url)) {
+                _ = AuthController.rx.handleOpenUrl(url: url)
+            }
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -55,7 +76,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
-
-
 }
 
