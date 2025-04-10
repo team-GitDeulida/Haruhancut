@@ -6,7 +6,7 @@ name: 🚀 Fastlane TestFlight Deployment
 on:
   push:
     branches:
-      - main  # ✅ main 브랜치에 push될 때 실행
+      - develop  # ✅ develop 브랜치에 push될 때 실행
 
 jobs:
   build-and-deploy:
