@@ -49,14 +49,14 @@ final class LoginViewController: UIViewController {
             .observe(on: MainScheduler.instance)
             .subscribe { result in
                 switch result {
-                case .success(let token):
-                    print("로그인 성공: \(token)")
+                case .success:
+                    print("로그인 성공: ")
+                    self.changeRootToMain(debug: 1)
                 case .failure(let error):
                     print("로그인 실패: \(error.localizedDescription)")
                 }
             }.disposed(by: disposeBag)
     }
-    
     
     // MARK: - UI Components
     private lazy var kakaoLoginButton: UIButton = {
@@ -87,7 +87,6 @@ final class LoginViewController: UIViewController {
             }
             button.configuration = config
         }
-//        button.addTarget(self, action: #selector(handleKakaoLogin), for: .touchUpInside)
         return button
     }()
     
@@ -136,14 +135,12 @@ final class LoginViewController: UIViewController {
         return st
     }()
     
-    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         makeUI()
         bindViewModel()
     }
-    
     
     // MARK: - Setup UI
     func makeUI() {
@@ -163,16 +160,29 @@ final class LoginViewController: UIViewController {
         ])
     }
     
-//    @objc private func handleKakaoLogin() {
-//        print("✅ 카카오 로그인 버튼 눌림")
-//        viewModel.loginWithKakao()
-//    }
-//    
-//    @objc private func handleAppleLogin() {
-//        print("✅ Apple 로그인 버튼 눌림")
-//    }
+    func changeRootToMain(debug: Int) {
+        
+        switch debug {
+        case 1:
+            self.navigationController?.setViewControllers([
+                NicknameSettingViewController(loginViewModel: loginViewModel)
+            ], animated: true)
+        case 2:
+            let sceneDelegate = UIApplication.shared.connectedScenes
+                .first?.delegate as? SceneDelegate
+            let window = sceneDelegate?.window
+
+            let homeVC = HomeViewController()
+            window?.rootViewController = homeVC
+            window?.makeKeyAndVisible()
+        default:
+            break
+        }
+    }
 }
 
-//#Preview {
-//    LoginViewController(viewModel: .init())
-//}
+#Preview {
+    LoginViewController(
+        loginViewModel: .init(loginUsecase: LoginUsecase(repository: AuthRepository(
+            kakaoLoginManager: KakaoLoginManager()))))
+}

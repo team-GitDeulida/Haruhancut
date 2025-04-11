@@ -31,8 +31,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let viewModel = LoginViewModel(loginUsecase: usecase)
         let rootVC = LoginViewController(loginViewModel: viewModel)
         
+        // 3.1 UINavigationController로 감싸서 루트뷰컨트롤러 설정
+        let navController = UINavigationController(rootViewController: rootVC)
+        
         // 4. viewController로 window의 root view controller를 설정
-        window.rootViewController = rootVC
+        window.rootViewController = navController
         
         // 5. window를 설정하고 makeKeyAndVisible()
         self.window = window

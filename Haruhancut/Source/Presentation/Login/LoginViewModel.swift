@@ -17,6 +17,8 @@ final class LoginViewModel {
     
     private let loginUsecase: LoginUsecaseProtocol
     
+    private(set) var token: String?
+    
     init(loginUsecase: LoginUsecase) {
         self.loginUsecase = loginUsecase
     }
@@ -32,7 +34,7 @@ final class LoginViewModel {
         // ViewModel 외부로 전달하는 출력(Output)을 정의한 구조체
         // - 내부에서 Subject 등을 사용하더라도 외부에는 Observable만 노출함으로써
         //   ViewModel의 내부 로직을 캡슐화하고 단방향 데이터 흐름을 유지
-        let loginResult: Observable<Result<String, LoginError>> // 로그인 결과 스트림 (읽기 전용)
+        let loginResult: Observable<Result<Void, LoginError>> // 로그인 결과 스트림 (읽기 전용)
     }
     
     func transform(input: Input) -> Output {
@@ -41,8 +43,17 @@ final class LoginViewModel {
                 guard let self = self else { return .empty() }
                 return self.loginUsecase.execute()
             }
+            .do(onNext: { [weak self] result in
+                if case .success(let token) = result {
+                    self?.token = token
+                }
+            })
+            .map { result in
+                result.map { _ in () } // ✅ token은 저장했으니 외부에는 보여주지 않음
+            }
             .observe(on: MainScheduler.instance)
             .share() // 중복 요청 방지
         return Output(loginResult: result)
     }
 }
+

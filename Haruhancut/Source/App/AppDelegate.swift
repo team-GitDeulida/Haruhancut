@@ -13,7 +13,7 @@ import FirebaseAuth
 
 // 카카오톡
 import RxKakaoSDKCommon
-import RxKakaoSDKAuth
+//import RxKakaoSDKAuth
 import KakaoSDKAuth
 
 @main
@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // 카카오톡 설정
         if let nativeAppKey: String = Bundle.main.infoDictionary?["KAKAO_NATIVE_APP_KEY"] as? String {
-            RxKakaoSDK.initSDK(appKey: nativeAppKey)
+            RxKakaoSDK.initSDK(appKey: nativeAppKey, loggingEnable: false)
         }
  
         // 의존성 주입
