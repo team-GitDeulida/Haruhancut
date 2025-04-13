@@ -69,3 +69,9 @@ final class LoginUsecase: LoginUsecaseProtocol {
         }
     }
 }
+
+final class StubLoginUsecase: LoginUsecaseProtocol {
+    func loginWIthKakao() -> RxSwift.Observable<Result<String, LoginError>> {
+        return .just(.success("stub-token"))
+    }
+}

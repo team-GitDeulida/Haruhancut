@@ -163,6 +163,10 @@ final class LoginViewController: UIViewController {
     func changeRootToMain(debug: Int) {
         
         switch debug {
+        case 0:
+            self.navigationController?.setViewControllers([
+                HomeViewController()
+            ], animated: true)
         case 1:
             self.navigationController?.setViewControllers([
                 NicknameSettingViewController(loginViewModel: loginViewModel)

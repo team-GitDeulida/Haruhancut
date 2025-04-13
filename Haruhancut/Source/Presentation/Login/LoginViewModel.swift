@@ -23,7 +23,7 @@ final class LoginViewModel {
     
     private(set) var token: String?
     
-    init(loginUsecase: LoginUsecase) {
+    init(loginUsecase: LoginUsecaseProtocol) {
         self.loginUsecase = loginUsecase
     }
     
@@ -101,6 +101,10 @@ final class LoginViewModel {
 //            return Disposables.create()
 //        }
 //    }
+}
+
+final class StubLoginViewModel {
+    
 }
 
 

@@ -14,7 +14,11 @@ class NicknameSettingViewController: UIViewController {
     init(loginViewModel: LoginViewModel) {
         self.loginViewModel = loginViewModel
         super.init(nibName: nil, bundle: nil)
-        print("토큰 옮기기 성공: \(loginViewModel.token!)")
+        if let token = loginViewModel.token {
+            print("토큰 옮기기 성공: \(token)")
+        } else {
+            print("토큰이 아직 없습니다.")
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -54,4 +58,8 @@ class NicknameSettingViewController: UIViewController {
             HomeViewController()
         ], animated: true)
     }
+}
+
+#Preview {
+    NicknameSettingViewController(loginViewModel: LoginViewModel(loginUsecase: StubLoginUsecase()))
 }
