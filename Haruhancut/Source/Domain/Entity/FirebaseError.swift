@@ -1,8 +1,8 @@
 //
-//  LoginError.swift
+//  FirebaseError.swift
 //  Haruhancut
 //
-//  Created by 김동현 on 4/11/25.
+//  Created by 김동현 on 4/13/25.
 //
 
 import Foundation
@@ -13,12 +13,17 @@ enum LoginError: Error {
     case noTokenKakao
     case sdkKakao(Error)
     
+    // MARK: - Auth
+    case signUpError
+    
     var description: String {
         switch self {
         case .noTokenKakao:
             "⚠️ 카카오 로그인 token이 없습니다"
         case .sdkKakao(let error):
-            "카카오 SDK 오류: \(error)"
+            "⚠️ 카카오 SDK 오류: \(error)"
+        case .signUpError:
+            "⚠️ 파이어베이스 가입 실패"
         }
     }
 }

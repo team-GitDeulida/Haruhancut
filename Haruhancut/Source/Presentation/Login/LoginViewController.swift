@@ -183,6 +183,6 @@ final class LoginViewController: UIViewController {
 
 #Preview {
     LoginViewController(
-        loginViewModel: .init(loginUsecase: LoginUsecase(repository: AuthRepository(
+        loginViewModel: .init(loginUsecase: LoginUsecase(repository: LoginRepository(
             kakaoLoginManager: KakaoLoginManager()))))
 }

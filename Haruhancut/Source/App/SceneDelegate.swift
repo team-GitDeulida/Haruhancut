@@ -8,6 +8,11 @@
 import UIKit
 import RxKakaoSDKAuth
 import KakaoSDKAuth
+import FirebaseAuth
+
+/*
+ https://jiwift.tistory.com/m/entry/iOSSwift-Firebase-Auth-로그인-여부-확인-코드?category=1154048
+ */
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -30,9 +35,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let usecase = DIContainer.shared.resolve(LoginUsecase.self)
         let viewModel = LoginViewModel(loginUsecase: usecase)
         let rootVC = LoginViewController(loginViewModel: viewModel)
+        let homeVC = HomeViewController()
+        let navController: UINavigationController?
+        
+        if let _ = Auth.auth().currentUser {
+            // 3.1 UINavigationController로 감싸서 루트뷰컨트롤러 설정
+            navController = UINavigationController(rootViewController: homeVC)
+            print("로그인완료")
+        } else {
+            // 3.1 UINavigationController로 감싸서 루트뷰컨트롤러 설정
+            navController = UINavigationController(rootViewController: rootVC)
+            print("로그인이 필요합니다")
+        }
         
         // 3.1 UINavigationController로 감싸서 루트뷰컨트롤러 설정
-        let navController = UINavigationController(rootViewController: rootVC)
+        // let navController = UINavigationController(rootViewController: rootVC)
         
         // 4. viewController로 window의 root view controller를 설정
         window.rootViewController = navController
@@ -78,6 +95,27 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Called as the scene transitions from the foreground to the background.
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
+    }
+}
+
+extension SceneDelegate {
+    
+    func changeRootView(to viewController: UIViewController, animated: Bool = true) {
+        guard let window = self.window else { return }
+        window.rootViewController = viewController
+        if animated {
+            UIView.transition(with: window, duration: 0.4, options: .transitionFlipFromLeft, animations: nil)
+        }
+        window.makeKeyAndVisible()
+    }
+    
+    /// 로그인 화면을 루트로 바꾸는 함수 (로그아웃 등에서 호출)
+    func makeLoginRoot() {
+        let usecase = DIContainer.shared.resolve(LoginUsecase.self)
+        let viewModel = LoginViewModel(loginUsecase: usecase)
+        let loginVC = LoginViewController(loginViewModel: viewModel)
+        let nav = UINavigationController(rootViewController: loginVC)
+        changeRootView(to: nav)
     }
 }
 

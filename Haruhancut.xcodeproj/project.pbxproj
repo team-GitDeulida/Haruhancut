@@ -10,9 +10,11 @@
 		DF3326BD2DA9097D00BB2CB9 /* NicknameSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3326BC2DA9097D00BB2CB9 /* NicknameSettingViewController.swift */; };
 		DF3CBA1D2DA8079600AD5788 /* KakaoLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBA1C2DA8079600AD5788 /* KakaoLoginManager.swift */; };
 		DF3CBB492DA809DB00AD5788 /* AuthRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBB482DA809DB00AD5788 /* AuthRepository.swift */; };
-		DF3CBB4D2DA80A6800AD5788 /* AuthRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBB4C2DA80A6800AD5788 /* AuthRepositoryProtocol.swift */; };
+		DF3CBB4D2DA80A6800AD5788 /* LoginRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBB4C2DA80A6800AD5788 /* LoginRepositoryProtocol.swift */; };
 		DF3CBB4F2DA814F100AD5788 /* LoginUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBB4E2DA814F100AD5788 /* LoginUsecase.swift */; };
-		DF3CBB532DA817E300AD5788 /* LoginError.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBB522DA817E300AD5788 /* LoginError.swift */; };
+		DF590B662DAB843F00956E54 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DF590B652DAB843F00956E54 /* GoogleService-Info.plist */; };
+		DF590B682DAB8D9F00956E54 /* FirebaseAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF590B672DAB8D9F00956E54 /* FirebaseAuthManager.swift */; };
+		DF590B6A2DAB926600956E54 /* FirebaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF590B692DAB926600956E54 /* FirebaseError.swift */; };
 		DF5F3E5E2D95BE7000245C20 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF5F3E5A2D95BE7000245C20 /* ViewController.swift */; };
 		DF5F3E8E2D95C47400245C20 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DF5F3E8A2D95C47400245C20 /* Assets.xcassets */; };
 		DF5F3E8F2D95C47400245C20 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF5F3E8C2D95C47400245C20 /* LaunchScreen.storyboard */; };
@@ -24,7 +26,6 @@
 		DF9AEEF52DA420F400466CC6 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = DF9AEEF42DA420F400466CC6 /* FirebaseStorage */; };
 		DF9AEEF72DA420F400466CC6 /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = DF9AEEF62DA420F400466CC6 /* FirebaseStorageCombine-Community */; };
 		DF9AEF172DA422A400466CC6 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = DF9AEF162DA422A400466CC6 /* Config.xcconfig */; };
-		DF9AEF192DA423C700466CC6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DF9AEF182DA423C700466CC6 /* GoogleService-Info.plist */; };
 		DF9AEF1C2DA4255C00466CC6 /* RxKakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = DF9AEF1B2DA4255C00466CC6 /* RxKakaoSDKAuth */; };
 		DF9AEF1E2DA4255C00466CC6 /* RxKakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = DF9AEF1D2DA4255C00466CC6 /* RxKakaoSDKUser */; };
 		DF9AEF602DA4380A00466CC6 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9AEF5F2DA4380A00466CC6 /* LoginViewModel.swift */; };
@@ -37,9 +38,11 @@
 		DF3326BC2DA9097D00BB2CB9 /* NicknameSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameSettingViewController.swift; sourceTree = "<group>"; };
 		DF3CBA1C2DA8079600AD5788 /* KakaoLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginManager.swift; sourceTree = "<group>"; };
 		DF3CBB482DA809DB00AD5788 /* AuthRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthRepository.swift; sourceTree = "<group>"; };
-		DF3CBB4C2DA80A6800AD5788 /* AuthRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthRepositoryProtocol.swift; sourceTree = "<group>"; };
+		DF3CBB4C2DA80A6800AD5788 /* LoginRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRepositoryProtocol.swift; sourceTree = "<group>"; };
 		DF3CBB4E2DA814F100AD5788 /* LoginUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUsecase.swift; sourceTree = "<group>"; };
-		DF3CBB522DA817E300AD5788 /* LoginError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginError.swift; sourceTree = "<group>"; };
+		DF590B652DAB843F00956E54 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		DF590B672DAB8D9F00956E54 /* FirebaseAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthManager.swift; sourceTree = "<group>"; };
+		DF590B692DAB926600956E54 /* FirebaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseError.swift; sourceTree = "<group>"; };
 		DF5F3E572D95BE7000245C20 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DF5F3E5A2D95BE7000245C20 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		DF5F3E8A2D95C47400245C20 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -49,7 +52,6 @@
 		DF66506C2D88023400820F1A /* Haruhancut.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Haruhancut.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF9AEEEC2DA41F6800466CC6 /* Haruhancut.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Haruhancut.entitlements; sourceTree = "<group>"; };
 		DF9AEF162DA422A400466CC6 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
-		DF9AEF182DA423C700466CC6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DF9AEF5F2DA4380A00466CC6 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		DF9B3DB32D9B0541009162CF /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		DFBD5C752DA9045D00A21953 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -85,7 +87,7 @@
 		DF3CBB4B2DA80A5C00AD5788 /* RepositoryProtocol */ = {
 			isa = PBXGroup;
 			children = (
-				DF3CBB4C2DA80A6800AD5788 /* AuthRepositoryProtocol.swift */,
+				DF3CBB4C2DA80A6800AD5788 /* LoginRepositoryProtocol.swift */,
 			);
 			path = RepositoryProtocol;
 			sourceTree = "<group>";
@@ -94,7 +96,6 @@
 			isa = PBXGroup;
 			children = (
 				DF9AEEEC2DA41F6800466CC6 /* Haruhancut.entitlements */,
-				DF9AEF182DA423C700466CC6 /* GoogleService-Info.plist */,
 				DF9AEF162DA422A400466CC6 /* Config.xcconfig */,
 				DF5F3E8D2D95C47400245C20 /* Resource */,
 				DF5F3E7F2D95BECF00245C20 /* Source */,
@@ -118,9 +119,9 @@
 		DF5F3E7B2D95BECF00245C20 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				DF3CBB472DA809CD00AD5788 /* RepositoryImpl */,
 				DFD757A32D9C1CBD008C82DF /* Network */,
 				DFD757A42D9C1CBF008C82DF /* Dto */,
-				DF3CBB472DA809CD00AD5788 /* RepositoryImpl */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -128,9 +129,9 @@
 		DF5F3E7C2D95BECF00245C20 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
-				DF3CBB4B2DA80A5C00AD5788 /* RepositoryProtocol */,
-				DFD757A72D9C1CC7008C82DF /* Entity */,
 				DFD757A62D9C1CC5008C82DF /* UseCase */,
+				DFD757A72D9C1CC7008C82DF /* Entity */,
+				DF3CBB4B2DA80A5C00AD5788 /* RepositoryProtocol */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -183,6 +184,7 @@
 		DF5F3E8D2D95C47400245C20 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				DF590B652DAB843F00956E54 /* GoogleService-Info.plist */,
 				DF5F3E8A2D95C47400245C20 /* Assets.xcassets */,
 			);
 			path = Resource;
@@ -241,6 +243,7 @@
 			isa = PBXGroup;
 			children = (
 				DF3CBA1C2DA8079600AD5788 /* KakaoLoginManager.swift */,
+				DF590B672DAB8D9F00956E54 /* FirebaseAuthManager.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -263,7 +266,7 @@
 		DFD757A72D9C1CC7008C82DF /* Entity */ = {
 			isa = PBXGroup;
 			children = (
-				DF3CBB522DA817E300AD5788 /* LoginError.swift */,
+				DF590B692DAB926600956E54 /* FirebaseError.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -342,8 +345,8 @@
 			files = (
 				DF5F3E8E2D95C47400245C20 /* Assets.xcassets in Resources */,
 				DF9AEF172DA422A400466CC6 /* Config.xcconfig in Resources */,
+				DF590B662DAB843F00956E54 /* GoogleService-Info.plist in Resources */,
 				DF5F3E8F2D95C47400245C20 /* LaunchScreen.storyboard in Resources */,
-				DF9AEF192DA423C700466CC6 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -355,15 +358,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				DF9B3DB42D9B0541009162CF /* LoginViewController.swift in Sources */,
-				DF3CBB532DA817E300AD5788 /* LoginError.swift in Sources */,
 				DF3CBB492DA809DB00AD5788 /* AuthRepository.swift in Sources */,
 				DF3CBA1D2DA8079600AD5788 /* KakaoLoginManager.swift in Sources */,
 				DF5F3E5E2D95BE7000245C20 /* ViewController.swift in Sources */,
 				DF3326BD2DA9097D00BB2CB9 /* NicknameSettingViewController.swift in Sources */,
 				DF9AEF602DA4380A00466CC6 /* LoginViewModel.swift in Sources */,
 				DF3CBB4F2DA814F100AD5788 /* LoginUsecase.swift in Sources */,
+				DF590B682DAB8D9F00956E54 /* FirebaseAuthManager.swift in Sources */,
+				DF590B6A2DAB926600956E54 /* FirebaseError.swift in Sources */,
 				DFD757AA2D9C2A74008C82DF /* DIContainer.swift in Sources */,
-				DF3CBB4D2DA80A6800AD5788 /* AuthRepositoryProtocol.swift in Sources */,
+				DF3CBB4D2DA80A6800AD5788 /* LoginRepositoryProtocol.swift in Sources */,
 				DF5F3E932D95C47700245C20 /* AppDelegate.swift in Sources */,
 				DF5F3E942D95C47700245C20 /* SceneDelegate.swift in Sources */,
 				DFBD5C762DA9045D00A21953 /* HomeViewController.swift in Sources */,

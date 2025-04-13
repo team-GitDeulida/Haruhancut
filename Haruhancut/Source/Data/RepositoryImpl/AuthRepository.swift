@@ -1,5 +1,5 @@
 //
-//  AuthRepository.swift
+//  LoginRepository.swift
 //  Haruhancut
 //
 //  Created by 김동현 on 4/10/25.
@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-final class AuthRepository: AuthRepositoryProtocol {
+final class LoginRepository: LoginRepositoryProtocol {
     private let kakaoLoginManager: KakaoLoginManagerProtocol
     
     init(kakaoLoginManager: KakaoLoginManagerProtocol) {
