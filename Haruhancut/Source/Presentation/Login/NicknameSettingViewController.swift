@@ -13,6 +13,9 @@ import UIKit
 
 class NicknameSettingViewController: UIViewController {
     
+    // 키보드 가림 해결을 위한 bottom constraint속성
+    private var nextButtonBottomConstraint: NSLayoutConstraint?
+
     private let loginViewModel: LoginViewModel
     
     private lazy var mainLabel: UILabel = {
@@ -74,6 +77,11 @@ class NicknameSettingViewController: UIViewController {
             updatedConfig?.baseBackgroundColor = button.isHighlighted ? UIColor.lightGray : UIColor.mainWhite
             button.configuration = updatedConfig
         }
+        
+        // 초기 상태 비활성화
+        button.isEnabled = false
+        button.alpha = 0.5
+        
         button.addTarget(self, action: #selector(didTapNext), for: .touchUpInside)
         return button
     }()
@@ -96,9 +104,15 @@ class NicknameSettingViewController: UIViewController {
         super.viewDidLoad()
         setDelegate()
         makeUI()
-        hideKeyboardWhenTappedAround()
+        registerForKeyboardNotifications()
     }
     
+    // 외부 터치 시 키보드 내리기
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        view.endEditing(true)
+    }
+
     func setDelegate() {
         // 텍스트필드의 프로토콜을 사용하기 위해선 사용할 객체를 연결 시켜줘야 한다.(위임)
         // 텍스트필드.대리자 = ViewController의 객체를 담는다
@@ -134,8 +148,12 @@ class NicknameSettingViewController: UIViewController {
         // MARK: - NextButtonn
         view.addSubview(nextButton)
         nextButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        // 키보드에 의해 다음 버튼 가림을 막기 위한 방법
+        nextButtonBottomConstraint = nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
+        nextButtonBottomConstraint?.isActive = true
         NSLayoutConstraint.activate([
-            nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10), // y축 위치
+            //nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10), // y축 위치
             nextButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),              // x축 위치
             
             nextButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),// 좌우 패딩
@@ -144,9 +162,14 @@ class NicknameSettingViewController: UIViewController {
     }
     
     @objc private func didTapNext() {
-        let birthdayVC = BirthdaySettingViewController(loginViewModel: loginViewModel)
-        self.navigationController?.pushViewController(birthdayVC, animated: true)
+        view.endEditing(true) // 키보드를 먼저 내림
+        print("000000000000000000000000000000")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            let birthdayVC = BirthdaySettingViewController(loginViewModel: self.loginViewModel)
+            self.navigationController?.pushViewController(birthdayVC, animated: true)
+        }
     }
+    
 }
 
 // 델리게이트 패턴: 객체와 객체간의 커뮤니케이션 (의사소통을 한다)
@@ -157,9 +180,52 @@ extension NicknameSettingViewController: UITextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
+    
+    // 텍스트가 빈 문자열이 아닐떄만 다음 버튼 활성화
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        // 최종적으로 입력될 텍스트 구하기
+        if let currentText = textField.text as NSString? {
+            let updatedText = currentText.replacingCharacters(in: range, with: string)
+            let isNotEmpty = !updatedText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            nextButton.isEnabled = isNotEmpty
+            nextButton.alpha = isNotEmpty ? 1.0 : 0.5
+        }
+        return true
+    }
 }
 
+// MARK: - 키보드 알림
+extension NicknameSettingViewController {
+    private func registerForKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillShow),
+                                               name: UIResponder.keyboardWillShowNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillHide),
+                                               name: UIResponder.keyboardWillHideNotification,
+                                               object: nil)
+    }
+
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+        let bottomInset = keyboardFrame.height - view.safeAreaInsets.bottom
+        nextButtonBottomConstraint?.constant = -bottomInset - 10
+
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        nextButtonBottomConstraint?.constant = -10
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
+    }
+}
 
 #Preview {
     NicknameSettingViewController(loginViewModel: LoginViewModel(loginUsecase: StubLoginUsecase()))
 }
+

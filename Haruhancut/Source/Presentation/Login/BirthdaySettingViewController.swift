@@ -13,10 +13,18 @@ final class BirthdaySettingViewController: UIViewController {
     
     private lazy var mainLabel: UILabel = {
         let label = UILabel()
-        label.text = "가족들이 함꼐 축하할 수 있게,\n닉네임 님의 생년월일을 알려주세요."
+        label.text = "닉네임 님의 생년월일을 알려주세요."
         label.textColor = .white
         label.font = UIFont.hcFont(.bold, size: 20)
         label.numberOfLines = 0
+        return label
+    }()
+    
+    private lazy var subLabel: UILabel = {
+        let label = UILabel()
+        label.text = "가족들이 함께 생일을 축하할 수 있어요!"
+        label.textColor = .gray
+        label.font = UIFont.hcFont(.semiBold, size: 15)
         return label
     }()
     
@@ -36,6 +44,7 @@ final class BirthdaySettingViewController: UIViewController {
     private lazy var labelStackView: UIStackView = {
         let st = UIStackView(arrangedSubviews: [
             mainLabel,
+            subLabel
         ])
         st.spacing = 10
         st.axis = .vertical
@@ -50,7 +59,7 @@ final class BirthdaySettingViewController: UIViewController {
         let button = UIButton(type: .system)
         var config = UIButton.Configuration.filled()
         
-        config.title = "다음"
+        config.title = "완료"
         config.baseBackgroundColor = .mainWhite
         config.baseForegroundColor = .mainBlack
         
