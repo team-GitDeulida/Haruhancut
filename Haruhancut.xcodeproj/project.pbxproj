@@ -27,6 +27,8 @@
 		DF4962C12DACD6840001437B /* FontSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4962C02DACD6840001437B /* FontSystem.swift */; };
 		DF4962C52DACD8A60001437B /* ColorSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4962C42DACD8A60001437B /* ColorSystem.swift */; };
 		DF4962C72DACD96F0001437B /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4962C62DACD96F0001437B /* UIColor+Extension.swift */; };
+		DF4962C92DACEF140001437B /* TextField+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4962C82DACEF140001437B /* TextField+Extension.swift */; };
+		DF4962CB2DACF0740001437B /* BirthdaySettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4962CA2DACF0740001437B /* BirthdaySettingViewController.swift */; };
 		DF590B662DAB843F00956E54 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DF590B652DAB843F00956E54 /* GoogleService-Info.plist */; };
 		DF590B682DAB8D9F00956E54 /* FirebaseAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF590B672DAB8D9F00956E54 /* FirebaseAuthManager.swift */; };
 		DF590B6A2DAB926600956E54 /* FirebaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF590B692DAB926600956E54 /* FirebaseError.swift */; };
@@ -70,6 +72,8 @@
 		DF4962C02DACD6840001437B /* FontSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontSystem.swift; sourceTree = "<group>"; };
 		DF4962C42DACD8A60001437B /* ColorSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSystem.swift; sourceTree = "<group>"; };
 		DF4962C62DACD96F0001437B /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		DF4962C82DACEF140001437B /* TextField+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextField+Extension.swift"; sourceTree = "<group>"; };
+		DF4962CA2DACF0740001437B /* BirthdaySettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthdaySettingViewController.swift; sourceTree = "<group>"; };
 		DF590B652DAB843F00956E54 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DF590B672DAB8D9F00956E54 /* FirebaseAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthManager.swift; sourceTree = "<group>"; };
 		DF590B692DAB926600956E54 /* FirebaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseError.swift; sourceTree = "<group>"; };
@@ -235,6 +239,7 @@
 			isa = PBXGroup;
 			children = (
 				DF4962C62DACD96F0001437B /* UIColor+Extension.swift */,
+				DF4962C82DACEF140001437B /* TextField+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -288,6 +293,7 @@
 				DF9B3DB32D9B0541009162CF /* LoginViewController.swift */,
 				DF9AEF5F2DA4380A00466CC6 /* LoginViewModel.swift */,
 				DF3326BC2DA9097D00BB2CB9 /* NicknameSettingViewController.swift */,
+				DF4962CA2DACF0740001437B /* BirthdaySettingViewController.swift */,
 				DF31444E2DAC3DAD006769BC /* TestViewController.swift */,
 			);
 			path = Login;
@@ -429,6 +435,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DF4962CB2DACF0740001437B /* BirthdaySettingViewController.swift in Sources */,
 				DF9B3DB42D9B0541009162CF /* LoginViewController.swift in Sources */,
 				DF3CBB492DA809DB00AD5788 /* AuthRepository.swift in Sources */,
 				DF3CBA1D2DA8079600AD5788 /* KakaoLoginManager.swift in Sources */,
@@ -444,6 +451,7 @@
 				DF31444F2DAC3DAD006769BC /* TestViewController.swift in Sources */,
 				DF4962C52DACD8A60001437B /* ColorSystem.swift in Sources */,
 				DF3CBB4D2DA80A6800AD5788 /* LoginRepositoryProtocol.swift in Sources */,
+				DF4962C92DACEF140001437B /* TextField+Extension.swift in Sources */,
 				DF5F3E932D95C47700245C20 /* AppDelegate.swift in Sources */,
 				DF5F3E942D95C47700245C20 /* SceneDelegate.swift in Sources */,
 				DFBD5C762DA9045D00A21953 /* HomeViewController.swift in Sources */,

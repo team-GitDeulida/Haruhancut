@@ -1,39 +1,28 @@
 //
-//  NicknameSettingViewController.swift
+//  BirthdaySettingViewController.swift
 //  Haruhancut
 //
-//  Created by 김동현 on 4/11/25.
+//  Created by 김동현 on 4/14/25.
 //
-/*
- https://ios-daniel-yang.tistory.com/entry/UITextField
- https://ios-development.tistory.com/369
- */
 
 import UIKit
 
-class NicknameSettingViewController: UIViewController {
+final class BirthdaySettingViewController: UIViewController {
     
     private let loginViewModel: LoginViewModel
     
     private lazy var mainLabel: UILabel = {
         let label = UILabel()
-        label.text = "사용하실 닉네임을 입력해주세요."
+        label.text = "가족들이 함꼐 축하할 수 있게,\n닉네임 님의 생년월일을 알려주세요."
         label.textColor = .white
         label.font = UIFont.hcFont(.bold, size: 20)
-        return label
-    }()
-    
-    private lazy var subLabel: UILabel = {
-        let label = UILabel()
-        label.text = "닉네임은 언제든지 변경할 수 있어요!"
-        label.textColor = .gray
-        label.font = UIFont.hcFont(.semiBold, size: 15)
+        label.numberOfLines = 0
         return label
     }()
     
     private lazy var textField: UITextField = {
         let textfield = UITextField()
-        textfield.placeholder = "닉네임"
+        textfield.placeholder = "2000.11.11"
         textfield.textColor = .mainWhite
         textfield.backgroundColor = .Gray500
         textfield.layer.cornerRadius = 10
@@ -47,7 +36,6 @@ class NicknameSettingViewController: UIViewController {
     private lazy var labelStackView: UIStackView = {
         let st = UIStackView(arrangedSubviews: [
             mainLabel,
-            subLabel,
         ])
         st.spacing = 10
         st.axis = .vertical
@@ -74,7 +62,7 @@ class NicknameSettingViewController: UIViewController {
             updatedConfig?.baseBackgroundColor = button.isHighlighted ? UIColor.lightGray : UIColor.mainWhite
             button.configuration = updatedConfig
         }
-        button.addTarget(self, action: #selector(didTapNext), for: .touchUpInside)
+         button.addTarget(self, action: #selector(didTapNext), for: .touchUpInside)
         return button
     }()
     
@@ -136,11 +124,12 @@ class NicknameSettingViewController: UIViewController {
     }
     
     @objc private func didTapNext() {
-        let birthdayVC = BirthdaySettingViewController(loginViewModel: loginViewModel)
-        self.navigationController?.pushViewController(birthdayVC, animated: true)
+        let birthdayVC = HomeViewController()
+        self.navigationController?.setViewControllers([birthdayVC], animated: true)
     }
 }
 
 #Preview {
-    NicknameSettingViewController(loginViewModel: LoginViewModel(loginUsecase: StubLoginUsecase()))
+    BirthdaySettingViewController(
+        loginViewModel: LoginViewModel(loginUsecase: StubLoginUsecase()))
 }

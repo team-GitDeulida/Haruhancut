@@ -71,7 +71,8 @@ final class LoginViewController: UIViewController {
         // 폰트 설정
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
-            outgoing.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+            outgoing.font = UIFont.hcFont(.semiBold, size: 16)
+            // UIFont.systemFont(ofSize: 16, weight: .medium)
             return outgoing
         }
         button.configuration = config
@@ -102,7 +103,8 @@ final class LoginViewController: UIViewController {
         // 폰트 설정
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
-            outgoing.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+            outgoing.font = UIFont.hcFont(.semiBold, size: 16)
+            // UIFont.systemFont(ofSize: 16, weight: .medium)
             return outgoing
         }
         button.configuration = config

@@ -44,7 +44,6 @@ class TestViewController: UIViewController {
         let st = UIStackView(arrangedSubviews: [
             mainLabel,
             subLabel,
-
         ])
         st.spacing = 10
         st.axis = .vertical
