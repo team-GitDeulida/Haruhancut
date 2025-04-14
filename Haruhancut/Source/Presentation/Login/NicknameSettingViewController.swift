@@ -38,7 +38,7 @@ class NicknameSettingViewController: UIViewController {
     }()
     
     func makeUI() {
-        view.backgroundColor = #colorLiteral(red: 0.09411741048, green: 0.09411782771, blue: 0.102702044, alpha: 1)
+        view.backgroundColor = .background
         
         // 1. view에 버튼 추가
         view.addSubview(btn)

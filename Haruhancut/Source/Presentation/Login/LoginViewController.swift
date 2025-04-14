@@ -83,7 +83,7 @@ final class LoginViewController: UIViewController {
             if button.isHighlighted {
                 config?.baseBackgroundColor = UIColor(red: 0.8, green: 0.72, blue: 0.0, alpha: 1.0) // 눌렸을 때 진한 노랑
             } else {
-                config?.baseBackgroundColor = UIColor(red: 1.0, green: 0.9, blue: 0.0, alpha: 1.0) // 기본 노랑
+                config?.baseBackgroundColor = .kakao // 기본 노랑
             }
             button.configuration = config
         }
@@ -114,7 +114,7 @@ final class LoginViewController: UIViewController {
             if button.isHighlighted {
                 config?.baseBackgroundColor = UIColor(white: 0.9, alpha: 1.0) // 눌렀을 때 약간 회색
             } else {
-                config?.baseBackgroundColor = .white // 원래 흰색
+                config?.baseBackgroundColor = .apple
             }
             button.configuration = config
         }
@@ -145,7 +145,7 @@ final class LoginViewController: UIViewController {
     // MARK: - Setup UI
     func makeUI() {
         // 배경 색상
-        view.backgroundColor = #colorLiteral(red: 0.09411741048, green: 0.09411782771, blue: 0.102702044, alpha: 1)
+        view.backgroundColor = .background
         
         // 스택뷰 -> 뷰에 추가
         view.addSubview(stackView)

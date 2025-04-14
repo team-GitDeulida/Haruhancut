@@ -7,11 +7,26 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DF31444F2DAC3DAD006769BC /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF31444E2DAC3DAD006769BC /* TestViewController.swift */; };
 		DF3326BD2DA9097D00BB2CB9 /* NicknameSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3326BC2DA9097D00BB2CB9 /* NicknameSettingViewController.swift */; };
 		DF3CBA1D2DA8079600AD5788 /* KakaoLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBA1C2DA8079600AD5788 /* KakaoLoginManager.swift */; };
 		DF3CBB492DA809DB00AD5788 /* AuthRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBB482DA809DB00AD5788 /* AuthRepository.swift */; };
 		DF3CBB4D2DA80A6800AD5788 /* LoginRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBB4C2DA80A6800AD5788 /* LoginRepositoryProtocol.swift */; };
 		DF3CBB4F2DA814F100AD5788 /* LoginUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBB4E2DA814F100AD5788 /* LoginUsecase.swift */; };
+		DF4962B52DACD2860001437B /* RacingSansOne-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DF4962B42DACD2860001437B /* RacingSansOne-Regular.ttf */; };
+		DF4962B62DACD2860001437B /* Pretendard-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = DF4962AE2DACD2860001437B /* Pretendard-ExtraLight.otf */; };
+		DF4962B72DACD2860001437B /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DF4962B22DACD2860001437B /* Pretendard-SemiBold.otf */; };
+		DF4962B82DACD2860001437B /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DF4962AC2DACD2860001437B /* Pretendard-Bold.otf */; };
+		DF4962B92DACD2860001437B /* Pretendard-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DF4962AD2DACD2860001437B /* Pretendard-ExtraBold.otf */; };
+		DF4962BA2DACD2860001437B /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = DF4962B12DACD2860001437B /* Pretendard-Regular.otf */; };
+		DF4962BB2DACD2860001437B /* NanumMyeongjo-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DF4962AA2DACD2860001437B /* NanumMyeongjo-Regular.ttf */; };
+		DF4962BC2DACD2860001437B /* Pretendard-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = DF4962AB2DACD2860001437B /* Pretendard-Black.otf */; };
+		DF4962BD2DACD2860001437B /* Pretendard-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = DF4962AF2DACD2860001437B /* Pretendard-Light.otf */; };
+		DF4962BE2DACD2860001437B /* Pretendard-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = DF4962B02DACD2860001437B /* Pretendard-Medium.otf */; };
+		DF4962BF2DACD2860001437B /* Pretendard-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = DF4962B32DACD2860001437B /* Pretendard-Thin.otf */; };
+		DF4962C12DACD6840001437B /* FontSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4962C02DACD6840001437B /* FontSystem.swift */; };
+		DF4962C52DACD8A60001437B /* ColorSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4962C42DACD8A60001437B /* ColorSystem.swift */; };
+		DF4962C72DACD96F0001437B /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4962C62DACD96F0001437B /* UIColor+Extension.swift */; };
 		DF590B662DAB843F00956E54 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DF590B652DAB843F00956E54 /* GoogleService-Info.plist */; };
 		DF590B682DAB8D9F00956E54 /* FirebaseAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF590B672DAB8D9F00956E54 /* FirebaseAuthManager.swift */; };
 		DF590B6A2DAB926600956E54 /* FirebaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF590B692DAB926600956E54 /* FirebaseError.swift */; };
@@ -35,11 +50,26 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DF31444E2DAC3DAD006769BC /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		DF3326BC2DA9097D00BB2CB9 /* NicknameSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameSettingViewController.swift; sourceTree = "<group>"; };
 		DF3CBA1C2DA8079600AD5788 /* KakaoLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginManager.swift; sourceTree = "<group>"; };
 		DF3CBB482DA809DB00AD5788 /* AuthRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthRepository.swift; sourceTree = "<group>"; };
 		DF3CBB4C2DA80A6800AD5788 /* LoginRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRepositoryProtocol.swift; sourceTree = "<group>"; };
 		DF3CBB4E2DA814F100AD5788 /* LoginUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUsecase.swift; sourceTree = "<group>"; };
+		DF4962AA2DACD2860001437B /* NanumMyeongjo-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NanumMyeongjo-Regular.ttf"; sourceTree = "<group>"; };
+		DF4962AB2DACD2860001437B /* Pretendard-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Black.otf"; sourceTree = "<group>"; };
+		DF4962AC2DACD2860001437B /* Pretendard-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.otf"; sourceTree = "<group>"; };
+		DF4962AD2DACD2860001437B /* Pretendard-ExtraBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraBold.otf"; sourceTree = "<group>"; };
+		DF4962AE2DACD2860001437B /* Pretendard-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraLight.otf"; sourceTree = "<group>"; };
+		DF4962AF2DACD2860001437B /* Pretendard-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Light.otf"; sourceTree = "<group>"; };
+		DF4962B02DACD2860001437B /* Pretendard-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Medium.otf"; sourceTree = "<group>"; };
+		DF4962B12DACD2860001437B /* Pretendard-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.otf"; sourceTree = "<group>"; };
+		DF4962B22DACD2860001437B /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
+		DF4962B32DACD2860001437B /* Pretendard-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Thin.otf"; sourceTree = "<group>"; };
+		DF4962B42DACD2860001437B /* RacingSansOne-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RacingSansOne-Regular.ttf"; sourceTree = "<group>"; };
+		DF4962C02DACD6840001437B /* FontSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontSystem.swift; sourceTree = "<group>"; };
+		DF4962C42DACD8A60001437B /* ColorSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSystem.swift; sourceTree = "<group>"; };
+		DF4962C62DACD96F0001437B /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		DF590B652DAB843F00956E54 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DF590B672DAB8D9F00956E54 /* FirebaseAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthManager.swift; sourceTree = "<group>"; };
 		DF590B692DAB926600956E54 /* FirebaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseError.swift; sourceTree = "<group>"; };
@@ -90,6 +120,33 @@
 				DF3CBB4C2DA80A6800AD5788 /* LoginRepositoryProtocol.swift */,
 			);
 			path = RepositoryProtocol;
+			sourceTree = "<group>";
+		};
+		DF4962A92DACD2730001437B /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				DF4962AA2DACD2860001437B /* NanumMyeongjo-Regular.ttf */,
+				DF4962AB2DACD2860001437B /* Pretendard-Black.otf */,
+				DF4962AC2DACD2860001437B /* Pretendard-Bold.otf */,
+				DF4962AD2DACD2860001437B /* Pretendard-ExtraBold.otf */,
+				DF4962AE2DACD2860001437B /* Pretendard-ExtraLight.otf */,
+				DF4962AF2DACD2860001437B /* Pretendard-Light.otf */,
+				DF4962B02DACD2860001437B /* Pretendard-Medium.otf */,
+				DF4962B12DACD2860001437B /* Pretendard-Regular.otf */,
+				DF4962B22DACD2860001437B /* Pretendard-SemiBold.otf */,
+				DF4962B32DACD2860001437B /* Pretendard-Thin.otf */,
+				DF4962B42DACD2860001437B /* RacingSansOne-Regular.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		DF4962C32DACD8990001437B /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				DF4962C02DACD6840001437B /* FontSystem.swift */,
+				DF4962C42DACD8A60001437B /* ColorSystem.swift */,
+			);
+			path = DesignSystem;
 			sourceTree = "<group>";
 		};
 		DF5F3E5B2D95BE7000245C20 /* Haruhancut */ = {
@@ -177,6 +234,7 @@
 		DF5F3E862D95C11D00245C20 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				DF4962C62DACD96F0001437B /* UIColor+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -184,6 +242,8 @@
 		DF5F3E8D2D95C47400245C20 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				DF4962C32DACD8990001437B /* DesignSystem */,
+				DF4962A92DACD2730001437B /* Fonts */,
 				DF590B652DAB843F00956E54 /* GoogleService-Info.plist */,
 				DF5F3E8A2D95C47400245C20 /* Assets.xcassets */,
 			);
@@ -228,6 +288,7 @@
 				DF9B3DB32D9B0541009162CF /* LoginViewController.swift */,
 				DF9AEF5F2DA4380A00466CC6 /* LoginViewModel.swift */,
 				DF3326BC2DA9097D00BB2CB9 /* NicknameSettingViewController.swift */,
+				DF31444E2DAC3DAD006769BC /* TestViewController.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -343,6 +404,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DF4962B52DACD2860001437B /* RacingSansOne-Regular.ttf in Resources */,
+				DF4962B62DACD2860001437B /* Pretendard-ExtraLight.otf in Resources */,
+				DF4962B72DACD2860001437B /* Pretendard-SemiBold.otf in Resources */,
+				DF4962B82DACD2860001437B /* Pretendard-Bold.otf in Resources */,
+				DF4962B92DACD2860001437B /* Pretendard-ExtraBold.otf in Resources */,
+				DF4962BA2DACD2860001437B /* Pretendard-Regular.otf in Resources */,
+				DF4962BB2DACD2860001437B /* NanumMyeongjo-Regular.ttf in Resources */,
+				DF4962BC2DACD2860001437B /* Pretendard-Black.otf in Resources */,
+				DF4962BD2DACD2860001437B /* Pretendard-Light.otf in Resources */,
+				DF4962BE2DACD2860001437B /* Pretendard-Medium.otf in Resources */,
+				DF4962BF2DACD2860001437B /* Pretendard-Thin.otf in Resources */,
 				DF5F3E8E2D95C47400245C20 /* Assets.xcassets in Resources */,
 				DF9AEF172DA422A400466CC6 /* Config.xcconfig in Resources */,
 				DF590B662DAB843F00956E54 /* GoogleService-Info.plist in Resources */,
@@ -360,13 +432,17 @@
 				DF9B3DB42D9B0541009162CF /* LoginViewController.swift in Sources */,
 				DF3CBB492DA809DB00AD5788 /* AuthRepository.swift in Sources */,
 				DF3CBA1D2DA8079600AD5788 /* KakaoLoginManager.swift in Sources */,
+				DF4962C72DACD96F0001437B /* UIColor+Extension.swift in Sources */,
 				DF5F3E5E2D95BE7000245C20 /* ViewController.swift in Sources */,
 				DF3326BD2DA9097D00BB2CB9 /* NicknameSettingViewController.swift in Sources */,
 				DF9AEF602DA4380A00466CC6 /* LoginViewModel.swift in Sources */,
 				DF3CBB4F2DA814F100AD5788 /* LoginUsecase.swift in Sources */,
+				DF4962C12DACD6840001437B /* FontSystem.swift in Sources */,
 				DF590B682DAB8D9F00956E54 /* FirebaseAuthManager.swift in Sources */,
 				DF590B6A2DAB926600956E54 /* FirebaseError.swift in Sources */,
 				DFD757AA2D9C2A74008C82DF /* DIContainer.swift in Sources */,
+				DF31444F2DAC3DAD006769BC /* TestViewController.swift in Sources */,
+				DF4962C52DACD8A60001437B /* ColorSystem.swift in Sources */,
 				DF3CBB4D2DA80A6800AD5788 /* LoginRepositoryProtocol.swift in Sources */,
 				DF5F3E932D95C47700245C20 /* AppDelegate.swift in Sources */,
 				DF5F3E942D95C47700245C20 /* SceneDelegate.swift in Sources */,
