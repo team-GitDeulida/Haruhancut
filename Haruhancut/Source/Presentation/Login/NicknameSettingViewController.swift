@@ -94,7 +94,15 @@ class NicknameSettingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setDelegate()
         makeUI()
+        hideKeyboardWhenTappedAround()
+    }
+    
+    func setDelegate() {
+        // 텍스트필드의 프로토콜을 사용하기 위해선 사용할 객체를 연결 시켜줘야 한다.(위임)
+        // 텍스트필드.대리자 = ViewController의 객체를 담는다
+        textField.delegate = self
     }
     
     func makeUI() {
@@ -140,6 +148,17 @@ class NicknameSettingViewController: UIViewController {
         self.navigationController?.pushViewController(birthdayVC, animated: true)
     }
 }
+
+// 델리게이트 패턴: 객체와 객체간의 커뮤니케이션 (의사소통을 한다)
+// 즉. 뷰컨트롤러 대신에 일을 수행하고 그 결과값을 전달할 수 있다
+extension NicknameSettingViewController: UITextFieldDelegate {
+    // return키 입력시 키보드 내려감
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+}
+
 
 #Preview {
     NicknameSettingViewController(loginViewModel: LoginViewModel(loginUsecase: StubLoginUsecase()))

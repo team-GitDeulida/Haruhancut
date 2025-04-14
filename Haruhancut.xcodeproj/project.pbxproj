@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DF0C249D2DACF65F00022AB0 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0C249C2DACF65F00022AB0 /* UIViewController+Extension.swift */; };
 		DF31444F2DAC3DAD006769BC /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF31444E2DAC3DAD006769BC /* TestViewController.swift */; };
 		DF3326BD2DA9097D00BB2CB9 /* NicknameSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3326BC2DA9097D00BB2CB9 /* NicknameSettingViewController.swift */; };
 		DF3CBA1D2DA8079600AD5788 /* KakaoLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBA1C2DA8079600AD5788 /* KakaoLoginManager.swift */; };
@@ -52,6 +53,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DF0C249C2DACF65F00022AB0 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		DF31444E2DAC3DAD006769BC /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		DF3326BC2DA9097D00BB2CB9 /* NicknameSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameSettingViewController.swift; sourceTree = "<group>"; };
 		DF3CBA1C2DA8079600AD5788 /* KakaoLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginManager.swift; sourceTree = "<group>"; };
@@ -240,6 +242,7 @@
 			children = (
 				DF4962C62DACD96F0001437B /* UIColor+Extension.swift */,
 				DF4962C82DACEF140001437B /* TextField+Extension.swift */,
+				DF0C249C2DACF65F00022AB0 /* UIViewController+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -453,6 +456,7 @@
 				DF3CBB4D2DA80A6800AD5788 /* LoginRepositoryProtocol.swift in Sources */,
 				DF4962C92DACEF140001437B /* TextField+Extension.swift in Sources */,
 				DF5F3E932D95C47700245C20 /* AppDelegate.swift in Sources */,
+				DF0C249D2DACF65F00022AB0 /* UIViewController+Extension.swift in Sources */,
 				DF5F3E942D95C47700245C20 /* SceneDelegate.swift in Sources */,
 				DFBD5C762DA9045D00A21953 /* HomeViewController.swift in Sources */,
 			);
