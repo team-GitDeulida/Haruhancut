@@ -4,6 +4,9 @@
 //
 //  Created by 김동현 on 4/14/25.
 //
+/*
+ https://ios-daniel-yang.tistory.com/entry/SwiftTIL-11-TextField와-DatePicker를-같이-사용해보자
+ */
 
 import UIKit
 
@@ -78,11 +81,6 @@ final class BirthdaySettingViewController: UIViewController {
     init(loginViewModel: LoginViewModel) {
         self.loginViewModel = loginViewModel
         super.init(nibName: nil, bundle: nil)
-        if let token = loginViewModel.token {
-            print("토큰 옮기기 성공: \(token)")
-        } else {
-            print("토큰이 아직 없습니다.")
-        }
     }
     
     required init?(coder: NSCoder) {
@@ -97,7 +95,7 @@ final class BirthdaySettingViewController: UIViewController {
     func makeUI() {
         view.backgroundColor = .background
 
-        // MARK: - labelStack
+        // MARK: - labelStack setup
         // 1. view에 버튼 추가
         view.addSubview(labelStackView)
         
@@ -110,7 +108,7 @@ final class BirthdaySettingViewController: UIViewController {
             labelStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20) // x축 위치
         ])
         
-        // MARK: - textField
+        // MARK: - textField setup
         view.addSubview(textField)
         textField.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -119,8 +117,9 @@ final class BirthdaySettingViewController: UIViewController {
             textField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20), // 좌우 패딩
             textField.heightAnchor.constraint(equalToConstant: 50) // 버튼 높이
         ])
+        setupDatePicker()
         
-        // MARK: - NextButtonn
+        // MARK: - NextButtonn setup
         view.addSubview(nextButton)
         nextButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -133,8 +132,61 @@ final class BirthdaySettingViewController: UIViewController {
     }
     
     @objc private func didTapNext() {
+        if let user = loginViewModel.user {
+            print("✅ 완료: \(user)")
+        }
+        
         let birthdayVC = HomeViewController()
         self.navigationController?.setViewControllers([birthdayVC], animated: true)
+    }
+}
+
+extension BirthdaySettingViewController {
+    private func setupDatePicker() {
+        let datePicker = UIDatePicker()
+        datePicker.datePickerMode = .date
+        datePicker.preferredDatePickerStyle = .wheels
+        datePicker.locale = Locale(identifier: "ko-KR")
+        datePicker.addTarget(self, action: #selector(dateChange), for: .valueChanged)
+
+        // ✅ 핵심: inputView를 datePicker로 지정
+        textField.inputView = datePicker
+        
+        // ✅ 툴바를 inputAccessoryView로 설정
+        textField.inputAccessoryView = createToolbar()
+
+        // 초기값 설정
+        textField.text = dateFormat(date: Date())
+    }
+
+    @objc private func dateChange(_ sender: UIDatePicker) {
+        textField.text = dateFormat(date: sender.date)
+        loginViewModel.user?.birthdayDate = sender.date
+    }
+
+    private func dateFormat(date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy / MM / dd"
+        return formatter.string(from: date)
+    }
+    
+    // 툴바 추가
+    private func createToolbar() -> UIToolbar {
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(title: "완료", style: .plain, target: self, action: #selector(donePressed))
+        
+        // "완료" 버튼을 오른쪽으로 보내기
+        toolbar.setItems([flexibleSpace, doneButton], animated: true)
+
+        return toolbar
+    }
+
+
+    @objc private func donePressed() {
+        textField.resignFirstResponder()
     }
 }
 

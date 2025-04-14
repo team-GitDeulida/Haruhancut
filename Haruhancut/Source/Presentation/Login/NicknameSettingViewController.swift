@@ -89,11 +89,6 @@ class NicknameSettingViewController: UIViewController {
     init(loginViewModel: LoginViewModel) {
         self.loginViewModel = loginViewModel
         super.init(nibName: nil, bundle: nil)
-        if let token = loginViewModel.token {
-            print("토큰 옮기기 성공: \(token)")
-        } else {
-            print("토큰이 아직 없습니다.")
-        }
     }
     
     required init?(coder: NSCoder) {
@@ -162,8 +157,8 @@ class NicknameSettingViewController: UIViewController {
     }
     
     @objc private func didTapNext() {
+        loginViewModel.user?.nickname = textField.text ?? "닉네임"
         view.endEditing(true) // 키보드를 먼저 내림
-        print("000000000000000000000000000000")
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             let birthdayVC = BirthdaySettingViewController(loginViewModel: self.loginViewModel)
             self.navigationController?.pushViewController(birthdayVC, animated: true)

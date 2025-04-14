@@ -19,8 +19,9 @@ import KakaoSDKAuth
 
 final class LoginViewModel {
     
-    private let loginUsecase: LoginUsecaseProtocol
+    var user: User?
     
+    private let loginUsecase: LoginUsecaseProtocol
     private(set) var token: String?
     
     init(loginUsecase: LoginUsecaseProtocol) {
@@ -50,7 +51,9 @@ final class LoginViewModel {
             // map 안으로 넣어도 되지만 부수효과 분리, 비즈니스로직 구분을 위해 do 처리
             .do(onNext: { [weak self] result in
                 if case .success(let token) = result {
-                    self?.token = token
+                    guard let self = self else { return }
+                    self.token = token
+                    self.user = User.empty(uid: token, loginPlatform: .kakao)
                 }
             })
             .map { $0.mapToVoid() }

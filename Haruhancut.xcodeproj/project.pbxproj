@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		DF0C249D2DACF65F00022AB0 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0C249C2DACF65F00022AB0 /* UIViewController+Extension.swift */; };
+		DF156B742DAD60E500918EE6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF156B732DAD60E500918EE6 /* User.swift */; };
+		DF156B762DAD610B00918EE6 /* UserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF156B752DAD610B00918EE6 /* UserDTO.swift */; };
 		DF31444F2DAC3DAD006769BC /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF31444E2DAC3DAD006769BC /* TestViewController.swift */; };
 		DF3326BD2DA9097D00BB2CB9 /* NicknameSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3326BC2DA9097D00BB2CB9 /* NicknameSettingViewController.swift */; };
 		DF3CBA1D2DA8079600AD5788 /* KakaoLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBA1C2DA8079600AD5788 /* KakaoLoginManager.swift */; };
@@ -54,6 +56,8 @@
 
 /* Begin PBXFileReference section */
 		DF0C249C2DACF65F00022AB0 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		DF156B732DAD60E500918EE6 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		DF156B752DAD610B00918EE6 /* UserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDTO.swift; sourceTree = "<group>"; };
 		DF31444E2DAC3DAD006769BC /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		DF3326BC2DA9097D00BB2CB9 /* NicknameSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameSettingViewController.swift; sourceTree = "<group>"; };
 		DF3CBA1C2DA8079600AD5788 /* KakaoLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginManager.swift; sourceTree = "<group>"; };
@@ -321,6 +325,7 @@
 		DFD757A42D9C1CBF008C82DF /* Dto */ = {
 			isa = PBXGroup;
 			children = (
+				DF156B752DAD610B00918EE6 /* UserDTO.swift */,
 			);
 			path = Dto;
 			sourceTree = "<group>";
@@ -337,6 +342,7 @@
 			isa = PBXGroup;
 			children = (
 				DF590B692DAB926600956E54 /* FirebaseError.swift */,
+				DF156B732DAD60E500918EE6 /* User.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -448,6 +454,7 @@
 				DF9AEF602DA4380A00466CC6 /* LoginViewModel.swift in Sources */,
 				DF3CBB4F2DA814F100AD5788 /* LoginUsecase.swift in Sources */,
 				DF4962C12DACD6840001437B /* FontSystem.swift in Sources */,
+				DF156B742DAD60E500918EE6 /* User.swift in Sources */,
 				DF590B682DAB8D9F00956E54 /* FirebaseAuthManager.swift in Sources */,
 				DF590B6A2DAB926600956E54 /* FirebaseError.swift in Sources */,
 				DFD757AA2D9C2A74008C82DF /* DIContainer.swift in Sources */,
@@ -455,6 +462,7 @@
 				DF4962C52DACD8A60001437B /* ColorSystem.swift in Sources */,
 				DF3CBB4D2DA80A6800AD5788 /* LoginRepositoryProtocol.swift in Sources */,
 				DF4962C92DACEF140001437B /* TextField+Extension.swift in Sources */,
+				DF156B762DAD610B00918EE6 /* UserDTO.swift in Sources */,
 				DF5F3E932D95C47700245C20 /* AppDelegate.swift in Sources */,
 				DF0C249D2DACF65F00022AB0 /* UIViewController+Extension.swift in Sources */,
 				DF5F3E942D95C47700245C20 /* SceneDelegate.swift in Sources */,
