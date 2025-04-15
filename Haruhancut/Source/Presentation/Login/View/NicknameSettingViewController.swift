@@ -10,8 +10,12 @@
  */
 
 import UIKit
+import RxSwift
+import RxCocoa
 
-class NicknameSettingViewController: UIViewController {
+final class NicknameSettingViewController: UIViewController {
+    
+    private let disposeBag = DisposeBag()
     
     // 키보드 가림 해결을 위한 bottom constraint속성
     private var nextButtonBottomConstraint: NSLayoutConstraint?
@@ -81,8 +85,7 @@ class NicknameSettingViewController: UIViewController {
         // 초기 상태 비활성화
         button.isEnabled = false
         button.alpha = 0.5
-        
-        button.addTarget(self, action: #selector(didTapNext), for: .touchUpInside)
+        //button.addTarget(self, action: #selector(didTapNext), for: .touchUpInside)
         return button
     }()
     
@@ -100,6 +103,7 @@ class NicknameSettingViewController: UIViewController {
         setDelegate()
         makeUI()
         registerForKeyboardNotifications()
+        bindViewModel()
     }
     
     // 외부 터치 시 키보드 내리기
@@ -108,54 +112,82 @@ class NicknameSettingViewController: UIViewController {
         view.endEditing(true)
     }
 
-    func setDelegate() {
+    private func setDelegate() {
         // 텍스트필드의 프로토콜을 사용하기 위해선 사용할 객체를 연결 시켜줘야 한다.(위임)
         // 텍스트필드.대리자 = ViewController의 객체를 담는다
         textField.delegate = self
     }
     
-    func makeUI() {
-        view.backgroundColor = .background
+    private func makeUI() {
+    view.backgroundColor = .background
 
-        // MARK: - labelStack
-        // 1. view에 버튼 추가
-        view.addSubview(labelStackView)
+    // MARK: - labelStack
+    // 1. view에 버튼 추가
+    view.addSubview(labelStackView)
+    
+    // 2. 오토레이아웃 활성화
+    labelStackView.translatesAutoresizingMaskIntoConstraints = false
+    
+    // 3. 오토레이아웃 제약 추가
+    NSLayoutConstraint.activate([
+        labelStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),        // y축 위치
+        labelStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20) // x축 위치
+    ])
+    
+    // MARK: - textField
+    view.addSubview(textField)
+    textField.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([
+        textField.topAnchor.constraint(equalTo: labelStackView.bottomAnchor, constant: 30),  // y축 위치
+        textField.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor), // x축 위치
+        textField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20), // 좌우 패딩
+        textField.heightAnchor.constraint(equalToConstant: 50) // 버튼 높이
+    ])
+    
+    // MARK: - NextButtonn
+    view.addSubview(nextButton)
+    nextButton.translatesAutoresizingMaskIntoConstraints = false
+    
+    // 키보드에 의해 다음 버튼 가림을 막기 위한 방법
+    nextButtonBottomConstraint = nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
+    nextButtonBottomConstraint?.isActive = true
+    NSLayoutConstraint.activate([
+        //nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10), // y축 위치
+        nextButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),              // x축 위치
         
-        // 2. 오토레이아웃 활성화
-        labelStackView.translatesAutoresizingMaskIntoConstraints = false
+        nextButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),// 좌우 패딩
+        nextButton.heightAnchor.constraint(equalToConstant: 50) // 버튼 높이
+    ])
+}
+    
+    private func bindViewModel() {
+        let input = LoginViewModel.Input.init(
+            kakaoLoginTapped: .never(),
+            appleLoginTapped: .never(),
+            nicknameText: textField.rx.text.orEmpty.asObservable(),
+            nicknameNextBtnTapped: nextButton.rx.tap.asObservable(),
+            birthdayDate: .never(),
+            birthdayNextTapped: .never()
+        )
         
-        // 3. 오토레이아웃 제약 추가
-        NSLayoutConstraint.activate([
-            labelStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),        // y축 위치
-            labelStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20) // x축 위치
-        ])
+        let output = loginViewModel.transform(input: input)
+        bindViewModelOutput(output: output)
         
-        // MARK: - textField
-        view.addSubview(textField)
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            textField.topAnchor.constraint(equalTo: labelStackView.bottomAnchor, constant: 30),  // y축 위치
-            textField.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor), // x축 위치
-            textField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20), // 좌우 패딩
-            textField.heightAnchor.constraint(equalToConstant: 50) // 버튼 높이
-        ])
-        
-        // MARK: - NextButtonn
-        view.addSubview(nextButton)
-        nextButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        // 키보드에 의해 다음 버튼 가림을 막기 위한 방법
-        nextButtonBottomConstraint = nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
-        nextButtonBottomConstraint?.isActive = true
-        NSLayoutConstraint.activate([
-            //nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10), // y축 위치
-            nextButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),              // x축 위치
-            
-            nextButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),// 좌우 패딩
-            nextButton.heightAnchor.constraint(equalToConstant: 50) // 버튼 높이
-        ])
     }
     
+    private func bindViewModelOutput(output: LoginViewModel.Output) {
+        output.moveToBirthday
+            .drive(onNext: { [weak self] in
+                guard let self = self else { return }
+                self.view.endEditing(true)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    let birthdayVC = BirthdaySettingViewController(loginViewModel: self.loginViewModel)
+                    self.navigationController?.pushViewController(birthdayVC, animated: true)
+                }
+            }).disposed(by: disposeBag)
+    }
+    
+    /*
     @objc private func didTapNext() {
         loginViewModel.user?.nickname = textField.text ?? "닉네임"
         view.endEditing(true) // 키보드를 먼저 내림
@@ -164,6 +196,7 @@ class NicknameSettingViewController: UIViewController {
             self.navigationController?.pushViewController(birthdayVC, animated: true)
         }
     }
+     */
     
 }
 

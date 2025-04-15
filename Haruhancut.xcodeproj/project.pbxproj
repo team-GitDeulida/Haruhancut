@@ -10,8 +10,6 @@
 		DF0C249D2DACF65F00022AB0 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0C249C2DACF65F00022AB0 /* UIViewController+Extension.swift */; };
 		DF156B742DAD60E500918EE6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF156B732DAD60E500918EE6 /* User.swift */; };
 		DF156B762DAD610B00918EE6 /* UserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF156B752DAD610B00918EE6 /* UserDTO.swift */; };
-		DF31444F2DAC3DAD006769BC /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF31444E2DAC3DAD006769BC /* TestViewController.swift */; };
-		DF3326BD2DA9097D00BB2CB9 /* NicknameSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3326BC2DA9097D00BB2CB9 /* NicknameSettingViewController.swift */; };
 		DF3CBA1D2DA8079600AD5788 /* KakaoLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBA1C2DA8079600AD5788 /* KakaoLoginManager.swift */; };
 		DF3CBB492DA809DB00AD5788 /* AuthRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBB482DA809DB00AD5788 /* AuthRepository.swift */; };
 		DF3CBB4D2DA80A6800AD5788 /* LoginRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBB4C2DA80A6800AD5788 /* LoginRepositoryProtocol.swift */; };
@@ -31,7 +29,10 @@
 		DF4962C52DACD8A60001437B /* ColorSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4962C42DACD8A60001437B /* ColorSystem.swift */; };
 		DF4962C72DACD96F0001437B /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4962C62DACD96F0001437B /* UIColor+Extension.swift */; };
 		DF4962C92DACEF140001437B /* TextField+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4962C82DACEF140001437B /* TextField+Extension.swift */; };
-		DF4962CB2DACF0740001437B /* BirthdaySettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4962CA2DACF0740001437B /* BirthdaySettingViewController.swift */; };
+		DF4B5BA02DAEBACE00A7ADD7 /* BirthdaySettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4B5B9B2DAEBACE00A7ADD7 /* BirthdaySettingViewController.swift */; };
+		DF4B5BA12DAEBACE00A7ADD7 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4B5B9C2DAEBACE00A7ADD7 /* LoginViewController.swift */; };
+		DF4B5BA22DAEBACE00A7ADD7 /* NicknameSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4B5B9D2DAEBACE00A7ADD7 /* NicknameSettingViewController.swift */; };
+		DF4B5BA62DAEBAD300A7ADD7 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4B5BA42DAEBAD300A7ADD7 /* LoginViewModel.swift */; };
 		DF590B662DAB843F00956E54 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DF590B652DAB843F00956E54 /* GoogleService-Info.plist */; };
 		DF590B682DAB8D9F00956E54 /* FirebaseAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF590B672DAB8D9F00956E54 /* FirebaseAuthManager.swift */; };
 		DF590B6A2DAB926600956E54 /* FirebaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF590B692DAB926600956E54 /* FirebaseError.swift */; };
@@ -48,8 +49,6 @@
 		DF9AEF172DA422A400466CC6 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = DF9AEF162DA422A400466CC6 /* Config.xcconfig */; };
 		DF9AEF1C2DA4255C00466CC6 /* RxKakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = DF9AEF1B2DA4255C00466CC6 /* RxKakaoSDKAuth */; };
 		DF9AEF1E2DA4255C00466CC6 /* RxKakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = DF9AEF1D2DA4255C00466CC6 /* RxKakaoSDKUser */; };
-		DF9AEF602DA4380A00466CC6 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9AEF5F2DA4380A00466CC6 /* LoginViewModel.swift */; };
-		DF9B3DB42D9B0541009162CF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9B3DB32D9B0541009162CF /* LoginViewController.swift */; };
 		DFBD5C762DA9045D00A21953 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFBD5C752DA9045D00A21953 /* HomeViewController.swift */; };
 		DFD757AA2D9C2A74008C82DF /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD757A92D9C2A74008C82DF /* DIContainer.swift */; };
 /* End PBXBuildFile section */
@@ -58,8 +57,6 @@
 		DF0C249C2DACF65F00022AB0 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		DF156B732DAD60E500918EE6 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		DF156B752DAD610B00918EE6 /* UserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDTO.swift; sourceTree = "<group>"; };
-		DF31444E2DAC3DAD006769BC /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
-		DF3326BC2DA9097D00BB2CB9 /* NicknameSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameSettingViewController.swift; sourceTree = "<group>"; };
 		DF3CBA1C2DA8079600AD5788 /* KakaoLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginManager.swift; sourceTree = "<group>"; };
 		DF3CBB482DA809DB00AD5788 /* AuthRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthRepository.swift; sourceTree = "<group>"; };
 		DF3CBB4C2DA80A6800AD5788 /* LoginRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRepositoryProtocol.swift; sourceTree = "<group>"; };
@@ -79,7 +76,10 @@
 		DF4962C42DACD8A60001437B /* ColorSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSystem.swift; sourceTree = "<group>"; };
 		DF4962C62DACD96F0001437B /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		DF4962C82DACEF140001437B /* TextField+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextField+Extension.swift"; sourceTree = "<group>"; };
-		DF4962CA2DACF0740001437B /* BirthdaySettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthdaySettingViewController.swift; sourceTree = "<group>"; };
+		DF4B5B9B2DAEBACE00A7ADD7 /* BirthdaySettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthdaySettingViewController.swift; sourceTree = "<group>"; };
+		DF4B5B9C2DAEBACE00A7ADD7 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		DF4B5B9D2DAEBACE00A7ADD7 /* NicknameSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameSettingViewController.swift; sourceTree = "<group>"; };
+		DF4B5BA42DAEBAD300A7ADD7 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		DF590B652DAB843F00956E54 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DF590B672DAB8D9F00956E54 /* FirebaseAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthManager.swift; sourceTree = "<group>"; };
 		DF590B692DAB926600956E54 /* FirebaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseError.swift; sourceTree = "<group>"; };
@@ -92,8 +92,6 @@
 		DF66506C2D88023400820F1A /* Haruhancut.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Haruhancut.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF9AEEEC2DA41F6800466CC6 /* Haruhancut.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Haruhancut.entitlements; sourceTree = "<group>"; };
 		DF9AEF162DA422A400466CC6 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
-		DF9AEF5F2DA4380A00466CC6 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
-		DF9B3DB32D9B0541009162CF /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		DFBD5C752DA9045D00A21953 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		DFD757A92D9C2A74008C82DF /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -157,6 +155,24 @@
 				DF4962C42DACD8A60001437B /* ColorSystem.swift */,
 			);
 			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		DF4B5B9F2DAEBACE00A7ADD7 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DF4B5B9C2DAEBACE00A7ADD7 /* LoginViewController.swift */,
+				DF4B5B9B2DAEBACE00A7ADD7 /* BirthdaySettingViewController.swift */,
+				DF4B5B9D2DAEBACE00A7ADD7 /* NicknameSettingViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DF4B5BA52DAEBAD300A7ADD7 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				DF4B5BA42DAEBAD300A7ADD7 /* LoginViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		DF5F3E5B2D95BE7000245C20 /* Haruhancut */ = {
@@ -297,11 +313,8 @@
 		DF6BBA182D972048002A344F /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				DF9B3DB32D9B0541009162CF /* LoginViewController.swift */,
-				DF9AEF5F2DA4380A00466CC6 /* LoginViewModel.swift */,
-				DF3326BC2DA9097D00BB2CB9 /* NicknameSettingViewController.swift */,
-				DF4962CA2DACF0740001437B /* BirthdaySettingViewController.swift */,
-				DF31444E2DAC3DAD006769BC /* TestViewController.swift */,
+				DF4B5B9F2DAEBACE00A7ADD7 /* View */,
+				DF4B5BA52DAEBAD300A7ADD7 /* ViewModel */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -444,21 +457,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DF4962CB2DACF0740001437B /* BirthdaySettingViewController.swift in Sources */,
-				DF9B3DB42D9B0541009162CF /* LoginViewController.swift in Sources */,
+				DF4B5BA62DAEBAD300A7ADD7 /* LoginViewModel.swift in Sources */,
 				DF3CBB492DA809DB00AD5788 /* AuthRepository.swift in Sources */,
+				DF4B5BA02DAEBACE00A7ADD7 /* BirthdaySettingViewController.swift in Sources */,
+				DF4B5BA12DAEBACE00A7ADD7 /* LoginViewController.swift in Sources */,
+				DF4B5BA22DAEBACE00A7ADD7 /* NicknameSettingViewController.swift in Sources */,
 				DF3CBA1D2DA8079600AD5788 /* KakaoLoginManager.swift in Sources */,
 				DF4962C72DACD96F0001437B /* UIColor+Extension.swift in Sources */,
 				DF5F3E5E2D95BE7000245C20 /* ViewController.swift in Sources */,
-				DF3326BD2DA9097D00BB2CB9 /* NicknameSettingViewController.swift in Sources */,
-				DF9AEF602DA4380A00466CC6 /* LoginViewModel.swift in Sources */,
 				DF3CBB4F2DA814F100AD5788 /* LoginUsecase.swift in Sources */,
 				DF4962C12DACD6840001437B /* FontSystem.swift in Sources */,
 				DF156B742DAD60E500918EE6 /* User.swift in Sources */,
 				DF590B682DAB8D9F00956E54 /* FirebaseAuthManager.swift in Sources */,
 				DF590B6A2DAB926600956E54 /* FirebaseError.swift in Sources */,
 				DFD757AA2D9C2A74008C82DF /* DIContainer.swift in Sources */,
-				DF31444F2DAC3DAD006769BC /* TestViewController.swift in Sources */,
 				DF4962C52DACD8A60001437B /* ColorSystem.swift in Sources */,
 				DF3CBB4D2DA80A6800AD5788 /* LoginRepositoryProtocol.swift in Sources */,
 				DF4962C92DACEF140001437B /* TextField+Extension.swift in Sources */,

@@ -6,11 +6,18 @@
 //
 /*
  https://ios-daniel-yang.tistory.com/entry/SwiftTIL-11-TextField와-DatePicker를-같이-사용해보자
+ 
+ -[RTIInputSystemClient remoteTextInputSessionWithID:performInputOperation:]  perform input operation requires a valid sessionID. inputModality = Keyboard, inputOperation = <null selector>, customInfoType = UIEmojiSearchOperations
+ 
  */
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 final class BirthdaySettingViewController: UIViewController {
+    
+    private let disposeBag = DisposeBag()
     
     private let loginViewModel: LoginViewModel
     
@@ -74,7 +81,7 @@ final class BirthdaySettingViewController: UIViewController {
             updatedConfig?.baseBackgroundColor = button.isHighlighted ? UIColor.lightGray : UIColor.mainWhite
             button.configuration = updatedConfig
         }
-         button.addTarget(self, action: #selector(didTapNext), for: .touchUpInside)
+        //button.addTarget(self, action: #selector(didTapNext), for: .touchUpInside)
         return button
     }()
     
@@ -90,9 +97,10 @@ final class BirthdaySettingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         makeUI()
+        bindViewModel()
     }
     
-    func makeUI() {
+    private func makeUI() {
         view.backgroundColor = .background
 
         // MARK: - labelStack setup
@@ -131,6 +139,44 @@ final class BirthdaySettingViewController: UIViewController {
         ])
     }
     
+    private let datePicker: UIDatePicker = {
+        let picker = UIDatePicker()
+        picker.datePickerMode = .date
+        picker.preferredDatePickerStyle = .wheels
+        picker.locale = Locale(identifier: "ko-KR")
+        picker.timeZone = TimeZone(identifier: "Asia/Seoul")
+        return picker
+    }()
+    
+    private func bindViewModel() {
+        let input = LoginViewModel.Input.init(
+            kakaoLoginTapped: .never(),
+            appleLoginTapped: .never(),
+            nicknameText: .never(),
+            nicknameNextBtnTapped: .never(),
+            birthdayDate: datePicker.rx.date.asObservable(),
+            birthdayNextTapped: nextButton.rx.tap.asObservable())
+        
+        let output = loginViewModel.transform(input: input)
+        bindViewModelOutput(output: output)
+    }
+    
+    private func bindViewModelOutput(output: LoginViewModel.Output) {
+        output.moveToHome
+            .drive(onNext: { [weak self] in
+                guard let self = self else { return }
+                self.view.endEditing(true)
+                if let user = loginViewModel.user {
+                    print("✅ 완료: \(user)")
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    self.navigationController?.setViewControllers([HomeViewController()], animated: true)
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    /*
     @objc private func didTapNext() {
         if let user = loginViewModel.user {
             print("✅ 완료: \(user)")
@@ -139,11 +185,12 @@ final class BirthdaySettingViewController: UIViewController {
         let birthdayVC = HomeViewController()
         self.navigationController?.setViewControllers([birthdayVC], animated: true)
     }
+     */
 }
 
 extension BirthdaySettingViewController {
+
     private func setupDatePicker() {
-        let datePicker = UIDatePicker()
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .wheels
         datePicker.locale = Locale(identifier: "ko-KR")
@@ -166,13 +213,17 @@ extension BirthdaySettingViewController {
 
     private func dateFormat(date: Date) -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy / MM / dd"
+        formatter.locale = Locale(identifier: "ko_KR")              // ✅ 한국어
+        formatter.timeZone = TimeZone(identifier: "Asia/Seoul")     // ✅ 한국 타임존
+        formatter.dateFormat = "yyyy년 MM월 dd일"                     // ✅ 한국식 포맷 (원하면 "yyyy.MM.dd" 도 가능)
         return formatter.string(from: date)
     }
+
     
     // 툴바 추가
     private func createToolbar() -> UIToolbar {
         let toolbar = UIToolbar()
+        toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
         toolbar.sizeToFit()
         
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
@@ -183,7 +234,6 @@ extension BirthdaySettingViewController {
 
         return toolbar
     }
-
 
     @objc private func donePressed() {
         textField.resignFirstResponder()

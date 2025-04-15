@@ -8,6 +8,7 @@
 /*
  reference
  - https://velog.io/@pomme/UIButton-커스텀하기iOS-15.0-ver
+ Driver는 RxCocoa가 만든 특별한 옵저버블 타입
  */
 
 import UIKit
@@ -33,21 +34,31 @@ final class LoginViewController: UIViewController {
     }
     
     // MARK: - Properties
-    let disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
     
     // MARK: - Bind ViewModel
     private func bindViewModel() {
         
         // 버튼 탭 이벤트를 viewModel의 Input으로 전달
-        let input = LoginViewModel.Input(kakaoLoginTapped: kakaoLoginButton.rx.tap.asObservable())
-        
+        let input = LoginViewModel.Input(
+            kakaoLoginTapped: kakaoLoginButton.rx.tap.asObservable(),
+            appleLoginTapped: appleLoginButton.rx.tap.asObservable(),
+            nicknameText: .never(),
+            nicknameNextBtnTapped: .never(),
+            birthdayDate: .never(),
+            birthdayNextTapped: .never()
+        )
+            
         // viewModel의 transform함수 호출 -> Output 반환
         let output = loginViewModel.transform(input: input)
-        
-        // 로그인 결과를 구독하여 UI 반응 처리
+        bindViewModelOutput(output: output)
+    }
+    
+    // MARK: - Bind VoewModelOutput
+    private func bindViewModelOutput(output: LoginViewModel.Output) {
+        // 로그인 결과를 구독하여  UI 흐름 처리
         output.loginResult
-            .observe(on: MainScheduler.instance)
-            .subscribe { result in
+            .drive { result in
                 switch result {
                 case .success:
                     print("로그인 성공: ")
