@@ -19,7 +19,6 @@ final class HomeViewController: UIViewController {
     init(loginViewModel: LoginViewModel) {
         self.loginViewModel = loginViewModel
         super.init(nibName: nil, bundle: nil)
-        
     }
     
     private lazy var logoutBtn: UIButton = {

@@ -12,6 +12,7 @@ protocol LoginUsecaseProtocol {
     func loginWIthKakao() -> Observable<Result<String, LoginError>>
     func authenticateUser(prividerID: String, idToken: String) -> Observable<Result<Void, LoginError>>
     func registerUserToRealtimeDatabase(user: User) -> Observable<Result<User, LoginError>>
+    func fetchUserFromDatabase() -> Observable<User?>
 }
 
 final class LoginUsecase: LoginUsecaseProtocol {
@@ -42,6 +43,11 @@ final class LoginUsecase: LoginUsecaseProtocol {
     func registerUserToRealtimeDatabase(user: User) -> Observable<Result<User, LoginError>> {
         return repository.registerUserToRealtimeDatabase(user: user)
     }
+    
+    func fetchUserFromDatabase() -> Observable<User?> {
+        return repository.fetchUserFromDatabase()
+    }
+    
 }
 
 final class StubLoginUsecase: LoginUsecaseProtocol {
@@ -61,5 +67,16 @@ final class StubLoginUsecase: LoginUsecaseProtocol {
             nickname: "관리자",
             birthdayDate: .now, gender: .male,
             isPushEnabled: true)))
+    }
+    
+    func fetchUserFromDatabase() -> Observable<User?> {
+        return .just(
+            User(
+                uid: "testUser",
+                registerDate: .now,
+                loginPlatform: .kakao,
+                nickname: "관리자",
+                birthdayDate: .now, gender: .male,
+                isPushEnabled: true))
     }
 }

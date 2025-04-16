@@ -39,11 +39,6 @@ final class LoginViewModel {
     // 이벤트를 방출하는 내부 트리거
     private let signUpResultRelay = PublishRelay<Result<Void, LoginError>>()
     
-    // sugnUpResultRelay 트리거를 driver로 변환하여 외부 vc에 노출하는 읽기 전용 driver
-//    var signUpResult: Driver<Result<Void, LoginError>> {
-//        signUpResultRelay.asDriver(onErrorJustReturn: .failure(.signUpError))
-//    }
-    
     struct Input { // View에서 발생할 Input 이벤트(Stream)들
         // ViewModel 외부에서 전달받는 입력(Input)을 정의한 구조체
         // - Observable을 사용하는 이유는 ViewModel 내부 로직을 숨기고 단방향으로 이벤트만 전달받기 위함
@@ -82,15 +77,55 @@ final class LoginViewModel {
                 guard let self = self else { return .empty() }
                 return self.loginUsecase.loginWIthKakao()
             }
-            // map 안으로 넣어도 되지만 부수효과 분리, 비즈니스로직 구분을 위해 do 처리
-            .do(onNext: { [weak self] result in
-                if case .success(let token) = result {
-                    guard let self = self else { return }
+            // 인증 요청
+            .flatMapLatest { [weak self] result -> Observable<Result<Void, LoginError>> in
+                guard let self = self else { return .just(.failure(.signUpError)) }
+                switch result {
+                case .success(let token):
                     self.token = token
-                    self.user = User.empty(loginPlatform: .kakao)
+                    
+                    return self.loginUsecase.authenticateUser(prividerID: "kakao", idToken: token)
+                case .failure(let error):
+                    return .just(.failure(error))
                 }
-            })
-            .map { $0.mapToVoid() }
+            }
+            // 기존 유저 확인
+            .flatMapLatest { [weak self] result -> Observable<Result<Void, LoginError>> in
+                guard let self = self else { return .empty() }
+                switch result {
+                case .success:
+                    return self.loginUsecase.fetchUserFromDatabase()
+                        .map { user -> Result<Void, LoginError> in
+                            if let user = user {
+                                self.user = user
+                                UserDefaultsManager.shared.saveUser(user)
+                                return .success(())
+                            } else {
+                                // 유저가 없으면 회원가입 흐름
+                                self.user = User.empty(loginPlatform: .kakao)
+                                return .failure(.noUser)
+                            }
+                        }
+                case .failure(let error):
+                    return .just(.failure(error))
+                }
+            }
+        
+//        let kakaoLoginResult = input.kakaoLoginTapped
+//            // Observable → Observable 연결
+//            .flatMapLatest { [weak self] _ -> Observable<Result<String, LoginError>> in
+//                guard let self = self else { return .empty() }
+//                return self.loginUsecase.loginWIthKakao()
+//            }
+//            // map 안으로 넣어도 되지만 부수효과 분리, 비즈니스로직 구분을 위해 do 처리
+//            .do(onNext: { [weak self] result in
+//                if case .success(let token) = result {
+//                    guard let self = self else { return }
+//                    self.token = token
+//                    self.user = User.empty(loginPlatform: .kakao)
+//                }
+//            })
+//            .map { $0.mapToVoid() }
 
         let appleLoginResult = input.appleLoginTapped
             // Observable → Observable 연결

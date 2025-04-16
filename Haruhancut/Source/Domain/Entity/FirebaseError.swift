@@ -16,6 +16,7 @@ enum LoginError: Error {
     // MARK: - Auth
     case authError
     case signUpError
+    case noUser
     
     var description: String {
         switch self {
@@ -27,6 +28,8 @@ enum LoginError: Error {
             "⚠️ 파이어베이스 인증 실패"
         case .signUpError:
             "⚠️ 파이어베이스 가입 실패"
+        case .noUser:
+            "⚠️ 유저가 존재하지 않음"
         }
     }
 }

@@ -61,9 +61,15 @@ final class LoginViewController: UIViewController {
             .drive { result in
                 switch result {
                 case .success:
-                    self.changeRootToMain(debug: 1)
+                    self.changeRootToMain(debug: 0)
                 case .failure(let error):
-                    print("로그인 실패: \(error.localizedDescription)")
+                    switch error {
+                    case .noUser:
+                        self.changeRootToMain(debug: 1)
+                    default:
+                        print("로그인 실패: \(error.localizedDescription)")
+                    }
+                    
                 }
             }.disposed(by: disposeBag)
     }
