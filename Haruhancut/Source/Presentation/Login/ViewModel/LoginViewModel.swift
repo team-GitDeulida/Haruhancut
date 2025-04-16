@@ -113,7 +113,7 @@ final class LoginViewModel {
             .asDriver(onErrorDriveWith: .empty())
         
         let isNicknameValid = input.nicknameText
-            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines).count >= 5 }
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines).count != 0 }
             .distinctUntilChanged() // 중복된 값은 무시하고 변경될 때만 아래로 전달
             .asDriver(onErrorJustReturn: false) // 에러 발생 시에도 false를 대신 방출
 

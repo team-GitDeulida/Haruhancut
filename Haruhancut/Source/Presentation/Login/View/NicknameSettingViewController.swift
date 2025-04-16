@@ -43,6 +43,7 @@ final class NicknameSettingViewController: UIViewController {
         textfield.placeholder = "닉네임"
         textfield.textColor = .mainWhite
         textfield.backgroundColor = .Gray500
+        textfield.tintColor = .mainWhite
         textfield.layer.cornerRadius = 10
         
         textfield.addLeftPadding() // 왼쪽에 여백 추가
