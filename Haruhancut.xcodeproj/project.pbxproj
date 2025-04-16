@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DF0C249D2DACF65F00022AB0 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0C249C2DACF65F00022AB0 /* UIViewController+Extension.swift */; };
+		DF0C249D2DACF65F00022AB0 /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0C249C2DACF65F00022AB0 /* UIViewController+.swift */; };
 		DF156B742DAD60E500918EE6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF156B732DAD60E500918EE6 /* User.swift */; };
 		DF156B762DAD610B00918EE6 /* UserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF156B752DAD610B00918EE6 /* UserDTO.swift */; };
 		DF3CBA1D2DA8079600AD5788 /* KakaoLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBA1C2DA8079600AD5788 /* KakaoLoginManager.swift */; };
@@ -27,8 +27,8 @@
 		DF4962BF2DACD2860001437B /* Pretendard-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = DF4962B32DACD2860001437B /* Pretendard-Thin.otf */; };
 		DF4962C12DACD6840001437B /* FontSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4962C02DACD6840001437B /* FontSystem.swift */; };
 		DF4962C52DACD8A60001437B /* ColorSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4962C42DACD8A60001437B /* ColorSystem.swift */; };
-		DF4962C72DACD96F0001437B /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4962C62DACD96F0001437B /* UIColor+Extension.swift */; };
-		DF4962C92DACEF140001437B /* TextField+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4962C82DACEF140001437B /* TextField+Extension.swift */; };
+		DF4962C72DACD96F0001437B /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4962C62DACD96F0001437B /* UIColor+.swift */; };
+		DF4962C92DACEF140001437B /* TextField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4962C82DACEF140001437B /* TextField+.swift */; };
 		DF4B5BA02DAEBACE00A7ADD7 /* BirthdaySettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4B5B9B2DAEBACE00A7ADD7 /* BirthdaySettingViewController.swift */; };
 		DF4B5BA12DAEBACE00A7ADD7 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4B5B9C2DAEBACE00A7ADD7 /* LoginViewController.swift */; };
 		DF4B5BA22DAEBACE00A7ADD7 /* NicknameSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4B5B9D2DAEBACE00A7ADD7 /* NicknameSettingViewController.swift */; };
@@ -54,7 +54,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		DF0C249C2DACF65F00022AB0 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		DF0C249C2DACF65F00022AB0 /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
 		DF156B732DAD60E500918EE6 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		DF156B752DAD610B00918EE6 /* UserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDTO.swift; sourceTree = "<group>"; };
 		DF3CBA1C2DA8079600AD5788 /* KakaoLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginManager.swift; sourceTree = "<group>"; };
@@ -74,8 +74,8 @@
 		DF4962B42DACD2860001437B /* RacingSansOne-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RacingSansOne-Regular.ttf"; sourceTree = "<group>"; };
 		DF4962C02DACD6840001437B /* FontSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontSystem.swift; sourceTree = "<group>"; };
 		DF4962C42DACD8A60001437B /* ColorSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSystem.swift; sourceTree = "<group>"; };
-		DF4962C62DACD96F0001437B /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
-		DF4962C82DACEF140001437B /* TextField+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextField+Extension.swift"; sourceTree = "<group>"; };
+		DF4962C62DACD96F0001437B /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
+		DF4962C82DACEF140001437B /* TextField+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextField+.swift"; sourceTree = "<group>"; };
 		DF4B5B9B2DAEBACE00A7ADD7 /* BirthdaySettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthdaySettingViewController.swift; sourceTree = "<group>"; };
 		DF4B5B9C2DAEBACE00A7ADD7 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		DF4B5B9D2DAEBACE00A7ADD7 /* NicknameSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameSettingViewController.swift; sourceTree = "<group>"; };
@@ -260,9 +260,9 @@
 		DF5F3E862D95C11D00245C20 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
-				DF4962C62DACD96F0001437B /* UIColor+Extension.swift */,
-				DF4962C82DACEF140001437B /* TextField+Extension.swift */,
-				DF0C249C2DACF65F00022AB0 /* UIViewController+Extension.swift */,
+				DF4962C62DACD96F0001437B /* UIColor+.swift */,
+				DF4962C82DACEF140001437B /* TextField+.swift */,
+				DF0C249C2DACF65F00022AB0 /* UIViewController+.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -463,7 +463,7 @@
 				DF4B5BA12DAEBACE00A7ADD7 /* LoginViewController.swift in Sources */,
 				DF4B5BA22DAEBACE00A7ADD7 /* NicknameSettingViewController.swift in Sources */,
 				DF3CBA1D2DA8079600AD5788 /* KakaoLoginManager.swift in Sources */,
-				DF4962C72DACD96F0001437B /* UIColor+Extension.swift in Sources */,
+				DF4962C72DACD96F0001437B /* UIColor+.swift in Sources */,
 				DF5F3E5E2D95BE7000245C20 /* ViewController.swift in Sources */,
 				DF3CBB4F2DA814F100AD5788 /* LoginUsecase.swift in Sources */,
 				DF4962C12DACD6840001437B /* FontSystem.swift in Sources */,
@@ -473,10 +473,10 @@
 				DFD757AA2D9C2A74008C82DF /* DIContainer.swift in Sources */,
 				DF4962C52DACD8A60001437B /* ColorSystem.swift in Sources */,
 				DF3CBB4D2DA80A6800AD5788 /* LoginRepositoryProtocol.swift in Sources */,
-				DF4962C92DACEF140001437B /* TextField+Extension.swift in Sources */,
+				DF4962C92DACEF140001437B /* TextField+.swift in Sources */,
 				DF156B762DAD610B00918EE6 /* UserDTO.swift in Sources */,
 				DF5F3E932D95C47700245C20 /* AppDelegate.swift in Sources */,
-				DF0C249D2DACF65F00022AB0 /* UIViewController+Extension.swift in Sources */,
+				DF0C249D2DACF65F00022AB0 /* UIViewController+.swift in Sources */,
 				DF5F3E942D95C47700245C20 /* SceneDelegate.swift in Sources */,
 				DFBD5C762DA9045D00A21953 /* HomeViewController.swift in Sources */,
 			);
