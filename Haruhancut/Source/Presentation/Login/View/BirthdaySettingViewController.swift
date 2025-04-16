@@ -176,16 +176,6 @@ final class BirthdaySettingViewController: UIViewController {
             .disposed(by: disposeBag)
     }
     
-    /*
-    @objc private func didTapNext() {
-        if let user = loginViewModel.user {
-            print("✅ 완료: \(user)")
-        }
-        
-        let birthdayVC = HomeViewController()
-        self.navigationController?.setViewControllers([birthdayVC], animated: true)
-    }
-     */
 }
 
 extension BirthdaySettingViewController {
@@ -203,22 +193,13 @@ extension BirthdaySettingViewController {
         textField.inputAccessoryView = createToolbar()
 
         // 초기값 설정
-        textField.text = dateFormat(date: Date())
+        textField.text = Date().toKoreanDateString()
     }
 
     @objc private func dateChange(_ sender: UIDatePicker) {
-        textField.text = dateFormat(date: sender.date)
+        textField.text = sender.date.toKoreanDateString()
         loginViewModel.user?.birthdayDate = sender.date
     }
-
-    private func dateFormat(date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ko_KR")              // ✅ 한국어
-        formatter.timeZone = TimeZone(identifier: "Asia/Seoul")     // ✅ 한국 타임존
-        formatter.dateFormat = "yyyy년 MM월 dd일"                     // ✅ 한국식 포맷 (원하면 "yyyy.MM.dd" 도 가능)
-        return formatter.string(from: date)
-    }
-
     
     // 툴바 추가
     private func createToolbar() -> UIToolbar {
