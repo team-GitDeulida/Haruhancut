@@ -68,7 +68,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate {
     private func registerDependencies() {
         let kakaoLoginManager = KakaoLoginManager.shared
-        let authRepository = LoginRepository(kakaoLoginManager: kakaoLoginManager)
+        let firebaseAuthManager = FirebaseAuthManager.shared
+        let authRepository = LoginRepository(kakaoLoginManager: kakaoLoginManager, firebaseAuthManager: firebaseAuthManager)
         let loginUsecase = LoginUsecase(repository: authRepository)
         DIContainer.shared.register(LoginUsecase.self, dependency: loginUsecase)
     }

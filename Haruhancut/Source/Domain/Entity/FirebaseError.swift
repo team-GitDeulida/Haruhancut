@@ -14,6 +14,7 @@ enum LoginError: Error {
     case sdkKakao(Error)
     
     // MARK: - Auth
+    case authError
     case signUpError
     
     var description: String {
@@ -22,6 +23,8 @@ enum LoginError: Error {
             "⚠️ 카카오 로그인 token이 없습니다"
         case .sdkKakao(let error):
             "⚠️ 카카오 SDK 오류: \(error)"
+        case .authError:
+            "⚠️ 파이어베이스 인증 실패"
         case .signUpError:
             "⚠️ 파이어베이스 가입 실패"
         }

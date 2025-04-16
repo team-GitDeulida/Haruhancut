@@ -10,4 +10,6 @@ import RxSwift
 
 protocol LoginRepositoryProtocol {
     func loginWithKakao() -> Observable<Result<String, LoginError>>
+    func authenticateUser(prividerID: String, idToken: String) -> Observable<Result<Void, LoginError>>
+    func registerUserToRealtimeDatabase(user: User) -> Observable<Result<User, LoginError>>
 }

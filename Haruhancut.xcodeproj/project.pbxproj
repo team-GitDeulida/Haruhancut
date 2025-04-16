@@ -11,7 +11,7 @@
 		DF156B742DAD60E500918EE6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF156B732DAD60E500918EE6 /* User.swift */; };
 		DF156B762DAD610B00918EE6 /* UserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF156B752DAD610B00918EE6 /* UserDTO.swift */; };
 		DF3CBA1D2DA8079600AD5788 /* KakaoLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBA1C2DA8079600AD5788 /* KakaoLoginManager.swift */; };
-		DF3CBB492DA809DB00AD5788 /* AuthRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBB482DA809DB00AD5788 /* AuthRepository.swift */; };
+		DF3CBB492DA809DB00AD5788 /* LoginRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBB482DA809DB00AD5788 /* LoginRepository.swift */; };
 		DF3CBB4D2DA80A6800AD5788 /* LoginRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBB4C2DA80A6800AD5788 /* LoginRepositoryProtocol.swift */; };
 		DF3CBB4F2DA814F100AD5788 /* LoginUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBB4E2DA814F100AD5788 /* LoginUsecase.swift */; };
 		DF4962B52DACD2860001437B /* RacingSansOne-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DF4962B42DACD2860001437B /* RacingSansOne-Regular.ttf */; };
@@ -59,7 +59,7 @@
 		DF156B732DAD60E500918EE6 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		DF156B752DAD610B00918EE6 /* UserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDTO.swift; sourceTree = "<group>"; };
 		DF3CBA1C2DA8079600AD5788 /* KakaoLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginManager.swift; sourceTree = "<group>"; };
-		DF3CBB482DA809DB00AD5788 /* AuthRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthRepository.swift; sourceTree = "<group>"; };
+		DF3CBB482DA809DB00AD5788 /* LoginRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRepository.swift; sourceTree = "<group>"; };
 		DF3CBB4C2DA80A6800AD5788 /* LoginRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRepositoryProtocol.swift; sourceTree = "<group>"; };
 		DF3CBB4E2DA814F100AD5788 /* LoginUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUsecase.swift; sourceTree = "<group>"; };
 		DF4962AA2DACD2860001437B /* NanumMyeongjo-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NanumMyeongjo-Regular.ttf"; sourceTree = "<group>"; };
@@ -119,7 +119,7 @@
 		DF3CBB472DA809CD00AD5788 /* RepositoryImpl */ = {
 			isa = PBXGroup;
 			children = (
-				DF3CBB482DA809DB00AD5788 /* AuthRepository.swift */,
+				DF3CBB482DA809DB00AD5788 /* LoginRepository.swift */,
 			);
 			path = RepositoryImpl;
 			sourceTree = "<group>";
@@ -462,7 +462,7 @@
 			files = (
 				DFA5BE2E2DAF94A900CAD5D3 /* Date+.swift in Sources */,
 				DF4B5BA62DAEBAD300A7ADD7 /* LoginViewModel.swift in Sources */,
-				DF3CBB492DA809DB00AD5788 /* AuthRepository.swift in Sources */,
+				DF3CBB492DA809DB00AD5788 /* LoginRepository.swift in Sources */,
 				DF4B5BA02DAEBACE00A7ADD7 /* BirthdaySettingViewController.swift in Sources */,
 				DF4B5BA12DAEBACE00A7ADD7 /* LoginViewController.swift in Sources */,
 				DF4B5BA22DAEBACE00A7ADD7 /* NicknameSettingViewController.swift in Sources */,

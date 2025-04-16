@@ -162,18 +162,33 @@ final class BirthdaySettingViewController: UIViewController {
     }
     
     private func bindViewModelOutput(output: LoginViewModel.Output) {
-        output.moveToHome
-            .drive(onNext: { [weak self] in
+        
+        // 회원가입 요청
+//        output.moveToHome
+//            .drive(onNext: { [weak self] in
+//                guard let self = self else { return }
+//                self.view.endEditing(true)
+//            })
+//            .disposed(by: disposeBag)
+        
+        // 회원가입 결과 처리
+        output.signUpResult
+            .drive(onNext: { [weak self] result in
                 guard let self = self else { return }
-                self.view.endEditing(true)
-                if let user = loginViewModel.user {
-                    print("✅ 완료: \(user)")
-                }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    self.navigationController?.setViewControllers([HomeViewController()], animated: true)
+                switch result {
+                case .success:
+                    self.view.endEditing(true)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        self.navigationController?.setViewControllers([HomeViewController()], animated: true)
+                    }
+                case .failure(let error):
+                    // 실패 알림 등 추가
+                    print("❌ 회원가입 실패: \(error)")
                 }
             })
             .disposed(by: disposeBag)
+        
+        
     }
     
 }
@@ -185,15 +200,17 @@ extension BirthdaySettingViewController {
         datePicker.preferredDatePickerStyle = .wheels
         datePicker.locale = Locale(identifier: "ko-KR")
         datePicker.addTarget(self, action: #selector(dateChange), for: .valueChanged)
-
+        
         // ✅ 핵심: inputView를 datePicker로 지정
         textField.inputView = datePicker
         
         // ✅ 툴바를 inputAccessoryView로 설정
         textField.inputAccessoryView = createToolbar()
 
-        // 초기값 설정
-        textField.text = Date().toKoreanDateString()
+        // ✅ 초기값을 2000년 1월 1일로 설정
+        let defaultDate = Calendar.current.date(from: DateComponents(year: 2000, month: 1, day: 1)) ?? Date()
+        datePicker.date = defaultDate
+        textField.text = defaultDate.toKoreanDateString()
     }
 
     @objc private func dateChange(_ sender: UIDatePicker) {

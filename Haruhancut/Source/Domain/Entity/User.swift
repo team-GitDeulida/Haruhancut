@@ -14,8 +14,8 @@ enum Gender: String {
 }
 
 enum LoginPlatform: String {
-    case kakao = "Kakao"
-    case apple = "Apple"
+    case kakao = "kakao"
+    case apple = "apple"
 }
 
 // MARK: - Model
@@ -49,9 +49,9 @@ extension User {
     
     // ✅ Empty Object 패턴 생성자
     // 필수 속성이 많은 Non-Optional 모델(User)을 "기본값으로라도 먼저 생성하고, 이후 점진적으로 값만 채워나가는 패턴"
-    static func empty(uid: String, loginPlatform: LoginPlatform) -> User {
+    static func empty(loginPlatform: LoginPlatform) -> User {
         return User(
-            uid: uid,
+            uid: "",
             registerDate: Date(),                 // 현재 시간
             loginPlatform: loginPlatform,
             nickname: "",                         // 아직 입력 안 됨

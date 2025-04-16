@@ -7,6 +7,7 @@
 
 import Foundation
 import FirebaseAuth
+import FirebaseDatabase
 
 import RxSwift
 import RxCocoa
@@ -18,6 +19,7 @@ import KakaoSDKAuth
 
 
 final class LoginViewModel {
+    private let disposeBag = DisposeBag()
     
     var user: User?
     
@@ -27,6 +29,14 @@ final class LoginViewModel {
     init(loginUsecase: LoginUsecaseProtocol) {
         self.loginUsecase = loginUsecase
     }
+    
+    // 이벤트를 방출하는 내부 트리거
+    private let signUpResultRelay = PublishRelay<Result<Void, LoginError>>()
+    
+    // sugnUpResultRelay 트리거를 driver로 변환하여 외부 vc에 노출하는 읽기 전용 driver
+//    var signUpResult: Driver<Result<Void, LoginError>> {
+//        signUpResultRelay.asDriver(onErrorJustReturn: .failure(.signUpError))
+//    }
     
     struct Input { // View에서 발생할 Input 이벤트(Stream)들
         // ViewModel 외부에서 전달받는 입력(Input)을 정의한 구조체
@@ -55,7 +65,8 @@ final class LoginViewModel {
         let loginResult: Driver<Result<Void, LoginError>> // 로그인 결과 스트림 (읽기 전용)
         let moveToBirthday: Driver<Void>
         let isNicknameValid: Driver<Bool>
-        let moveToHome: Driver<Void>
+        //let moveToHome: Driver<Void>
+        let signUpResult: Driver<Result<Void, LoginError>>
     }
     
     func transform(input: Input) -> Output {
@@ -70,7 +81,7 @@ final class LoginViewModel {
                 if case .success(let token) = result {
                     guard let self = self else { return }
                     self.token = token
-                    self.user = User.empty(uid: token, loginPlatform: .kakao)
+                    self.user = User.empty(loginPlatform: .kakao)
                 }
             })
             .map { $0.mapToVoid() }
@@ -86,7 +97,7 @@ final class LoginViewModel {
                 if case .success(let token) = result {
                     guard let self = self else { return }
                     self.token = token
-                    self.user = User.empty(uid: token, loginPlatform: .kakao)
+                    self.user = User.empty(loginPlatform: .kakao)
                 }
             })
             .map { $0.mapToVoid() }
@@ -104,20 +115,70 @@ final class LoginViewModel {
             .map { _ in () }
             .asDriver(onErrorDriveWith: .empty())
         
-        let birthdayNext = input.birthdayNextTapped
-            .withLatestFrom(input.birthdayDate)
-            .do(onNext: { [weak self] birthdate in
-                self?.user?.birthdayDate = birthdate
-            })
-            .map { _ in () }
-            .asDriver(onErrorDriveWith: .empty())
-        
         let isNicknameValid = input.nicknameText
             .map { $0.trimmingCharacters(in: .whitespacesAndNewlines).count != 0 }
             .distinctUntilChanged() // 중복된 값은 무시하고 변경될 때만 아래로 전달
             .asDriver(onErrorJustReturn: false) // 에러 발생 시에도 false를 대신 방출
+        
+//        let moveToHome = input.birthdayNextTapped
+//            .withLatestFrom(input.birthdayDate)
+//            .do(onNext: { [weak self] birthdate in
+//                guard let self = self else { return }
+//                self.user?.birthdayDate = birthdate
+//                if let user = self.user {
+//                    self.signUpUserToFirebase(user: user)
+//                }
+//            })
+//            .map { _ in () }
+//            .asDriver(onErrorDriveWith: .empty())
+        
+        let signUpResult = signUpResultRelay
+            .asDriver(onErrorJustReturn: .failure(.signUpError))
+        
+        // ✅ moveToHome 제거 → 내부에서 subscribe 처리 즉 ViewModel 내부에서만 트리거 처리
+        input.birthdayNextTapped
+            .withLatestFrom(input.birthdayDate)
+            .subscribe(onNext: { [weak self] birthdate in
+                guard let self = self else { return }
+                self.user?.birthdayDate = birthdate
+                if let user = self.user, let token = self.token {
+                    authenticateAndRegisterUser(user: user, idToken: token)
+                    
+                }
+            }).disposed(by: disposeBag)
 
-        return Output(loginResult: mergedLoginResult, moveToBirthday: nicknameNext, isNicknameValid: isNicknameValid, moveToHome: birthdayNext)
+        return Output(loginResult: mergedLoginResult, moveToBirthday: nicknameNext, isNicknameValid: isNicknameValid, signUpResult: signUpResult)
+    }
+    
+    private func authenticateAndRegisterUser(user: User, idToken: String) {
+        loginUsecase
+        // 1. FirebaseAuth 진행 // Observable<Result<Void, LoginError>>
+            .authenticateUser(prividerID: user.loginPlatform.rawValue, idToken: idToken)
+            // 결과에 따라 다른 Observable 흐름으로 전환
+            .flatMap { [weak self] result -> Observable<Result<User, LoginError>> in
+                guard let self = self else { return .empty() }
+                switch result {
+                case .success:
+                    // 2. 인증 성공시 유저 등록
+                    return self.loginUsecase.registerUserToRealtimeDatabase(user: user)
+                    /*
+                    return Observable.just(())
+                            .delay(.milliseconds(200), scheduler: MainScheduler.instance)
+                            .flatMap { self.loginUsecase.registerUserToRealtimeDatabase(user: user) }
+                     */
+                case .failure:
+                    return .just(.failure(.authError))
+                }
+            }
+            .map { [weak self] result in
+                if case .success(let user) = result {
+                    self?.user = user
+                    print("유저 업데이트: \(user)")
+                }
+                return result.mapToVoid()
+            }
+            .bind(to: signUpResultRelay)
+            .disposed(by: disposeBag)
     }
 }
 

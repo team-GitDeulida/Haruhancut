@@ -201,5 +201,5 @@ final class LoginViewController: UIViewController {
 #Preview {
     LoginViewController(
         loginViewModel: .init(loginUsecase: LoginUsecase(repository: LoginRepository(
-            kakaoLoginManager: KakaoLoginManager()))))
+            kakaoLoginManager: KakaoLoginManager.shared, firebaseAuthManager: FirebaseAuthManager.shared))))
 }

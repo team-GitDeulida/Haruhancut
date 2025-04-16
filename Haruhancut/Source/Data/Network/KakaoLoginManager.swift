@@ -18,6 +18,7 @@ final class KakaoLoginManager: KakaoLoginManagerProtocol {
     
     // MARK: - SingleTon
     static let shared = KakaoLoginManager()
+    private init() {}
     
     /// 카카오 로그인
     /// - Returns: Id 토큰을 방출하는 스트림
