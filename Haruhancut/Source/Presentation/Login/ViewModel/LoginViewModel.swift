@@ -54,6 +54,7 @@ final class LoginViewModel {
         // MARK: - 유저리스트, nicknameText등 단순 데이터 스트림 필요시는 Result x
         let loginResult: Driver<Result<Void, LoginError>> // 로그인 결과 스트림 (읽기 전용)
         let moveToBirthday: Driver<Void>
+        let isNicknameValid: Driver<Bool>
         let moveToHome: Driver<Void>
     }
     
@@ -110,8 +111,13 @@ final class LoginViewModel {
             })
             .map { _ in () }
             .asDriver(onErrorDriveWith: .empty())
+        
+        let isNicknameValid = input.nicknameText
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines).count >= 5 }
+            .distinctUntilChanged() // 중복된 값은 무시하고 변경될 때만 아래로 전달
+            .asDriver(onErrorJustReturn: false) // 에러 발생 시에도 false를 대신 방출
 
-        return Output(loginResult: mergedLoginResult, moveToBirthday: nicknameNext, moveToHome: birthdayNext)
+        return Output(loginResult: mergedLoginResult, moveToBirthday: nicknameNext, isNicknameValid: isNicknameValid, moveToHome: birthdayNext)
     }
 }
 

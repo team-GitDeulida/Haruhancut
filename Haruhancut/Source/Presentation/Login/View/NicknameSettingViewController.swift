@@ -47,7 +47,6 @@ final class NicknameSettingViewController: UIViewController {
         
         textfield.addLeftPadding() // 왼쪽에 여백 추가
         textfield.setPlaceholderColor(color: .Gray200) // placeHolder 색상
-        
         return textfield
     }()
     
@@ -100,7 +99,6 @@ final class NicknameSettingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setDelegate()
         makeUI()
         registerForKeyboardNotifications()
         bindViewModel()
@@ -110,12 +108,6 @@ final class NicknameSettingViewController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         view.endEditing(true)
-    }
-
-    private func setDelegate() {
-        // 텍스트필드의 프로토콜을 사용하기 위해선 사용할 객체를 연결 시켜줘야 한다.(위임)
-        // 텍스트필드.대리자 = ViewController의 객체를 담는다
-        textField.delegate = self
     }
     
     private func makeUI() {
@@ -172,7 +164,6 @@ final class NicknameSettingViewController: UIViewController {
         
         let output = loginViewModel.transform(input: input)
         bindViewModelOutput(output: output)
-        
     }
     
     private func bindViewModelOutput(output: LoginViewModel.Output) {
@@ -185,40 +176,23 @@ final class NicknameSettingViewController: UIViewController {
                     self.navigationController?.pushViewController(birthdayVC, animated: true)
                 }
             }).disposed(by: disposeBag)
-    }
-    
-    /*
-    @objc private func didTapNext() {
-        loginViewModel.user?.nickname = textField.text ?? "닉네임"
-        view.endEditing(true) // 키보드를 먼저 내림
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            let birthdayVC = BirthdaySettingViewController(loginViewModel: self.loginViewModel)
-            self.navigationController?.pushViewController(birthdayVC, animated: true)
-        }
-    }
-     */
-    
-}
-
-// 델리게이트 패턴: 객체와 객체간의 커뮤니케이션 (의사소통을 한다)
-// 즉. 뷰컨트롤러 대신에 일을 수행하고 그 결과값을 전달할 수 있다
-extension NicknameSettingViewController: UITextFieldDelegate {
-    // return키 입력시 키보드 내려감
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    
-    // 텍스트가 빈 문자열이 아닐떄만 다음 버튼 활성화
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        // 최종적으로 입력될 텍스트 구하기
-        if let currentText = textField.text as NSString? {
-            let updatedText = currentText.replacingCharacters(in: range, with: string)
-            let isNotEmpty = !updatedText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            nextButton.isEnabled = isNotEmpty
-            nextButton.alpha = isNotEmpty ? 1.0 : 0.5
-        }
-        return true
+        
+        // return키 입력시 키보드 내려감
+        textField.rx.controlEvent(.editingDidEndOnExit)
+            .bind(onNext: { [weak self] in
+                guard let self = self else { return }
+                self.view.endEditing(true)
+            })
+            .disposed(by: disposeBag)
+        
+        // 텍스트가 빈 문자열이 아닐때만 다음 버튼 활성화 - vm의 버튼 활성화로직에 대한 ui 바인딩
+        output.isNicknameValid
+            .drive(onNext: { [weak self] isValid in
+                guard let self = self else { return }
+                self.nextButton.isEnabled = isValid
+                self.nextButton.alpha = isValid ? 1.0 : 0.5
+            })
+            .disposed(by: disposeBag)
     }
 }
 
