@@ -61,7 +61,6 @@ final class LoginViewController: UIViewController {
             .drive { result in
                 switch result {
                 case .success:
-                    print("로그인 성공: ")
                     self.changeRootToMain(debug: 1)
                 case .failure(let error):
                     print("로그인 실패: \(error.localizedDescription)")
@@ -178,7 +177,7 @@ final class LoginViewController: UIViewController {
         switch debug {
         case 0:
             self.navigationController?.setViewControllers([
-                HomeViewController()
+                HomeViewController(loginViewModel: loginViewModel)
             ], animated: true)
         case 1:
             self.navigationController?.setViewControllers([
@@ -189,7 +188,7 @@ final class LoginViewController: UIViewController {
                 .first?.delegate as? SceneDelegate
             let window = sceneDelegate?.window
 
-            let homeVC = HomeViewController()
+            let homeVC = HomeViewController(loginViewModel: loginViewModel)
             window?.rootViewController = homeVC
             window?.makeKeyAndVisible()
         default:

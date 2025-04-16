@@ -41,6 +41,7 @@
 		DF5F3E8F2D95C47400245C20 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF5F3E8C2D95C47400245C20 /* LaunchScreen.storyboard */; };
 		DF5F3E932D95C47700245C20 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF5F3E902D95C47700245C20 /* AppDelegate.swift */; };
 		DF5F3E942D95C47700245C20 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF5F3E912D95C47700245C20 /* SceneDelegate.swift */; };
+		DF8603512DB00CFF008ADB69 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8603502DB00CFF008ADB69 /* UserDefaultsManager.swift */; };
 		DF9AEEEF2DA420F400466CC6 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = DF9AEEEE2DA420F400466CC6 /* FirebaseAuth */; };
 		DF9AEEF12DA420F400466CC6 /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = DF9AEEF02DA420F400466CC6 /* FirebaseAuthCombine-Community */; };
 		DF9AEEF32DA420F400466CC6 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = DF9AEEF22DA420F400466CC6 /* FirebaseDatabase */; };
@@ -91,6 +92,7 @@
 		DF5F3E902D95C47700245C20 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DF5F3E912D95C47700245C20 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		DF66506C2D88023400820F1A /* Haruhancut.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Haruhancut.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DF8603502DB00CFF008ADB69 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		DF9AEEEC2DA41F6800466CC6 /* Haruhancut.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Haruhancut.entitlements; sourceTree = "<group>"; };
 		DF9AEF162DA422A400466CC6 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		DFA5BE2D2DAF94A900CAD5D3 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
@@ -207,6 +209,7 @@
 				DF3CBB472DA809CD00AD5788 /* RepositoryImpl */,
 				DFD757A32D9C1CBD008C82DF /* Network */,
 				DFD757A42D9C1CBF008C82DF /* Dto */,
+				DF8603502DB00CFF008ADB69 /* UserDefaultsManager.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -474,6 +477,7 @@
 				DF156B742DAD60E500918EE6 /* User.swift in Sources */,
 				DF590B682DAB8D9F00956E54 /* FirebaseAuthManager.swift in Sources */,
 				DF590B6A2DAB926600956E54 /* FirebaseError.swift in Sources */,
+				DF8603512DB00CFF008ADB69 /* UserDefaultsManager.swift in Sources */,
 				DFD757AA2D9C2A74008C82DF /* DIContainer.swift in Sources */,
 				DF4962C52DACD8A60001437B /* ColorSystem.swift in Sources */,
 				DF3CBB4D2DA80A6800AD5788 /* LoginRepositoryProtocol.swift in Sources */,

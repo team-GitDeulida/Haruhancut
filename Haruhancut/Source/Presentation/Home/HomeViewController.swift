@@ -8,7 +8,19 @@
 import UIKit
 import FirebaseAuth
 
-class HomeViewController: UIViewController {
+final class HomeViewController: UIViewController {
+    
+    private let loginViewModel: LoginViewModel
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    init(loginViewModel: LoginViewModel) {
+        self.loginViewModel = loginViewModel
+        super.init(nibName: nil, bundle: nil)
+        
+    }
     
     private lazy var logoutBtn: UIButton = {
         let button = UIButton(type: .system)

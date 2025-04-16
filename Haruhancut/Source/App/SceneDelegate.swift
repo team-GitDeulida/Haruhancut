@@ -35,7 +35,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let usecase = DIContainer.shared.resolve(LoginUsecase.self)
         let viewModel = LoginViewModel(loginUsecase: usecase)
         let rootVC = LoginViewController(loginViewModel: viewModel)
-        let homeVC = HomeViewController()
+        let homeVC = HomeViewController(loginViewModel: viewModel)
         let navController: UINavigationController?
         
         if let _ = Auth.auth().currentUser {

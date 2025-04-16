@@ -7,19 +7,19 @@
 
 import Foundation
 
-enum Gender: String {
+enum Gender: String, Codable {
     case male = "남자"
     case female = "여자"
     case other = "비공개"
 }
 
-enum LoginPlatform: String {
+enum LoginPlatform: String, Codable {
     case kakao = "kakao"
     case apple = "apple"
 }
 
 // MARK: - Model
-struct User {
+struct User: Codable {
     var uid: String
     let registerDate: Date
     let loginPlatform: LoginPlatform
@@ -62,6 +62,18 @@ extension User {
         )
     }
 }
+
+// User를 캐싱 가능한 형태로 만들기
+extension User {
+    func toData() -> Data? {
+        try? JSONEncoder().encode(self)
+    }
+
+    static func from(data: Data) -> User? {
+        try? JSONDecoder().decode(User.self, from: data)
+    }
+}
+
 
 
 // MARK: - DTO

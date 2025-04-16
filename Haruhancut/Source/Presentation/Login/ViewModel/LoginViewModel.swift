@@ -28,6 +28,12 @@ final class LoginViewModel {
     
     init(loginUsecase: LoginUsecaseProtocol) {
         self.loginUsecase = loginUsecase
+        
+        // 앱 실행 시 캐시된 유저 불러오기
+        if let cachedUser = UserDefaultsManager.shared.loadUser() {
+            self.user = cachedUser
+        }
+        fetchMyInfo()
     }
     
     // 이벤트를 방출하는 내부 트리거
@@ -174,12 +180,52 @@ final class LoginViewModel {
                 if case .success(let user) = result {
                     self?.user = user
                     print("유저 업데이트: \(user)")
+                    UserDefaultsManager.shared.saveUser(user)
                 }
                 return result.mapToVoid()
             }
             .bind(to: signUpResultRelay)
             .disposed(by: disposeBag)
     }
+    
+    private func fetchMyInfo() {
+        
+        if let cached = UserDefaultsManager.shared.loadUser() {
+                print("✅ 캐시에서 불러온 유저: \(cached.nickname)")
+                self.user = cached
+                return
+            }
+        
+        // 1. 현재 로그인된 유저 UID 가져오기
+        guard let uid = Auth.auth().currentUser?.uid else {
+            print("🔸 로그인된 유저 없음")
+            return
+        }
+
+        // 2. Realtime Database 참조 설정
+        let ref = Database.database(url: "https://haruhancut-default-rtdb.asia-southeast1.firebasedatabase.app").reference()
+        let userRef = ref.child("users").child(uid)
+        
+        // 3. 데이터 fetch
+        userRef.observeSingleEvent(of: .value) { [weak self] snapshot, _  in
+            guard let value = snapshot.value as? [String: Any] else {
+                print("❌ 사용자 정보 없음")
+                return
+            }
+            
+            do {
+                // 4. Dictionary → Data → UserDTO → User
+                let data = try JSONSerialization.data(withJSONObject: value, options: [])
+                let dto = try JSONDecoder().decode(UserDTO.self, from: data)
+                let user = dto.toModel()
+                self?.user = user
+                 print("✅ 기존 유저 정보 불러옴: \(String(describing: user))")
+            } catch {
+                print("❌ 유저 디코딩 실패: \(error.localizedDescription)")
+            }
+        }
+    }
+
 }
 
 final class StubLoginViewModel {

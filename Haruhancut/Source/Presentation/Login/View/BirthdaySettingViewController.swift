@@ -23,7 +23,7 @@ final class BirthdaySettingViewController: UIViewController {
     
     private lazy var mainLabel: UILabel = {
         let label = UILabel()
-        label.text = "닉네임 님의 생년월일을 알려주세요."
+        label.text = "\(loginViewModel.user?.nickname ?? "닉네임") 님의 생년월일을 알려주세요."
         label.textColor = .white
         label.font = UIFont.hcFont(.bold, size: 20)
         label.numberOfLines = 0
@@ -179,7 +179,7 @@ final class BirthdaySettingViewController: UIViewController {
                 case .success:
                     self.view.endEditing(true)
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        self.navigationController?.setViewControllers([HomeViewController()], animated: true)
+                        self.navigationController?.setViewControllers([HomeViewController(loginViewModel: self.loginViewModel)], animated: true)
                     }
                 case .failure(let error):
                     // 실패 알림 등 추가
@@ -211,6 +211,29 @@ extension BirthdaySettingViewController {
         let defaultDate = Calendar.current.date(from: DateComponents(year: 2000, month: 1, day: 1)) ?? Date()
         datePicker.date = defaultDate
         textField.text = defaultDate.toKoreanDateString()
+    }
+    
+    private func showDatePickerAlert() {
+        let alert = UIAlertController(title: "생년월일 선택", message: "\n\n\n\n\n\n\n\n\n", preferredStyle: .alert)
+
+        let picker = UIDatePicker()
+        picker.datePickerMode = .date
+        picker.preferredDatePickerStyle = .wheels
+        picker.locale = Locale(identifier: "ko-KR")
+        picker.date = datePicker.date // 기존 값 유지
+        picker.frame = CGRect(x: 0, y: 30, width: 270, height: 216)
+
+        alert.view.addSubview(picker)
+
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [weak self] _ in
+            guard let self = self else { return }
+            self.datePicker.date = picker.date
+            self.textField.text = picker.date.toKoreanDateString()
+            self.loginViewModel.user?.birthdayDate = picker.date
+        }))
+
+        present(alert, animated: true)
     }
 
     @objc private func dateChange(_ sender: UIDatePicker) {

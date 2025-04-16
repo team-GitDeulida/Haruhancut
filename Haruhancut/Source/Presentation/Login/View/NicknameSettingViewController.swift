@@ -19,7 +19,7 @@ final class NicknameSettingViewController: UIViewController {
     
     // 키보드 가림 해결을 위한 bottom constraint속성
     private var nextButtonBottomConstraint: NSLayoutConstraint?
-
+    
     private let loginViewModel: LoginViewModel
     
     private lazy var mainLabel: UILabel = {
@@ -112,46 +112,52 @@ final class NicknameSettingViewController: UIViewController {
     }
     
     private func makeUI() {
-    view.backgroundColor = .background
-
-    // MARK: - labelStack
-    // 1. view에 버튼 추가
-    view.addSubview(labelStackView)
-    
-    // 2. 오토레이아웃 활성화
-    labelStackView.translatesAutoresizingMaskIntoConstraints = false
-    
-    // 3. 오토레이아웃 제약 추가
-    NSLayoutConstraint.activate([
-        labelStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),        // y축 위치
-        labelStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20) // x축 위치
-    ])
-    
-    // MARK: - textField
-    view.addSubview(textField)
-    textField.translatesAutoresizingMaskIntoConstraints = false
-    NSLayoutConstraint.activate([
-        textField.topAnchor.constraint(equalTo: labelStackView.bottomAnchor, constant: 30),  // y축 위치
-        textField.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor), // x축 위치
-        textField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20), // 좌우 패딩
-        textField.heightAnchor.constraint(equalToConstant: 50) // 버튼 높이
-    ])
-    
-    // MARK: - NextButtonn
-    view.addSubview(nextButton)
-    nextButton.translatesAutoresizingMaskIntoConstraints = false
-    
-    // 키보드에 의해 다음 버튼 가림을 막기 위한 방법
-    nextButtonBottomConstraint = nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
-    nextButtonBottomConstraint?.isActive = true
-    NSLayoutConstraint.activate([
-        //nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10), // y축 위치
-        nextButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),              // x축 위치
+        view.backgroundColor = .background
         
-        nextButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),// 좌우 패딩
-        nextButton.heightAnchor.constraint(equalToConstant: 50) // 버튼 높이
-    ])
-}
+        // MARK: - 커스텀 뒤로가기
+        let backItem = UIBarButtonItem()
+        backItem.title = "뒤로가기"
+        navigationItem.backBarButtonItem = backItem
+        navigationController?.navigationBar.tintColor = .mainWhite
+        
+        // MARK: - labelStack
+        // 1. view에 버튼 추가
+        view.addSubview(labelStackView)
+        
+        // 2. 오토레이아웃 활성화
+        labelStackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        // 3. 오토레이아웃 제약 추가
+        NSLayoutConstraint.activate([
+            labelStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),        // y축 위치
+            labelStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20) // x축 위치
+        ])
+        
+        // MARK: - textField
+        view.addSubview(textField)
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            textField.topAnchor.constraint(equalTo: labelStackView.bottomAnchor, constant: 30),  // y축 위치
+            textField.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor), // x축 위치
+            textField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20), // 좌우 패딩
+            textField.heightAnchor.constraint(equalToConstant: 50) // 버튼 높이
+        ])
+        
+        // MARK: - NextButtonn
+        view.addSubview(nextButton)
+        nextButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        // 키보드에 의해 다음 버튼 가림을 막기 위한 방법
+        nextButtonBottomConstraint = nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
+        nextButtonBottomConstraint?.isActive = true
+        NSLayoutConstraint.activate([
+            //nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10), // y축 위치
+            nextButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),              // x축 위치
+            
+            nextButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),// 좌우 패딩
+            nextButton.heightAnchor.constraint(equalToConstant: 50) // 버튼 높이
+        ])
+    }
     
     private func bindViewModel() {
         let input = LoginViewModel.Input.init(
@@ -209,17 +215,17 @@ extension NicknameSettingViewController {
                                                name: UIResponder.keyboardWillHideNotification,
                                                object: nil)
     }
-
+    
     @objc private func keyboardWillShow(_ notification: Notification) {
         guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
         let bottomInset = keyboardFrame.height - view.safeAreaInsets.bottom
         nextButtonBottomConstraint?.constant = -bottomInset - 10
-
+        
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
         }
     }
-
+    
     @objc private func keyboardWillHide(_ notification: Notification) {
         nextButtonBottomConstraint?.constant = -10
         UIView.animate(withDuration: 0.3) {
