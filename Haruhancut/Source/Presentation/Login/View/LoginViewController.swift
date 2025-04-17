@@ -184,7 +184,7 @@ final class LoginViewController: UIViewController {
         switch destination {
         case "home":
             self.navigationController?.setViewControllers([
-                HomeViewController(loginViewModel: loginViewModel)
+                HomeViewController(loginViewModel: loginViewModel, homeViewModel: HomeViewModel())
             ], animated: true)
         case "nickname":
             self.navigationController?.setViewControllers([
@@ -195,7 +195,7 @@ final class LoginViewController: UIViewController {
                 .first?.delegate as? SceneDelegate
             let window = sceneDelegate?.window
 
-            let homeVC = HomeViewController(loginViewModel: loginViewModel)
+            let homeVC = HomeViewController(loginViewModel: loginViewModel, homeViewModel: HomeViewModel())
             window?.rootViewController = homeVC
             window?.makeKeyAndVisible()
         default:

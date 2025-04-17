@@ -179,7 +179,7 @@ final class BirthdaySettingViewController: UIViewController {
                 case .success:
                     self.view.endEditing(true)
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        self.navigationController?.setViewControllers([HomeViewController(loginViewModel: self.loginViewModel)], animated: true)
+                        self.navigationController?.setViewControllers([HomeViewController(loginViewModel: self.loginViewModel, homeViewModel: HomeViewModel())], animated: true)
                     }
                 case .failure(let error):
                     // 실패 알림 등 추가

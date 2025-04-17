@@ -142,6 +142,7 @@ final class LoginViewModel {
                                 // 기존 유저 -> 유저 정보 저장 후 .success 반환
                                 self.user = user
                                 UserDefaultsManager.shared.saveUser(user)
+                                UserDefaultsManager.shared.markSignupCompleted()
                                 return .success(())
                             } else {
                                 // 신규 유저 -> 빈 유저 모델로 초기화 후 .noUser 반환 -> 회원가입 플로우 진입

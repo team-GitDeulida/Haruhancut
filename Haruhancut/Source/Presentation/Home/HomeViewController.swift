@@ -11,15 +11,26 @@ import FirebaseAuth
 final class HomeViewController: UIViewController {
     
     private let loginViewModel: LoginViewModel
+    private let homeViewModel: HomeViewModel
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(loginViewModel: LoginViewModel) {
+    init(
+    loginViewModel: LoginViewModel,
+    homeViewModel: HomeViewModel
+    ) {
         self.loginViewModel = loginViewModel
+        self.homeViewModel = homeViewModel
         super.init(nibName: nil, bundle: nil)
     }
+    
+    private lazy var testBtn: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Test", for: .normal)
+        return button
+    }()
     
     private lazy var logoutBtn: UIButton = {
         let button = UIButton(type: .system)
@@ -30,8 +41,12 @@ final class HomeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("홈 화면 이동 완료")
         makeUI()
+        bind()
+    }
+    
+    func makeUI() {
+        view.backgroundColor = .background
         
         view.addSubview(logoutBtn)
         logoutBtn.translatesAutoresizingMaskIntoConstraints = false
@@ -40,11 +55,13 @@ final class HomeViewController: UIViewController {
             logoutBtn.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             logoutBtn.centerYAnchor.constraint(equalTo: view.centerYAnchor),
         ])
-    }
-    
-    func makeUI() {
-        view.backgroundColor = #colorLiteral(red: 0.09411741048, green: 0.09411782771, blue: 0.102702044, alpha: 1)
         
+        view.addSubview(testBtn)
+        testBtn.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            testBtn.topAnchor.constraint(equalTo: logoutBtn.bottomAnchor, constant: 50),
+            testBtn.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
     }
     
     @objc func test() {
@@ -61,5 +78,9 @@ final class HomeViewController: UIViewController {
         } catch let signOutError as NSError {
             print("로그아웃 실패: %@", signOutError)
         }
+    }
+    
+    private func bind() {
+        homeViewModel.bindButtonTap(tap: testBtn.rx.tap.asObservable())
     }
 }

@@ -18,7 +18,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
@@ -33,9 +32,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         // 3. view 계층을 프로그래밍 방식으로 만들기
         let usecase = DIContainer.shared.resolve(LoginUsecase.self)
-        let viewModel = LoginViewModel(loginUsecase: usecase)
-        let rootVC = LoginViewController(loginViewModel: viewModel)
-        let homeVC = HomeViewController(loginViewModel: viewModel)
+        let loginVM = LoginViewModel(loginUsecase: usecase)
+        let rootVC = LoginViewController(loginViewModel: loginVM)
+        let homeVM = HomeViewModel()
+        let homeVC = HomeViewController(loginViewModel: loginVM, homeViewModel: homeVM)
         let navController: UINavigationController?
         
         if let _ = Auth.auth().currentUser {
@@ -133,8 +133,8 @@ extension SceneDelegate {
     /// 로그인 화면을 루트로 바꾸는 함수 (로그아웃 등에서 호출)
     func makeLoginRoot() {
         let usecase = DIContainer.shared.resolve(LoginUsecase.self)
-        let viewModel = LoginViewModel(loginUsecase: usecase)
-        let loginVC = LoginViewController(loginViewModel: viewModel)
+        let loginVM = LoginViewModel(loginUsecase: usecase)
+        let loginVC = LoginViewController(loginViewModel: loginVM)
         let nav = UINavigationController(rootViewController: loginVC)
         changeRootView(to: nav)
     }
