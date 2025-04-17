@@ -72,24 +72,23 @@ final class LoginViewModel {
     
     func transform(input: Input) -> Output {
         let kakaoLoginResult = input.kakaoLoginTapped
-            // Observable → Observable 연결
+            // 카카오 로그인 -> idToken 발급
             .flatMapLatest { [weak self] _ -> Observable<Result<String, LoginError>> in
                 guard let self = self else { return .empty() }
                 return self.loginUsecase.loginWIthKakao()
             }
-            // 인증 요청
+            // 토큰 발급 후 -> FirebaseAuth 인증
             .flatMapLatest { [weak self] result -> Observable<Result<Void, LoginError>> in
                 guard let self = self else { return .just(.failure(.signUpError)) }
                 switch result {
                 case .success(let token):
                     self.token = token
-                    
                     return self.loginUsecase.authenticateUser(prividerID: "kakao", idToken: token)
                 case .failure(let error):
                     return .just(.failure(error))
                 }
             }
-            // 기존 유저 확인
+            // 인증 성공 시 -> Realtime Database에서 인증 조회
             .flatMapLatest { [weak self] result -> Observable<Result<Void, LoginError>> in
                 guard let self = self else { return .empty() }
                 switch result {
@@ -97,11 +96,12 @@ final class LoginViewModel {
                     return self.loginUsecase.fetchUserFromDatabase()
                         .map { user -> Result<Void, LoginError> in
                             if let user = user {
+                                // 기존 유저 -> 유저 정보 저장 후 .success 반환
                                 self.user = user
                                 UserDefaultsManager.shared.saveUser(user)
                                 return .success(())
                             } else {
-                                // 유저가 없으면 회원가입 흐름
+                                // 신규 유저 -> 빈 유저 모델로 초기화 후 .noUser 반환 -> 회원가입 플로우 진입
                                 self.user = User.empty(loginPlatform: .kakao)
                                 return .failure(.noUser)
                             }
@@ -110,23 +110,7 @@ final class LoginViewModel {
                     return .just(.failure(error))
                 }
             }
-        
-//        let kakaoLoginResult = input.kakaoLoginTapped
-//            // Observable → Observable 연결
-//            .flatMapLatest { [weak self] _ -> Observable<Result<String, LoginError>> in
-//                guard let self = self else { return .empty() }
-//                return self.loginUsecase.loginWIthKakao()
-//            }
-//            // map 안으로 넣어도 되지만 부수효과 분리, 비즈니스로직 구분을 위해 do 처리
-//            .do(onNext: { [weak self] result in
-//                if case .success(let token) = result {
-//                    guard let self = self else { return }
-//                    self.token = token
-//                    self.user = User.empty(loginPlatform: .kakao)
-//                }
-//            })
-//            .map { $0.mapToVoid() }
-
+    
         let appleLoginResult = input.appleLoginTapped
             // Observable → Observable 연결
             .flatMapLatest { [weak self] _ -> Observable<Result<String, LoginError>> in
@@ -143,11 +127,12 @@ final class LoginViewModel {
             })
             .map { $0.mapToVoid() }
         
+        // 두 로그인 결과 병합 (카카오 or 애플)
         let mergedLoginResult = Observable
             .merge(kakaoLoginResult, appleLoginResult)
             .asDriver(onErrorJustReturn: .failure(.signUpError)) // ✅ Driver는 에러 허용 X → 기본값 처리 필요
         
-        // MARK: - 닉네임 입력 후 다음 버튼 탭 → 생일 뷰로 이동
+        // 닉네임 입력 후 다음 버튼 탭 → 생일 뷰로 이동
         let nicknameNext = input.nicknameNextBtnTapped
             .withLatestFrom(input.nicknameText)
             .do(onNext: { [weak self] nickname in
@@ -156,23 +141,13 @@ final class LoginViewModel {
             .map { _ in () }
             .asDriver(onErrorDriveWith: .empty())
         
+        // 닉네임 유효성 체크
         let isNicknameValid = input.nicknameText
             .map { $0.trimmingCharacters(in: .whitespacesAndNewlines).count != 0 }
             .distinctUntilChanged() // 중복된 값은 무시하고 변경될 때만 아래로 전달
             .asDriver(onErrorJustReturn: false) // 에러 발생 시에도 false를 대신 방출
         
-//        let moveToHome = input.birthdayNextTapped
-//            .withLatestFrom(input.birthdayDate)
-//            .do(onNext: { [weak self] birthdate in
-//                guard let self = self else { return }
-//                self.user?.birthdayDate = birthdate
-//                if let user = self.user {
-//                    self.signUpUserToFirebase(user: user)
-//                }
-//            })
-//            .map { _ in () }
-//            .asDriver(onErrorDriveWith: .empty())
-        
+        // 회원가입 결과 전달
         let signUpResult = signUpResultRelay
             .asDriver(onErrorJustReturn: .failure(.signUpError))
         

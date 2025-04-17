@@ -56,20 +56,21 @@ final class LoginViewController: UIViewController {
     
     // MARK: - Bind VoewModelOutput
     private func bindViewModelOutput(output: LoginViewModel.Output) {
-        // 로그인 결과를 구독하여  UI 흐름 처리
+        // 로그인 결과를 구독하여 UI 흐름 처리
         output.loginResult
             .drive { result in
                 switch result {
                 case .success:
-                    self.changeRootToMain(debug: 0)
+                    // 기존 유저 로그인 성공 -> 홈뷰로 이동
+                    self.navigateToNextScreen("home")
                 case .failure(let error):
                     switch error {
                     case .noUser:
-                        self.changeRootToMain(debug: 1)
+                        // 신규 유저 -> 닉네임 설정뷰로 이동
+                        self.navigateToNextScreen("nickname")
                     default:
                         print("로그인 실패: \(error.localizedDescription)")
                     }
-                    
                 }
             }.disposed(by: disposeBag)
     }
@@ -178,18 +179,18 @@ final class LoginViewController: UIViewController {
         ])
     }
     
-    func changeRootToMain(debug: Int) {
+    func navigateToNextScreen(_ destination: String) {
         
-        switch debug {
-        case 0:
+        switch destination {
+        case "home":
             self.navigationController?.setViewControllers([
                 HomeViewController(loginViewModel: loginViewModel)
             ], animated: true)
-        case 1:
+        case "nickname":
             self.navigationController?.setViewControllers([
                 NicknameSettingViewController(loginViewModel: loginViewModel)
             ], animated: true)
-        case 2:
+        case "home_":
             let sceneDelegate = UIApplication.shared.connectedScenes
                 .first?.delegate as? SceneDelegate
             let window = sceneDelegate?.window
