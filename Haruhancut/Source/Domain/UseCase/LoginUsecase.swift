@@ -10,7 +10,8 @@ import RxSwift
 
 protocol LoginUsecaseProtocol {
     func loginWIthKakao() -> Observable<Result<String, LoginError>>
-    func authenticateUser(prividerID: String, idToken: String) -> Observable<Result<Void, LoginError>>
+    func loginWithApple() -> Observable<Result<(String, String), LoginError>>
+    func authenticateUser(prividerID: String, idToken: String, rawNonce: String?) -> Observable<Result<Void, LoginError>>
     func registerUserToRealtimeDatabase(user: User) -> Observable<Result<User, LoginError>>
     func fetchUserFromDatabase() -> Observable<User?>
 }
@@ -28,13 +29,19 @@ final class LoginUsecase: LoginUsecaseProtocol {
         return repository.loginWithKakao()
     }
     
+    /// 애플 로그인
+    /// - Returns: 애플 로그인 토큰
+    func loginWithApple() -> Observable<Result<(String, String), LoginError>> {
+        return repository.loginWithApple()
+    }
+    
     /// Firebase Auth에 소셜 로그인으로 인증 요청
     /// - Parameters:
     ///   - prividerID: .kakao, .apple
     ///   - idToken: kakaoToken, appleToken
     /// - Returns: Result<Void, LoginError>
-    func authenticateUser(prividerID: String, idToken: String) -> Observable<Result<Void, LoginError>> {
-        return repository.authenticateUser(prividerID: prividerID, idToken: idToken)
+    func authenticateUser(prividerID: String, idToken: String, rawNonce: String?) -> Observable<Result<Void, LoginError>> {
+        return repository.authenticateUser(prividerID: prividerID, idToken: idToken, rawNonce: rawNonce)
     }
     
     /// Firebase Realtime Database에 유저 정보를 저장하고, 저장된 User를 반환
@@ -44,18 +51,23 @@ final class LoginUsecase: LoginUsecaseProtocol {
         return repository.registerUserToRealtimeDatabase(user: user)
     }
     
+    /// 본인 정보 불러오기
+    /// - Returns: Observable<User?>
     func fetchUserFromDatabase() -> Observable<User?> {
         return repository.fetchUserFromDatabase()
     }
-    
 }
 
 final class StubLoginUsecase: LoginUsecaseProtocol {
-    func loginWIthKakao() -> RxSwift.Observable<Result<String, LoginError>> {
+    func loginWIthKakao() -> Observable<Result<String, LoginError>> {
         return .just(.success("stub-token"))
     }
     
-    func authenticateUser(prividerID: String, idToken: String) -> Observable<Result<Void, LoginError>> {
+    func loginWithApple() -> Observable<Result<(String, String), LoginError>> {
+        return .just(.success(("stub-token", "stub-token")))
+    }
+    
+    func authenticateUser(prividerID: String, idToken: String, rawNonce: String?) -> Observable<Result<Void, LoginError>> {
         return .just(.success(()))
     }
     

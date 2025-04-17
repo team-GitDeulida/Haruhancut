@@ -39,14 +39,35 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let navController: UINavigationController?
         
         if let _ = Auth.auth().currentUser {
-            // 3.1 UINavigationController로 감싸서 루트뷰컨트롤러 설정
-            navController = UINavigationController(rootViewController: homeVC)
-            print("로그인완료")
+            print("테스트: \(UserDefaultsManager.shared.isSignupCompleted())")
+            // MARK: -
+            if UserDefaultsManager.shared.isSignupCompleted() {
+                
+                // 3.1 UINavigationController로 감싸서 루트뷰컨트롤러 설정
+                navController = UINavigationController(rootViewController: homeVC)
+                print("로그인완료")
+            } else {
+                navController = UINavigationController(rootViewController: rootVC)
+            }
+            
         } else {
             // 3.1 UINavigationController로 감싸서 루트뷰컨트롤러 설정
             navController = UINavigationController(rootViewController: rootVC)
             print("로그인이 필요합니다")
         }
+        
+//        if let _ = Auth.auth().currentUser {
+//            
+//
+//            
+//            // 3.1 UINavigationController로 감싸서 루트뷰컨트롤러 설정
+//            navController = UINavigationController(rootViewController: homeVC)
+//            print("로그인완료")
+//        } else {
+//            // 3.1 UINavigationController로 감싸서 루트뷰컨트롤러 설정
+//            navController = UINavigationController(rootViewController: rootVC)
+//            print("로그인이 필요합니다")
+//        }
         
         // 3.1 UINavigationController로 감싸서 루트뷰컨트롤러 설정
         // let navController = UINavigationController(rootViewController: rootVC)

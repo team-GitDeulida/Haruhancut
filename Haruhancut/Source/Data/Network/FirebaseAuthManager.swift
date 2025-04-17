@@ -19,19 +19,10 @@ enum ProviderID: String {
         case .apple: return .apple
         }
     }
-    
-    /*
-    var rawNonce: String {
-        switch self {
-        case .apple: return NonceGenerator.generate()
-        default: return ""
-        }
-    }
-     */
 }
 
 protocol FirebaseAuthManagerProtocol {
-    func authenticateUser(prividerID: String, idToken: String) -> Observable<Result<Void, LoginError>>
+    func authenticateUser(prividerID: String, idToken: String, rawNonce: String?) -> Observable<Result<Void, LoginError>>
     func registerUserToRealtimeDatabase(user: User) -> Observable<Result<User, LoginError>>
 }
 
@@ -47,23 +38,23 @@ final class FirebaseAuthManager: FirebaseAuthManagerProtocol {
     ///   - prividerID: .kakao, .apple
     ///   - idToken: kakaoToken, appleToken
     /// - Returns: Result<Void, LoginError>
-    func authenticateUser(prividerID: String, idToken: String) -> Observable<Result<Void, LoginError>> {
+    func authenticateUser(prividerID: String, idToken: String, rawNonce: String?) -> Observable<Result<Void, LoginError>> {
         // 비동기 이벤트를 하나의 흐름(Observable)으로 처리하기 위해 클로저 기반 esaping 비동기함수 -> Rx로 래핑
         
         guard let provider = ProviderID(rawValue: prividerID) else {
-            print("여기 에러: \(prividerID)")
             return Observable.just(.failure(LoginError.signUpError))
         }
         
         let credential = OAuthProvider.credential(
             providerID: provider.authProviderID,
             idToken: idToken,
-            rawNonce: "")
+            rawNonce: rawNonce ?? "")
         
         return Observable.create { observer in
             Auth.auth().signIn(with: credential) { _, error in
                 
-                if let _ = error {
+                if let error = error {
+                    print("❌ Firebase 인증 실패: \(error.localizedDescription)")
                     observer.onNext(.failure(LoginError.signUpError))
                 } else {
                     observer.onNext(.success(()))

@@ -183,7 +183,7 @@ final class BirthdaySettingViewController: UIViewController {
                     }
                 case .failure(let error):
                     // 실패 알림 등 추가
-                    print("❌ 회원가입 실패: \(error)")
+                    print("❌ [VC] 회원가입 실패: \(error)")
                 }
             })
             .disposed(by: disposeBag)

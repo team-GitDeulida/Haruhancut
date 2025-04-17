@@ -83,7 +83,50 @@ final class LoginViewModel {
                 switch result {
                 case .success(let token):
                     self.token = token
-                    return self.loginUsecase.authenticateUser(prividerID: "kakao", idToken: token)
+                    return self.loginUsecase.authenticateUser(prividerID: "kakao", idToken: token, rawNonce: nil)
+                case .failure(let error):
+                    return .just(.failure(error))
+                }
+            }
+            // 인증 성공 시 -> Realtime Database에서 인증 조회
+            .flatMapLatest { [weak self] result -> Observable<Result<Void, LoginError>> in
+                guard let self = self else { return .empty() }
+                switch result {
+                case .success:
+                    return self.loginUsecase.fetchUserFromDatabase()
+                        .map { user -> Result<Void, LoginError> in
+                            if let user = user {
+                                print("기존유저입니다")
+                                // 기존 유저 -> 유저 정보 저장 후 .success 반환
+                                self.user = user
+                                UserDefaultsManager.shared.saveUser(user)
+                                UserDefaultsManager.shared.markSignupCompleted()
+                                return .success(())
+                            } else {
+                                print("신규유저입니다")
+                                // 신규 유저 -> 빈 유저 모델로 초기화 후 .noUser 반환 -> 회원가입 플로우 진입
+                                self.user = User.empty(loginPlatform: .kakao)
+                                return .failure(.noUser)
+                            }
+                        }
+                case .failure(let error):
+                    return .just(.failure(error))
+                }
+            }
+    
+        let appleLoginResult = input.appleLoginTapped
+            // Observable → Observable 연결
+            .flatMapLatest { [weak self] _ -> Observable<Result<(String, String), LoginError>> in
+                guard let self = self else { return .empty() }
+                return self.loginUsecase.loginWithApple()
+            }
+            // 토큰 발급 후 -> FirebaseAuth 인증
+            .flatMapLatest { [weak self] result -> Observable<Result<Void, LoginError>> in
+                guard let self = self else { return .just(.failure(.signUpError)) }
+                switch result {
+                case .success(let (token, rawNonce)):
+                    self.token = token
+                    return self.loginUsecase.authenticateUser(prividerID: "apple", idToken: token, rawNonce: rawNonce)
                 case .failure(let error):
                     return .just(.failure(error))
                 }
@@ -102,7 +145,7 @@ final class LoginViewModel {
                                 return .success(())
                             } else {
                                 // 신규 유저 -> 빈 유저 모델로 초기화 후 .noUser 반환 -> 회원가입 플로우 진입
-                                self.user = User.empty(loginPlatform: .kakao)
+                                self.user = User.empty(loginPlatform: .apple)
                                 return .failure(.noUser)
                             }
                         }
@@ -110,22 +153,6 @@ final class LoginViewModel {
                     return .just(.failure(error))
                 }
             }
-    
-        let appleLoginResult = input.appleLoginTapped
-            // Observable → Observable 연결
-            .flatMapLatest { [weak self] _ -> Observable<Result<String, LoginError>> in
-                guard let self = self else { return .empty() }
-                return self.loginUsecase.loginWIthKakao()
-            }
-            // map 안으로 넣어도 되지만 부수효과 분리, 비즈니스로직 구분을 위해 do 처리
-            .do(onNext: { [weak self] result in
-                if case .success(let token) = result {
-                    guard let self = self else { return }
-                    self.token = token
-                    self.user = User.empty(loginPlatform: .kakao)
-                }
-            })
-            .map { $0.mapToVoid() }
         
         // 두 로그인 결과 병합 (카카오 or 애플)
         let mergedLoginResult = Observable
@@ -157,19 +184,23 @@ final class LoginViewModel {
             .subscribe(onNext: { [weak self] birthdate in
                 guard let self = self else { return }
                 self.user?.birthdayDate = birthdate
-                if let user = self.user, let token = self.token {
-                    authenticateAndRegisterUser(user: user, idToken: token)
-                    
+                if let user = self.user{
+                    registerUser(user: user)
                 }
             }).disposed(by: disposeBag)
 
         return Output(loginResult: mergedLoginResult, moveToBirthday: nicknameNext, isNicknameValid: isNicknameValid, signUpResult: signUpResult)
     }
     
-    private func authenticateAndRegisterUser(user: User, idToken: String) {
+    /// 신규 유저 회원가입 비즈니스 로직
+    /// - Parameters:
+    ///   - user: 신규 유저
+    ///   - idToken: 유저 토큰
+    /*
+    private func authenticateAndRegisterUser(user: User, idToken: String, rawNonce: String?) {
         loginUsecase
-        // 1. FirebaseAuth 진행 // Observable<Result<Void, LoginError>>
-            .authenticateUser(prividerID: user.loginPlatform.rawValue, idToken: idToken)
+            // 1. FirebaseAuth 진행 // Observable<Result<Void, LoginError>>
+            .authenticateUser(prividerID: user.loginPlatform.rawValue, idToken: idToken, rawNonce: rawNonce)
             // 결과에 따라 다른 Observable 흐름으로 전환
             .flatMap { [weak self] result -> Observable<Result<User, LoginError>> in
                 guard let self = self else { return .empty() }
@@ -191,6 +222,23 @@ final class LoginViewModel {
                     self?.user = user
                     print("유저 업데이트: \(user)")
                     UserDefaultsManager.shared.saveUser(user)
+                    UserDefaultsManager.shared.markSignupCompleted()
+                }
+                return result.mapToVoid()
+            }
+            .bind(to: signUpResultRelay)
+            .disposed(by: disposeBag)
+    }
+     */
+    
+    private func registerUser(user: User) {
+        loginUsecase
+            .registerUserToRealtimeDatabase(user: user)
+            .map { [weak self] result -> Result<Void, LoginError> in
+                if case .success(let user) = result {
+                    self?.user = user
+                    UserDefaultsManager.shared.saveUser(user)
+                    UserDefaultsManager.shared.markSignupCompleted()
                 }
                 return result.mapToVoid()
             }

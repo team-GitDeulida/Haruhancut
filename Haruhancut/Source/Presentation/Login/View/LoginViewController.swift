@@ -69,7 +69,7 @@ final class LoginViewController: UIViewController {
                         // 신규 유저 -> 닉네임 설정뷰로 이동
                         self.navigateToNextScreen("nickname")
                     default:
-                        print("로그인 실패: \(error.localizedDescription)")
+                        print("로그인 실패: \(error.description)")
                     }
                 }
             }.disposed(by: disposeBag)
@@ -207,5 +207,5 @@ final class LoginViewController: UIViewController {
 #Preview {
     LoginViewController(
         loginViewModel: .init(loginUsecase: LoginUsecase(repository: LoginRepository(
-            kakaoLoginManager: KakaoLoginManager.shared, firebaseAuthManager: FirebaseAuthManager.shared))))
+            kakaoLoginManager: KakaoLoginManager.shared, appleLoginManager: AppleLoginManager.shared, firebaseAuthManager: FirebaseAuthManager.shared))))
 }
