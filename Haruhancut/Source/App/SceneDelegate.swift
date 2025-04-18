@@ -45,6 +45,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 
                 // 3.1 UINavigationController로 감싸서 루트뷰컨트롤러 설정
                 navController = UINavigationController(rootViewController: homeVC)
+                
+                // navController = UINavigationController(rootViewController: GroupViewController())
+                
                 print("로그인완료")
             } else {
                 navController = UINavigationController(rootViewController: rootVC)

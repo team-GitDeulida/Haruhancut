@@ -24,7 +24,7 @@ final class BirthdaySettingViewController: UIViewController {
     private lazy var mainLabel: UILabel = {
         let label = UILabel()
         label.text = "\(loginViewModel.user?.nickname ?? "닉네임") 님의 생년월일을 알려주세요."
-        label.textColor = .white
+        label.textColor = .mainWhite
         label.font = UIFont.hcFont(.bold, size: 20)
         label.numberOfLines = 0
         return label

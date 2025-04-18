@@ -10,6 +10,9 @@
 		DF0C249D2DACF65F00022AB0 /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0C249C2DACF65F00022AB0 /* UIViewController+.swift */; };
 		DF156B742DAD60E500918EE6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF156B732DAD60E500918EE6 /* User.swift */; };
 		DF156B762DAD610B00918EE6 /* UserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF156B752DAD610B00918EE6 /* UserDTO.swift */; };
+		DF2AE60A2DB218A7007779D9 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2AE6082DB218A7007779D9 /* HomeViewController.swift */; };
+		DF2AE60E2DB218C6007779D9 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2AE60C2DB218C6007779D9 /* HomeViewModel.swift */; };
+		DF2AE6172DB218FD007779D9 /* GroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2AE6162DB218FD007779D9 /* GroupViewController.swift */; };
 		DF3CBA1D2DA8079600AD5788 /* KakaoLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBA1C2DA8079600AD5788 /* KakaoLoginManager.swift */; };
 		DF3CBB492DA809DB00AD5788 /* LoginRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBB482DA809DB00AD5788 /* LoginRepository.swift */; };
 		DF3CBB4D2DA80A6800AD5788 /* LoginRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBB4C2DA80A6800AD5788 /* LoginRepositoryProtocol.swift */; };
@@ -51,8 +54,6 @@
 		DF9AEF1C2DA4255C00466CC6 /* RxKakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = DF9AEF1B2DA4255C00466CC6 /* RxKakaoSDKAuth */; };
 		DF9AEF1E2DA4255C00466CC6 /* RxKakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = DF9AEF1D2DA4255C00466CC6 /* RxKakaoSDKUser */; };
 		DFA5BE2E2DAF94A900CAD5D3 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFA5BE2D2DAF94A900CAD5D3 /* Date+.swift */; };
-		DFBD5C762DA9045D00A21953 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFBD5C752DA9045D00A21953 /* HomeViewController.swift */; };
-		DFC0A1CB2DB154EE00CC0A66 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFC0A1CA2DB154EE00CC0A66 /* HomeViewModel.swift */; };
 		DFD757AA2D9C2A74008C82DF /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD757A92D9C2A74008C82DF /* DIContainer.swift */; };
 		DFF576A72DB0D87B007BEADA /* AppleLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFF576A62DB0D87B007BEADA /* AppleLoginManager.swift */; };
 /* End PBXBuildFile section */
@@ -61,6 +62,9 @@
 		DF0C249C2DACF65F00022AB0 /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
 		DF156B732DAD60E500918EE6 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		DF156B752DAD610B00918EE6 /* UserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDTO.swift; sourceTree = "<group>"; };
+		DF2AE6082DB218A7007779D9 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		DF2AE60C2DB218C6007779D9 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		DF2AE6162DB218FD007779D9 /* GroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewController.swift; sourceTree = "<group>"; };
 		DF3CBA1C2DA8079600AD5788 /* KakaoLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginManager.swift; sourceTree = "<group>"; };
 		DF3CBB482DA809DB00AD5788 /* LoginRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRepository.swift; sourceTree = "<group>"; };
 		DF3CBB4C2DA80A6800AD5788 /* LoginRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRepositoryProtocol.swift; sourceTree = "<group>"; };
@@ -98,8 +102,6 @@
 		DF9AEEEC2DA41F6800466CC6 /* Haruhancut.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Haruhancut.entitlements; sourceTree = "<group>"; };
 		DF9AEF162DA422A400466CC6 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		DFA5BE2D2DAF94A900CAD5D3 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
-		DFBD5C752DA9045D00A21953 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
-		DFC0A1CA2DB154EE00CC0A66 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		DFD757A92D9C2A74008C82DF /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
 		DFF576A62DB0D87B007BEADA /* AppleLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -122,6 +124,46 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DF2AE6092DB218A7007779D9 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DF2AE6082DB218A7007779D9 /* HomeViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DF2AE60D2DB218C6007779D9 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				DF2AE60C2DB218C6007779D9 /* HomeViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		DF2AE6122DB218E4007779D9 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DF2AE6162DB218FD007779D9 /* GroupViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DF2AE6132DB218E4007779D9 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		DF2AE6142DB218E4007779D9 /* Group */ = {
+			isa = PBXGroup;
+			children = (
+				DF2AE6122DB218E4007779D9 /* View */,
+				DF2AE6132DB218E4007779D9 /* ViewModel */,
+			);
+			path = Group;
+			sourceTree = "<group>";
+		};
 		DF3CBB472DA809CD00AD5788 /* RepositoryImpl */ = {
 			isa = PBXGroup;
 			children = (
@@ -231,6 +273,7 @@
 		DF5F3E7D2D95BECF00245C20 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				DF2AE6142DB218E4007779D9 /* Group */,
 				DF6BBA2A2D972597002A344F /* SignUp */,
 				DF6BBA152D972046002A344F /* Home */,
 				DF6BBA182D972048002A344F /* Login */,
@@ -315,8 +358,8 @@
 		DF6BBA152D972046002A344F /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				DFBD5C752DA9045D00A21953 /* HomeViewController.swift */,
-				DFC0A1CA2DB154EE00CC0A66 /* HomeViewModel.swift */,
+				DF2AE60D2DB218C6007779D9 /* ViewModel */,
+				DF2AE6092DB218A7007779D9 /* View */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -480,21 +523,22 @@
 				DF4962C72DACD96F0001437B /* UIColor+.swift in Sources */,
 				DF5F3E5E2D95BE7000245C20 /* ViewController.swift in Sources */,
 				DF3CBB4F2DA814F100AD5788 /* LoginUsecase.swift in Sources */,
+				DF2AE60A2DB218A7007779D9 /* HomeViewController.swift in Sources */,
 				DF4962C12DACD6840001437B /* FontSystem.swift in Sources */,
 				DF156B742DAD60E500918EE6 /* User.swift in Sources */,
 				DF590B682DAB8D9F00956E54 /* FirebaseAuthManager.swift in Sources */,
 				DF590B6A2DAB926600956E54 /* FirebaseError.swift in Sources */,
 				DF8603512DB00CFF008ADB69 /* UserDefaultsManager.swift in Sources */,
 				DFD757AA2D9C2A74008C82DF /* DIContainer.swift in Sources */,
+				DF2AE6172DB218FD007779D9 /* GroupViewController.swift in Sources */,
 				DF4962C52DACD8A60001437B /* ColorSystem.swift in Sources */,
 				DF3CBB4D2DA80A6800AD5788 /* LoginRepositoryProtocol.swift in Sources */,
 				DF4962C92DACEF140001437B /* TextField+.swift in Sources */,
+				DF2AE60E2DB218C6007779D9 /* HomeViewModel.swift in Sources */,
 				DF156B762DAD610B00918EE6 /* UserDTO.swift in Sources */,
-				DFC0A1CB2DB154EE00CC0A66 /* HomeViewModel.swift in Sources */,
 				DF5F3E932D95C47700245C20 /* AppDelegate.swift in Sources */,
 				DF0C249D2DACF65F00022AB0 /* UIViewController+.swift in Sources */,
 				DF5F3E942D95C47700245C20 /* SceneDelegate.swift in Sources */,
-				DFBD5C762DA9045D00A21953 /* HomeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -522,7 +566,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LGX4B4WC66;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -562,7 +606,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LGX4B4WC66;
 				GENERATE_INFOPLIST_FILE = YES;
