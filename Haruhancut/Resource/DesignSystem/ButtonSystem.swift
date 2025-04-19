@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// 소셜 로그인 버튼
 final class SocialLoginButton: UIButton {
     enum LoginType {
         case kakao, apple

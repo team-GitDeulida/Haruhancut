@@ -14,6 +14,7 @@
 		DF2AE60E2DB218C6007779D9 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2AE60C2DB218C6007779D9 /* HomeViewModel.swift */; };
 		DF2AE6172DB218FD007779D9 /* GroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2AE6162DB218FD007779D9 /* GroupViewController.swift */; };
 		DF3502E32DB36BBF002C1269 /* ButtonSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3502E22DB36BBF002C1269 /* ButtonSystem.swift */; };
+		DF35040E2DB388B8002C1269 /* TextFieldSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF35040D2DB388B8002C1269 /* TextFieldSystem.swift */; };
 		DF3CBA1D2DA8079600AD5788 /* KakaoLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBA1C2DA8079600AD5788 /* KakaoLoginManager.swift */; };
 		DF3CBB492DA809DB00AD5788 /* LoginRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBB482DA809DB00AD5788 /* LoginRepository.swift */; };
 		DF3CBB4D2DA80A6800AD5788 /* LoginRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBB4C2DA80A6800AD5788 /* LoginRepositoryProtocol.swift */; };
@@ -68,6 +69,7 @@
 		DF2AE60C2DB218C6007779D9 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		DF2AE6162DB218FD007779D9 /* GroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewController.swift; sourceTree = "<group>"; };
 		DF3502E22DB36BBF002C1269 /* ButtonSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonSystem.swift; sourceTree = "<group>"; };
+		DF35040D2DB388B8002C1269 /* TextFieldSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldSystem.swift; sourceTree = "<group>"; };
 		DF3CBA1C2DA8079600AD5788 /* KakaoLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginManager.swift; sourceTree = "<group>"; };
 		DF3CBB482DA809DB00AD5788 /* LoginRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRepository.swift; sourceTree = "<group>"; };
 		DF3CBB4C2DA80A6800AD5788 /* LoginRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRepositoryProtocol.swift; sourceTree = "<group>"; };
@@ -208,6 +210,7 @@
 				DF4962C02DACD6840001437B /* FontSystem.swift */,
 				DF4962C42DACD8A60001437B /* ColorSystem.swift */,
 				DF3502E22DB36BBF002C1269 /* ButtonSystem.swift */,
+				DF35040D2DB388B8002C1269 /* TextFieldSystem.swift */,
 			);
 			path = DesignSystem;
 			sourceTree = "<group>";
@@ -524,6 +527,7 @@
 				DF3CBB492DA809DB00AD5788 /* LoginRepository.swift in Sources */,
 				DFF9D1012DB2D339000C5E94 /* DynamicSize.swift in Sources */,
 				DF4B5BA02DAEBACE00A7ADD7 /* BirthdaySettingViewController.swift in Sources */,
+				DF35040E2DB388B8002C1269 /* TextFieldSystem.swift in Sources */,
 				DF4B5BA12DAEBACE00A7ADD7 /* LoginViewController.swift in Sources */,
 				DF4B5BA22DAEBACE00A7ADD7 /* NicknameSettingViewController.swift in Sources */,
 				DF3CBA1D2DA8079600AD5788 /* KakaoLoginManager.swift in Sources */,

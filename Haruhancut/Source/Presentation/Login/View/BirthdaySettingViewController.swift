@@ -38,18 +38,7 @@ final class BirthdaySettingViewController: UIViewController {
         return label
     }()
     
-    private lazy var textField: UITextField = {
-        let textfield = UITextField()
-        textfield.placeholder = "2000.11.11"
-        textfield.textColor = .mainWhite
-        textfield.backgroundColor = .Gray500
-        textfield.layer.cornerRadius = 10
-        
-        textfield.addLeftPadding() // 왼쪽에 여백 추가
-        textfield.setPlaceholderColor(color: .Gray200) // placeHolder 색상
-        
-        return textfield
-    }()
+    private lazy var textField: UITextField = HCTextField(placeholder: "2000.11.11")
     
     private lazy var labelStackView: UIStackView = {
         let st = UIStackView(arrangedSubviews: [

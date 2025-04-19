@@ -38,19 +38,8 @@ final class NicknameSettingViewController: UIViewController {
         return label
     }()
     
-    private lazy var textField: UITextField = {
-        let textfield = UITextField()
-        textfield.placeholder = "닉네임"
-        textfield.textColor = .mainWhite
-        textfield.backgroundColor = .Gray500
-        textfield.tintColor = .mainWhite
-        textfield.layer.cornerRadius = 10
-        
-        textfield.addLeftPadding() // 왼쪽에 여백 추가
-        textfield.setPlaceholderColor(color: .Gray200) // placeHolder 색상
-        return textfield
-    }()
-    
+    private lazy var textField: UITextField = HCTextField(placeholder: "닉네임")
+
     private lazy var labelStackView: UIStackView = {
         let st = UIStackView(arrangedSubviews: [
             mainLabel,
