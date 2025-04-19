@@ -27,6 +27,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // 1. scene 캡처
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
+        // 1.1 화면 사이즈를 저장하는 커스텀 함수, 기기 해상도에 따라 레이아웃 사이즈 조절
+        DynamicSize.setScreenSize(windowScene.screen.bounds)
+        
         // 2. window scene을 가져오는 windowScene을 생성자를 사용해서 UIWindow를 생성
         let window = UIWindow(windowScene: windowScene)
         

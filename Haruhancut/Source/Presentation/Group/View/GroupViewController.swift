@@ -19,16 +19,7 @@ final class GroupViewController: UIViewController {
         label.textColor = .mainWhite
         return label
     }()
-    
-    // 로고
-//    private lazy var logoLabel: UILabel = {
-//        let label = UILabel()
-//        label.text = "하루한컷"
-//        label.font = UIFont.hcFont(.bold, size: 20)
-//        label.textColor = .mainWhite
-//        return label
-//    }()
-    
+        
     // 설명
     private lazy var mainLabel: UILabel = {
         let label = UILabel()
@@ -142,14 +133,6 @@ final class GroupViewController: UIViewController {
     private func makeUI() {
         // 배경 색상
         view.backgroundColor = .background
-        
-        // MARK: - logoLabel
-//        view.addSubview(logoLabel)
-//        logoLabel.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            logoLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -30),
-//            logoLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-//        ])
         
         // MARK: - mainLabel
         view.addSubview(mainLabel)

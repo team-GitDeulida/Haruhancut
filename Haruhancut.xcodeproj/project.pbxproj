@@ -56,6 +56,7 @@
 		DFA5BE2E2DAF94A900CAD5D3 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFA5BE2D2DAF94A900CAD5D3 /* Date+.swift */; };
 		DFD757AA2D9C2A74008C82DF /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD757A92D9C2A74008C82DF /* DIContainer.swift */; };
 		DFF576A72DB0D87B007BEADA /* AppleLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFF576A62DB0D87B007BEADA /* AppleLoginManager.swift */; };
+		DFF9D1012DB2D339000C5E94 /* DynamicSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFF9D1002DB2D339000C5E94 /* DynamicSize.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -104,6 +105,7 @@
 		DFA5BE2D2DAF94A900CAD5D3 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		DFD757A92D9C2A74008C82DF /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
 		DFF576A62DB0D87B007BEADA /* AppleLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginManager.swift; sourceTree = "<group>"; };
+		DFF9D1002DB2D339000C5E94 /* DynamicSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicSize.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -305,6 +307,7 @@
 		DF5F3E852D95C11B00245C20 /* Constant */ = {
 			isa = PBXGroup;
 			children = (
+				DFF9D1002DB2D339000C5E94 /* DynamicSize.swift */,
 			);
 			path = Constant;
 			sourceTree = "<group>";
@@ -516,6 +519,7 @@
 				DFF576A72DB0D87B007BEADA /* AppleLoginManager.swift in Sources */,
 				DF4B5BA62DAEBAD300A7ADD7 /* LoginViewModel.swift in Sources */,
 				DF3CBB492DA809DB00AD5788 /* LoginRepository.swift in Sources */,
+				DFF9D1012DB2D339000C5E94 /* DynamicSize.swift in Sources */,
 				DF4B5BA02DAEBACE00A7ADD7 /* BirthdaySettingViewController.swift in Sources */,
 				DF4B5BA12DAEBACE00A7ADD7 /* LoginViewController.swift in Sources */,
 				DF4B5BA22DAEBACE00A7ADD7 /* NicknameSettingViewController.swift in Sources */,
