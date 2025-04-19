@@ -22,21 +22,9 @@ final class NicknameSettingViewController: UIViewController {
     
     private let loginViewModel: LoginViewModel
     
-    private lazy var mainLabel: UILabel = {
-        let label = UILabel()
-        label.text = "사용하실 닉네임을 입력해주세요."
-        label.textColor = .white
-        label.font = UIFont.hcFont(.bold, size: 20)
-        return label
-    }()
-    
-    private lazy var subLabel: UILabel = {
-        let label = UILabel()
-        label.text = "닉네임은 언제든지 변경할 수 있어요!"
-        label.textColor = .gray
-        label.font = UIFont.hcFont(.semiBold, size: 15)
-        return label
-    }()
+    private lazy var mainLabel: UILabel = HCLabel(type: .main(text: "사용하실 닉네임을 입력해주세요."))
+
+    private lazy var subLabel: UILabel = HCLabel(type: .sub(text: "닉네임은 언제든지 변경할 수 있어요!"))
     
     private lazy var textField: UITextField = HCTextField(placeholder: "닉네임")
 

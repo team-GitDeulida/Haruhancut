@@ -21,22 +21,9 @@ final class BirthdaySettingViewController: UIViewController {
     
     private let loginViewModel: LoginViewModel
     
-    private lazy var mainLabel: UILabel = {
-        let label = UILabel()
-        label.text = "\(loginViewModel.user?.nickname ?? "닉네임") 님의 생년월일을 알려주세요."
-        label.textColor = .mainWhite
-        label.font = UIFont.hcFont(.bold, size: 20)
-        label.numberOfLines = 0
-        return label
-    }()
+    private lazy var mainLabel: UILabel = HCLabel(type: .main(text: "\(loginViewModel.user?.nickname ?? "닉네임") 님의 생년월일을 알려주세요."))
     
-    private lazy var subLabel: UILabel = {
-        let label = UILabel()
-        label.text = "가족들이 함께 생일을 축하할 수 있어요!"
-        label.textColor = .gray
-        label.font = UIFont.hcFont(.semiBold, size: 15)
-        return label
-    }()
+    private lazy var subLabel: UILabel = HCLabel(type: .sub(text: "가족들이 함께 생일을 축하할 수 있어요!"))
     
     private lazy var textField: UITextField = HCTextField(placeholder: "2000.11.11")
     
