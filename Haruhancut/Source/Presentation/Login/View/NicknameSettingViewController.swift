@@ -54,29 +54,7 @@ final class NicknameSettingViewController: UIViewController {
         return st
     }()
     
-    private lazy var nextButton: UIButton = {
-        let button = UIButton(type: .system)
-        var config = UIButton.Configuration.filled()
-        
-        config.title = "다음"
-        config.baseBackgroundColor = .mainWhite
-        config.baseForegroundColor = .mainBlack
-        
-        button.configuration = config
-        button.layer.cornerRadius = 20
-        button.clipsToBounds = true
-        button.configurationUpdateHandler = { button in
-            var updatedConfig = button.configuration
-            updatedConfig?.baseBackgroundColor = button.isHighlighted ? UIColor.lightGray : UIColor.mainWhite
-            button.configuration = updatedConfig
-        }
-        
-        // 초기 상태 비활성화
-        button.isEnabled = false
-        button.alpha = 0.5
-        //button.addTarget(self, action: #selector(didTapNext), for: .touchUpInside)
-        return button
-    }()
+    private lazy var nextButton: UIButton = HCNextButton(title: "다음")
     
     init(loginViewModel: LoginViewModel) {
         self.loginViewModel = loginViewModel

@@ -60,3 +60,31 @@ final class SocialLoginButton: UIButton {
         }
     }
 }
+
+/// 다음 버튼
+final class HCNextButton: UIButton {
+    init(title: String) {
+        super.init(frame: .zero)
+        self.configure(title: title)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func configure(title: String) {
+        var config = UIButton.Configuration.filled()
+        config.title = "완료"
+        config.baseForegroundColor = .mainBlack
+        config.baseBackgroundColor = .mainWhite
+        
+        self.configuration = config
+        self.layer.cornerRadius = DynamicSize.scaledSize(20)
+        self.clipsToBounds = true
+        self.configurationUpdateHandler = { button in
+            var updated = button.configuration
+            updated?.baseBackgroundColor = button.isHighlighted ? .lightGray : .mainWhite
+            button.configuration = updated
+        }
+    }
+}

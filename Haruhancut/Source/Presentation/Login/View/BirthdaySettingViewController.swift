@@ -54,25 +54,7 @@ final class BirthdaySettingViewController: UIViewController {
         return st
     }()
     
-    private lazy var nextButton: UIButton = {
-        let button = UIButton(type: .system)
-        var config = UIButton.Configuration.filled()
-        
-        config.title = "완료"
-        config.baseBackgroundColor = .mainWhite
-        config.baseForegroundColor = .mainBlack
-        
-        button.configuration = config
-        button.layer.cornerRadius = 20
-        button.clipsToBounds = true
-        button.configurationUpdateHandler = { button in
-            var updatedConfig = button.configuration
-            updatedConfig?.baseBackgroundColor = button.isHighlighted ? UIColor.lightGray : UIColor.mainWhite
-            button.configuration = updatedConfig
-        }
-        //button.addTarget(self, action: #selector(didTapNext), for: .touchUpInside)
-        return button
-    }()
+    private lazy var nextButton: UIButton = HCNextButton(title: "완료")
     
     init(loginViewModel: LoginViewModel) {
         self.loginViewModel = loginViewModel
