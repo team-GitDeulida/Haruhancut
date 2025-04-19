@@ -76,70 +76,8 @@ final class LoginViewController: UIViewController {
     }
     
     // MARK: - UI Components
-    private lazy var kakaoLoginButton: UIButton = {
-        let button = UIButton(type: .system)
-        var config = UIButton.Configuration.filled()
-        config.image = UIImage(named: "Logo Kakao")
-        config.baseBackgroundColor = UIColor(red: 1.0, green: 0.9, blue: 0.0, alpha: 1.0)
-        config.imagePlacement = .leading    // 이미지가 텍스트 왼쪽에 위치
-        config.imagePadding = 20            // 이미지와 텍스트 사이 간격
-        config.title = "카카오로 계속하기"
-        config.baseForegroundColor = .black
-        // 폰트 설정
-        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
-            var outgoing = incoming
-            outgoing.font = UIFont.hcFont(.semiBold, size: 16)
-            // UIFont.systemFont(ofSize: 16, weight: .medium)
-            return outgoing
-        }
-        button.configuration = config
-        button.layer.cornerRadius = 10
-        button.clipsToBounds = true
-        // 상태에 따라 배경색 바꾸기
-        button.configurationUpdateHandler = { button in
-            var config = button.configuration
-            if button.isHighlighted {
-                config?.baseBackgroundColor = UIColor(red: 0.8, green: 0.72, blue: 0.0, alpha: 1.0) // 눌렸을 때 진한 노랑
-            } else {
-                config?.baseBackgroundColor = .kakao // 기본 노랑
-            }
-            button.configuration = config
-        }
-        return button
-    }()
-    
-    private lazy var appleLoginButton: UIButton = {
-        let button = UIButton(type: .system)
-        var config = UIButton.Configuration.filled()
-        config.image = UIImage(named: "Logo Apple")
-        config.baseBackgroundColor = .white
-        config.imagePlacement = .leading    // 이미지가 텍스트 왼쪽에 위치
-        config.imagePadding = 20            // 이미지와 텍스트 사이 간격
-        config.title = "Apple로 계속하기"
-        config.baseForegroundColor = .black
-        // 폰트 설정
-        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
-            var outgoing = incoming
-            outgoing.font = UIFont.hcFont(.semiBold, size: 16)
-            // UIFont.systemFont(ofSize: 16, weight: .medium)
-            return outgoing
-        }
-        button.configuration = config
-        button.layer.cornerRadius = 10
-        button.clipsToBounds = true
-        // 상태에 따라 배경색 바꾸기
-        button.configurationUpdateHandler = { button in
-            var config = button.configuration
-            if button.isHighlighted {
-                config?.baseBackgroundColor = UIColor(white: 0.9, alpha: 1.0) // 눌렀을 때 약간 회색
-            } else {
-                config?.baseBackgroundColor = .apple
-            }
-            button.configuration = config
-        }
-//        button.addTarget(self, action: #selector(handleAppleLogin), for: .touchUpInside)
-        return button
-    }()
+    private lazy var kakaoLoginButton = SocialLoginButton(type: .kakao, title: "카카오로 계속하기")
+    private lazy var appleLoginButton = SocialLoginButton(type: .apple, title: "Apple로 계속하기")
     
     private lazy var stackView: UIStackView = {
         // 카카오로그인버튼, 애플로그이넙튼 -> 스택뷰에 추가

@@ -79,7 +79,7 @@ extension DynamicSize {
     
     /// 주어진 값에 스케일 비율을 적용(동적 크기 계산)
     static func scaledSize(_ size: CGFloat) -> CGFloat {
-        print("test: \(size * scaleFactor)")
+        /// print("test: \(size * scaleFactor)")
         return size * scaleFactor
     }
 }

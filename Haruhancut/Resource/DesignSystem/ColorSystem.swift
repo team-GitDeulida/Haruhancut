@@ -21,6 +21,9 @@ extension UIColor {
     static let kakao = UIColor(hex: "#FEE500")
     static let apple = UIColor(hex: "#FFFFFF")
     
+    static let kakaoTapped = UIColor(hex: "#CCC200") // 기존 RGB(0.8, 0.72, 0.0) ≒ #CCC200
+    static let appleTapped = UIColor(hex: "#E5E5E5") // 기존 white: 0.9 ≒ #E5E5E5
+    
     static let Gray000 = UIColor(hex: "#EFEFEF")
     static let Gray100 = UIColor(hex: "#B0AEB3")
     static let Gray200 = UIColor(hex: "#8B888F")
