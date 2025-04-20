@@ -23,7 +23,7 @@ extension UIFont {
 
 extension UIFont {
     static func hcFont(_ font: HCFont, size: CGFloat) -> UIFont {
-        return UIFont(name: font.rawValue, size: DynamicSize.scaledSize(size)) ?? UIFont.systemFont(ofSize: DynamicSize.scaledSize(size))
+        return UIFont(name: font.rawValue, size: size.scaled) ?? UIFont.systemFont(ofSize: DynamicSize.scaledSize(size))
     }
 }
 

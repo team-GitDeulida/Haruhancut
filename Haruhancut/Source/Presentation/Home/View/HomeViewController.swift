@@ -50,7 +50,6 @@ final class HomeViewController: UIViewController {
         
         view.addSubview(logoutBtn)
         logoutBtn.translatesAutoresizingMaskIntoConstraints = false
-        
         NSLayoutConstraint.activate([
             logoutBtn.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             logoutBtn.centerYAnchor.constraint(equalTo: view.centerYAnchor),

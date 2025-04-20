@@ -10,6 +10,9 @@
 		DF0C249D2DACF65F00022AB0 /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0C249C2DACF65F00022AB0 /* UIViewController+.swift */; };
 		DF156B742DAD60E500918EE6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF156B732DAD60E500918EE6 /* User.swift */; };
 		DF156B762DAD610B00918EE6 /* UserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF156B752DAD610B00918EE6 /* UserDTO.swift */; };
+		DF2715842DB4AD0D0015AF6C /* CGFloat+.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2715832DB4AD0D0015AF6C /* CGFloat+.swift */; };
+		DF2715852DB4AD0D0015AF6C /* CGDouble+.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2715822DB4AD0D0015AF6C /* CGDouble+.swift */; };
+		DF2715872DB4AD330015AF6C /* BasicDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2715862DB4AD330015AF6C /* BasicDevice.swift */; };
 		DF2AE60A2DB218A7007779D9 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2AE6082DB218A7007779D9 /* HomeViewController.swift */; };
 		DF2AE60E2DB218C6007779D9 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2AE60C2DB218C6007779D9 /* HomeViewModel.swift */; };
 		DF2AE6172DB218FD007779D9 /* GroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2AE6162DB218FD007779D9 /* GroupViewController.swift */; };
@@ -66,6 +69,9 @@
 		DF0C249C2DACF65F00022AB0 /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
 		DF156B732DAD60E500918EE6 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		DF156B752DAD610B00918EE6 /* UserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDTO.swift; sourceTree = "<group>"; };
+		DF2715822DB4AD0D0015AF6C /* CGDouble+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGDouble+.swift"; sourceTree = "<group>"; };
+		DF2715832DB4AD0D0015AF6C /* CGFloat+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+.swift"; sourceTree = "<group>"; };
+		DF2715862DB4AD330015AF6C /* BasicDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicDevice.swift; sourceTree = "<group>"; };
 		DF2AE6082DB218A7007779D9 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		DF2AE60C2DB218C6007779D9 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		DF2AE6162DB218FD007779D9 /* GroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewController.swift; sourceTree = "<group>"; };
@@ -317,6 +323,9 @@
 			isa = PBXGroup;
 			children = (
 				DFF9D1002DB2D339000C5E94 /* DynamicSize.swift */,
+				DF2715822DB4AD0D0015AF6C /* CGDouble+.swift */,
+				DF2715862DB4AD330015AF6C /* BasicDevice.swift */,
+				DF2715832DB4AD0D0015AF6C /* CGFloat+.swift */,
 			);
 			path = Constant;
 			sourceTree = "<group>";
@@ -536,8 +545,11 @@
 				DF3CBA1D2DA8079600AD5788 /* KakaoLoginManager.swift in Sources */,
 				DF4962C72DACD96F0001437B /* UIColor+.swift in Sources */,
 				DF5F3E5E2D95BE7000245C20 /* ViewController.swift in Sources */,
+				DF2715872DB4AD330015AF6C /* BasicDevice.swift in Sources */,
 				DF3CBB4F2DA814F100AD5788 /* LoginUsecase.swift in Sources */,
 				DF2AE60A2DB218A7007779D9 /* HomeViewController.swift in Sources */,
+				DF2715842DB4AD0D0015AF6C /* CGFloat+.swift in Sources */,
+				DF2715852DB4AD0D0015AF6C /* CGDouble+.swift in Sources */,
 				DF4962C12DACD6840001437B /* FontSystem.swift in Sources */,
 				DF3502E32DB36BBF002C1269 /* ButtonSystem.swift in Sources */,
 				DF156B742DAD60E500918EE6 /* User.swift in Sources */,

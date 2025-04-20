@@ -15,7 +15,7 @@ final class HCTextField: UITextField {
         self.textColor = .mainWhite
         self.tintColor = .mainWhite
         self.backgroundColor = .Gray500
-        self.layer.cornerRadius = DynamicSize.scaledSize(10)
+        self.layer.cornerRadius = 10.scaled
         self.addLeftPadding()
         self.setPlaceholderColor(color: .Gray200)
     }

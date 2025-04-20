@@ -48,11 +48,11 @@ final class HCLabel: UILabel {
         switch type {
         case .main(let text):
             textColor = .mainWhite
-            font = UIFont.hcFont(.bold, size: 20)
+            font = UIFont.hcFont(.bold, size: 20.scaled)
             self.text = text
         case .sub(let text):
             textColor = .gray
-            font = UIFont.hcFont(.semiBold, size: 15)
+            font = UIFont.hcFont(.semiBold, size: 15.scaled)
             self.text = text
         }
     }

@@ -25,12 +25,12 @@ final class SocialLoginButton: UIButton {
     private func configure(type: LoginType, title: String) {
         var config = UIButton.Configuration.filled()
         config.imagePlacement = .leading
-        config.imagePadding = DynamicSize.scaledSize(20)
+        config.imagePadding = 20.scaled
         config.title = title
         config.baseBackgroundColor = .black
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
-            outgoing.font = UIFont.hcFont(.semiBold, size: DynamicSize.scaledSize(16))
+            outgoing.font = UIFont.hcFont(.semiBold, size: 16)
             return outgoing
         }
         
@@ -44,7 +44,7 @@ final class SocialLoginButton: UIButton {
         }
         
         self.configuration = config
-        self.layer.cornerRadius = DynamicSize.scaledSize(10)
+        self.layer.cornerRadius = 20.scaled
         self.clipsToBounds = true
         
         /// 눌렀을 때 생상 변경
@@ -79,7 +79,7 @@ final class HCNextButton: UIButton {
         config.baseBackgroundColor = .mainWhite
         
         self.configuration = config
-        self.layer.cornerRadius = DynamicSize.scaledSize(20)
+        self.layer.cornerRadius = 20.scaled
         self.clipsToBounds = true
         self.configurationUpdateHandler = { button in
             var updated = button.configuration
