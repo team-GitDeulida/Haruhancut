@@ -29,6 +29,7 @@ struct User: Codable {
     var birthdayDate: Date
     var gender: Gender
     var isPushEnabled: Bool
+    var groupId: String? // 그룹 참여 유무를 비즈니스 로직 분기에서 유용
 }
 
 extension User {
@@ -43,7 +44,8 @@ extension User {
             profileImageURL: profileImageURL,
             birthdayDate: formatter.string(from: birthdayDate),
             gender: gender.rawValue,
-            isPushEnabled: isPushEnabled
+            isPushEnabled: isPushEnabled,
+            groudId: groupId
         )
     }
     
@@ -58,7 +60,8 @@ extension User {
             profileImageURL: nil,
             birthdayDate: Date.distantPast,       // 의미 없는 과거 값
             gender: .other,                       // 기본값 (비공개)
-            isPushEnabled: true                   // 기본값
+            isPushEnabled: true,                  // 기본값
+            groupId: nil
         )
     }
 }
@@ -86,6 +89,7 @@ struct UserDTO: Codable {
     let birthdayDate: String?
     let gender: String?
     let isPushEnabled: Bool?
+    let groudId: String?
 }
 
 extension UserDTO {
@@ -116,7 +120,8 @@ extension UserDTO {
             profileImageURL: profileImageURL,
             birthdayDate: birthdayDate,
             gender: gender,
-            isPushEnabled: isPushEnabled
+            isPushEnabled: isPushEnabled,
+            groupId: groudId
         )
     }
 }

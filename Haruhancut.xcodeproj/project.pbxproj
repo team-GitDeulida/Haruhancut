@@ -10,9 +10,10 @@
 		DF0C249D2DACF65F00022AB0 /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0C249C2DACF65F00022AB0 /* UIViewController+.swift */; };
 		DF156B742DAD60E500918EE6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF156B732DAD60E500918EE6 /* User.swift */; };
 		DF156B762DAD610B00918EE6 /* UserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF156B752DAD610B00918EE6 /* UserDTO.swift */; };
-		DF2715842DB4AD0D0015AF6C /* CGFloat+.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2715832DB4AD0D0015AF6C /* CGFloat+.swift */; };
-		DF2715852DB4AD0D0015AF6C /* CGDouble+.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2715822DB4AD0D0015AF6C /* CGDouble+.swift */; };
-		DF2715872DB4AD330015AF6C /* BasicDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2715862DB4AD330015AF6C /* BasicDevice.swift */; };
+		DF2715902DB4AFEC0015AF6C /* BasicDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF27158B2DB4AFEC0015AF6C /* BasicDevice.swift */; };
+		DF2715912DB4AFEC0015AF6C /* CGDouble+.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF27158C2DB4AFEC0015AF6C /* CGDouble+.swift */; };
+		DF2715922DB4AFEC0015AF6C /* CGFloat+.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF27158D2DB4AFEC0015AF6C /* CGFloat+.swift */; };
+		DF2715932DB4AFEC0015AF6C /* DynamicSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF27158E2DB4AFEC0015AF6C /* DynamicSize.swift */; };
 		DF2AE60A2DB218A7007779D9 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2AE6082DB218A7007779D9 /* HomeViewController.swift */; };
 		DF2AE60E2DB218C6007779D9 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2AE60C2DB218C6007779D9 /* HomeViewModel.swift */; };
 		DF2AE6172DB218FD007779D9 /* GroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2AE6162DB218FD007779D9 /* GroupViewController.swift */; };
@@ -62,16 +63,16 @@
 		DFA5BE2E2DAF94A900CAD5D3 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFA5BE2D2DAF94A900CAD5D3 /* Date+.swift */; };
 		DFD757AA2D9C2A74008C82DF /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD757A92D9C2A74008C82DF /* DIContainer.swift */; };
 		DFF576A72DB0D87B007BEADA /* AppleLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFF576A62DB0D87B007BEADA /* AppleLoginManager.swift */; };
-		DFF9D1012DB2D339000C5E94 /* DynamicSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFF9D1002DB2D339000C5E94 /* DynamicSize.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		DF0C249C2DACF65F00022AB0 /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
 		DF156B732DAD60E500918EE6 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		DF156B752DAD610B00918EE6 /* UserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDTO.swift; sourceTree = "<group>"; };
-		DF2715822DB4AD0D0015AF6C /* CGDouble+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGDouble+.swift"; sourceTree = "<group>"; };
-		DF2715832DB4AD0D0015AF6C /* CGFloat+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+.swift"; sourceTree = "<group>"; };
-		DF2715862DB4AD330015AF6C /* BasicDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicDevice.swift; sourceTree = "<group>"; };
+		DF27158B2DB4AFEC0015AF6C /* BasicDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicDevice.swift; sourceTree = "<group>"; };
+		DF27158C2DB4AFEC0015AF6C /* CGDouble+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGDouble+.swift"; sourceTree = "<group>"; };
+		DF27158D2DB4AFEC0015AF6C /* CGFloat+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+.swift"; sourceTree = "<group>"; };
+		DF27158E2DB4AFEC0015AF6C /* DynamicSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicSize.swift; sourceTree = "<group>"; };
 		DF2AE6082DB218A7007779D9 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		DF2AE60C2DB218C6007779D9 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		DF2AE6162DB218FD007779D9 /* GroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewController.swift; sourceTree = "<group>"; };
@@ -117,7 +118,6 @@
 		DFA5BE2D2DAF94A900CAD5D3 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		DFD757A92D9C2A74008C82DF /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
 		DFF576A62DB0D87B007BEADA /* AppleLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginManager.swift; sourceTree = "<group>"; };
-		DFF9D1002DB2D339000C5E94 /* DynamicSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicSize.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,6 +138,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DF27158F2DB4AFEC0015AF6C /* DynamicSize */ = {
+			isa = PBXGroup;
+			children = (
+				DF27158B2DB4AFEC0015AF6C /* BasicDevice.swift */,
+				DF27158C2DB4AFEC0015AF6C /* CGDouble+.swift */,
+				DF27158D2DB4AFEC0015AF6C /* CGFloat+.swift */,
+				DF27158E2DB4AFEC0015AF6C /* DynamicSize.swift */,
+			);
+			path = DynamicSize;
+			sourceTree = "<group>";
+		};
 		DF2AE6092DB218A7007779D9 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -322,10 +333,7 @@
 		DF5F3E852D95C11B00245C20 /* Constant */ = {
 			isa = PBXGroup;
 			children = (
-				DFF9D1002DB2D339000C5E94 /* DynamicSize.swift */,
-				DF2715822DB4AD0D0015AF6C /* CGDouble+.swift */,
-				DF2715862DB4AD330015AF6C /* BasicDevice.swift */,
-				DF2715832DB4AD0D0015AF6C /* CGFloat+.swift */,
+				DF27158F2DB4AFEC0015AF6C /* DynamicSize */,
 			);
 			path = Constant;
 			sourceTree = "<group>";
@@ -537,7 +545,6 @@
 				DFF576A72DB0D87B007BEADA /* AppleLoginManager.swift in Sources */,
 				DF4B5BA62DAEBAD300A7ADD7 /* LoginViewModel.swift in Sources */,
 				DF3CBB492DA809DB00AD5788 /* LoginRepository.swift in Sources */,
-				DFF9D1012DB2D339000C5E94 /* DynamicSize.swift in Sources */,
 				DF4B5BA02DAEBACE00A7ADD7 /* BirthdaySettingViewController.swift in Sources */,
 				DF35040E2DB388B8002C1269 /* TextFieldSystem.swift in Sources */,
 				DF4B5BA12DAEBACE00A7ADD7 /* LoginViewController.swift in Sources */,
@@ -545,11 +552,8 @@
 				DF3CBA1D2DA8079600AD5788 /* KakaoLoginManager.swift in Sources */,
 				DF4962C72DACD96F0001437B /* UIColor+.swift in Sources */,
 				DF5F3E5E2D95BE7000245C20 /* ViewController.swift in Sources */,
-				DF2715872DB4AD330015AF6C /* BasicDevice.swift in Sources */,
 				DF3CBB4F2DA814F100AD5788 /* LoginUsecase.swift in Sources */,
 				DF2AE60A2DB218A7007779D9 /* HomeViewController.swift in Sources */,
-				DF2715842DB4AD0D0015AF6C /* CGFloat+.swift in Sources */,
-				DF2715852DB4AD0D0015AF6C /* CGDouble+.swift in Sources */,
 				DF4962C12DACD6840001437B /* FontSystem.swift in Sources */,
 				DF3502E32DB36BBF002C1269 /* ButtonSystem.swift in Sources */,
 				DF156B742DAD60E500918EE6 /* User.swift in Sources */,
@@ -566,6 +570,10 @@
 				DF156B762DAD610B00918EE6 /* UserDTO.swift in Sources */,
 				DF5F3E932D95C47700245C20 /* AppDelegate.swift in Sources */,
 				DF0C249D2DACF65F00022AB0 /* UIViewController+.swift in Sources */,
+				DF2715902DB4AFEC0015AF6C /* BasicDevice.swift in Sources */,
+				DF2715912DB4AFEC0015AF6C /* CGDouble+.swift in Sources */,
+				DF2715922DB4AFEC0015AF6C /* CGFloat+.swift in Sources */,
+				DF2715932DB4AFEC0015AF6C /* DynamicSize.swift in Sources */,
 				DF5F3E942D95C47700245C20 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

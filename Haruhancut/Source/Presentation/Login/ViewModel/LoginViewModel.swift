@@ -17,7 +17,6 @@ import RxKakaoSDKUser
 import RxKakaoSDKAuth
 import KakaoSDKAuth
 
-
 final class LoginViewModel {
     private let disposeBag = DisposeBag()
     

@@ -12,5 +12,3 @@ extension CGFloat {
         return DynamicSize.scaledSize(self)
     }
 }
-
-
