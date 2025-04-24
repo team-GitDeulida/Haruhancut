@@ -92,10 +92,12 @@ final class HCNextButton: UIButton {
 /// 그룹 버튼
 final class HCGroupButton: UIButton {
     
-    init(topText: String, bottomText: String) {
+    
+    init(topText: String, bottomText: String, rightImage: String) {
         super.init(frame: .zero)
-        mainLabel.text = topText
-        subLabel.text = bottomText
+        self.mainLabel.text = topText
+        self.subLabel.text = bottomText
+        rightImageView.image = UIImage(systemName: rightImage)
         setupUI()
     }
     
@@ -119,8 +121,9 @@ final class HCGroupButton: UIButton {
         return label
     }()
     
-    private lazy var rightImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(systemName: "arrow.right"))
+    /// 바로 초기화
+    private let rightImageView: UIImageView = {
+        let imageView = UIImageView()
         imageView.tintColor = .white
         imageView.contentMode = .scaleAspectFit
         imageView.setContentHuggingPriority(.required, for: .horizontal)

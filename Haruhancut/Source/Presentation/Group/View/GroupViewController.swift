@@ -36,7 +36,8 @@ final class GroupViewController: UIViewController {
     // 설명
     private lazy var mainLabel: UILabel = {
         let label = UILabel()
-        label.text = "닉네임 님이 가입하신 모임은\n총 0개에요!"
+        // label.text = "닉네임 님이 가입하신 모임은\n총 0개에요!"
+        label.text = "가족에게 받은\n모임 초대 코드가 있으신가요?"
         label.numberOfLines = 0
         label.textColor = .mainWhite
         label.font = UIFont.hcFont(.bold, size: 20)
@@ -47,7 +48,8 @@ final class GroupViewController: UIViewController {
     private lazy var enterButton: HCGroupButton = {
         let button = HCGroupButton(
             topText: "초대 코드를 받았다면",
-            bottomText: "가족 방 입장하기")
+            bottomText: "가족 방 입장하기",
+            rightImage: "arrow.right")
         button.addTarget(self, action: #selector(test), for: .touchUpInside)
         return button
     }()
@@ -56,7 +58,8 @@ final class GroupViewController: UIViewController {
     private lazy var hostButton: UIButton = {
         let button = HCGroupButton(
             topText: "초대 코드가 없다면",
-            bottomText: "가족 방 만들기")
+            bottomText: "가족 방 만들기",
+            rightImage: "arrow.right")
         button.addTarget(self, action: #selector(test), for: .touchUpInside)
         return button
     }()
