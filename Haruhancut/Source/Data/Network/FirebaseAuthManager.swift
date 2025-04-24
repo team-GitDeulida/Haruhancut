@@ -33,6 +33,10 @@ final class FirebaseAuthManager: FirebaseAuthManagerProtocol {
     static let shared = FirebaseAuthManager()
     private init() {}
     
+    private var databaseRef: DatabaseReference {
+        Database.database(url: "https://haruhancut-default-rtdb.asia-southeast1.firebasedatabase.app").reference()
+    }
+    
     /// Firebase Auth에 소셜 로그인으로 인증 요청
     /// - Parameters:
     ///   - prividerID: .kakao, .apple
@@ -97,8 +101,8 @@ final class FirebaseAuthManager: FirebaseAuthManagerProtocol {
                 }
                 
                 // 5. Firebase Realtime DB에 저장
-                let ref = Database.database(url: "https://haruhancut-default-rtdb.asia-southeast1.firebasedatabase.app").reference()
-                let userRef = ref.child("users").child(firebaseUID)
+//                let ref = Database.database(url: "https://haruhancut-default-rtdb.asia-southeast1.firebasedatabase.app").reference()
+                let userRef = self.databaseRef.child("users").child(firebaseUID)
                 
                 userRef.setValue(userDict) { error, _ in
                     if let error = error {
@@ -112,6 +116,63 @@ final class FirebaseAuthManager: FirebaseAuthManagerProtocol {
             } catch {
                 print("❌ JSON 변환 에러: \(error.localizedDescription)")
                 observer.onNext(.failure(.signUpError))
+                observer.onCompleted()
+            }
+            return Disposables.create()
+        }
+    }
+}
+
+extension FirebaseAuthManager {
+    
+    
+    /// Create or Overwrite
+    /// - Parameters:
+    ///   - path: 경로
+    ///   - value: 값
+    /// - Returns: Observable<Bool>
+    func setValue<T: Encodable>(path: String, value: T) -> Observable<Bool> {
+        return Observable.create { observer in
+            do {
+                let data = try JSONEncoder().encode(value)
+                let dict = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+                
+                self.databaseRef.child(path).setValue(dict) { error, _ in
+                    if let error = error {
+                        print("🔥 setValue 실패: \(error.localizedDescription)")
+                        observer.onNext(false)
+                    } else {
+                        observer.onNext(true)
+                    }
+                    observer.onCompleted()
+                }
+            } catch {
+                observer.onError(error)
+            }
+            return Disposables.create()
+        }
+    }
+    
+    
+    /// Read
+    /// - Parameters:
+    ///   - path: 경로
+    ///   - type: 값
+    /// - Returns: Observable<T>
+    func observeValue<T: Decodable>(path: String, type: T.Type) -> Observable<T> {
+        return Observable.create { observer in
+            self.databaseRef.child(path).observeSingleEvent(of: .value) { snapshot in
+                guard let value = snapshot.value else {
+                    observer.onError(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "값이 존재하지 않음"]))
+                    return
+                }
+                do {
+                    let data = try JSONSerialization.data(withJSONObject: value, options: [])
+                    let decoded = try JSONDecoder().decode(T.self, from: data)
+                    observer.onNext(decoded)
+                } catch {
+                    observer.onError(error)
+                }
                 observer.onCompleted()
             }
             return Disposables.create()

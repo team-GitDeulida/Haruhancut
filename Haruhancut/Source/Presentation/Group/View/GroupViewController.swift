@@ -9,6 +9,19 @@ import UIKit
 
 final class GroupViewController: UIViewController {
     
+    private let groupViewModel: GroupViewModel
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    init(groupViewModel: GroupViewModel) {
+        self.groupViewModel = groupViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    weak var coordinator: HomeCoordinator?
+    
     // MARK: - UI Conponents
     
     // 타이틀
@@ -31,88 +44,28 @@ final class GroupViewController: UIViewController {
     }()
     
     // 입장 label
-    private lazy var enterView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .Gray500
-        view.layer.cornerRadius = 10
-        return view
-    }()
-    
-    // 입장 text1
-    private lazy var enterMainLabel: UILabel = {
-        let label = UILabel()
-        label.text = "초대 코드를 받았다면"
-        label.font = UIFont.hcFont(.semiBold, size: 15)
-        label.textColor = .gray
-        return label
-    }()
-    
-    // 입장 text2
-    private lazy var enterSubLabel: UILabel = {
-        let label = UILabel()
-        label.text = "가족 방 입장하기"
-        label.font = UIFont.hcFont(.bold, size: 20)
-        label.textColor = .mainWhite
-        return label
-    }()
-    
-    // 입장 text stack
-    private lazy var enterLabelStackView: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [
-            enterMainLabel,
-            enterSubLabel
-        ])
-        stack.spacing = 10
-        stack.axis = .vertical
-        stack.distribution = .fillEqually
-        stack.alignment = .fill
-        return stack
+    private lazy var enterButton: HCGroupButton = {
+        let button = HCGroupButton(
+            topText: "초대 코드를 받았다면",
+            bottomText: "가족 방 입장하기")
+        button.addTarget(self, action: #selector(test), for: .touchUpInside)
+        return button
     }()
     
     // 초대 label
-    private lazy var hostView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .Gray500
-        view.layer.cornerRadius = 10
-        return view
+    private lazy var hostButton: UIButton = {
+        let button = HCGroupButton(
+            topText: "초대 코드가 없다면",
+            bottomText: "가족 방 만들기")
+        button.addTarget(self, action: #selector(test), for: .touchUpInside)
+        return button
     }()
-    
-    // 초대 text1
-    private lazy var hostMainLabel: UILabel = {
-        let label = UILabel()
-        label.text = "초대 코드가 없다면"
-        label.font = UIFont.hcFont(.semiBold, size: 15)
-        label.textColor = .gray
-        return label
-    }()
-    
-    // 초대 text2
-    private lazy var hostSubLabel: UILabel = {
-        let label = UILabel()
-        label.text = "가족 방 만들기"
-        label.font = UIFont.hcFont(.bold, size: 20)
-        label.textColor = .mainWhite
-        return label
-    }()
-    
-    // 초대 text stack
-    private lazy var hostLabelStackView: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [
-            hostMainLabel,
-            hostSubLabel
-        ])
-        stack.spacing = 10
-        stack.axis = .vertical
-        stack.distribution = .fillEqually
-        stack.alignment = .fill
-        return stack
-    }()
-    
+
     // 입장초대 viewStack
     private lazy var viewStackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [
-            enterView,
-            hostView
+            enterButton,
+            hostButton
         ])
         stack.spacing = 20
         stack.axis = .vertical
@@ -126,7 +79,7 @@ final class GroupViewController: UIViewController {
         super.viewDidLoad()
         setupLogoTitle()
         makeUI()
-        addGestureRecognizers()
+        bindViewModel()
     }
     
     // MARK: - Setup UI
@@ -154,42 +107,6 @@ final class GroupViewController: UIViewController {
             viewStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             viewStackView.heightAnchor.constraint(equalToConstant: 200)
         ])
-        
-        // MARK: - enterLabelStackView -> enterView 위에 올리기
-        enterView.addSubview(enterLabelStackView)
-        enterLabelStackView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            enterLabelStackView.centerYAnchor.constraint(equalTo: enterView.centerYAnchor),
-            enterLabelStackView.leadingAnchor.constraint(equalTo: enterView.leadingAnchor, constant: 20),
-        ])
-        
-        // MARK: - hostLabelStackView -> hostView 위에 올리기
-        hostView.addSubview(hostLabelStackView)
-        hostLabelStackView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            hostLabelStackView.centerYAnchor.constraint(equalTo: hostView.centerYAnchor),
-            hostLabelStackView.leadingAnchor.constraint(equalTo: hostView.leadingAnchor, constant: 20),
-        ])
-    }
-    
-    private func addGestureRecognizers() {
-        let enterTap = UITapGestureRecognizer(target: self, action: #selector(didTapEnterView))
-        enterView.addGestureRecognizer(enterTap)
-        enterView.isUserInteractionEnabled = true
-
-        let hostTap = UITapGestureRecognizer(target: self, action: #selector(didTapHostView))
-        hostView.addGestureRecognizer(hostTap)
-        hostView.isUserInteractionEnabled = true
-    }
-    
-    @objc private func didTapEnterView() {
-        print("입장 뷰 터치됨")
-        // ex) navigationController?.pushViewController(JoinViewController(), animated: true)
-    }
-
-    @objc private func didTapHostView() {
-        print("초대 뷰 터치됨")
-        // ex) navigationController?.pushViewController(CreateGroupViewController(), animated: true)
     }
     
     func setupLogoTitle() {
@@ -205,8 +122,21 @@ final class GroupViewController: UIViewController {
 //        }
 //        topViewController?.navigationItem.titleView = titleLabel
     }
+    
+    func bindViewModel() {
+        //let input = GroupViewModel.transform(input: enterView.rx.tap.asObservable())
+    }
+    
+    func bindViewModelOutput() {
+        
+    }
+    
+    @objc
+    func test() {
+        print("버튼 눌림")
+    }
 }
 
 #Preview {
-    GroupViewController()
+    GroupViewController(groupViewModel: GroupViewModel(userId: "testId"))
 }

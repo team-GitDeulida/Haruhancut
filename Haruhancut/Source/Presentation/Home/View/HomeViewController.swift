@@ -7,11 +7,14 @@
 
 import UIKit
 import FirebaseAuth
+import RxSwift
 
 final class HomeViewController: UIViewController {
+    weak var coordinator: HomeCoordinator?
     
     private let loginViewModel: LoginViewModel
     private let homeViewModel: HomeViewModel
+    private let disposeBag = DisposeBag()
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -43,6 +46,13 @@ final class HomeViewController: UIViewController {
         super.viewDidLoad()
         makeUI()
         bind()
+        
+//        FirebaseAuthManager.shared.observeValue(path: "users/\(loginViewModel.user!.uid)", type: UserDTO.self)
+//            .subscribe(onNext: { userDTO in
+//                // print("현재유저: \(userDTO.toModel()!)")
+//                dump(userDTO.toModel()!)
+//            })
+//            .disposed(by: disposeBag)
     }
     
     func makeUI() {

@@ -14,6 +14,7 @@ import RxSwift
 import RxCocoa
 
 final class NicknameSettingViewController: UIViewController {
+    weak var coordinator: LoginFlowCoordinator?
     
     private let disposeBag = DisposeBag()
     
@@ -114,45 +115,45 @@ final class NicknameSettingViewController: UIViewController {
         ])
     }
     
+    /// view -> viewModel로 Input 전달(UI 이벤트)
     private func bindViewModel() {
-        let input = LoginViewModel.Input.init(
-            kakaoLoginTapped: .never(),
-            appleLoginTapped: .never(),
-            nicknameText: textField.rx.text.orEmpty.asObservable(),
-            nicknameNextBtnTapped: nextButton.rx.tap.asObservable(),
-            birthdayDate: .never(),
-            birthdayNextTapped: .never()
-        )
+        let input = LoginViewModel.NicknameInput(nicknameText: textField.rx.text.orEmpty.asObservable(), nextBtnTapped: nextButton.rx.tap.asObservable())
         
         let output = loginViewModel.transform(input: input)
         bindViewModelOutput(output: output)
     }
     
-    private func bindViewModelOutput(output: LoginViewModel.Output) {
+    /// viewModel 에서 나온 Output을 View(UI)에 바인딩
+    private func bindViewModelOutput(output: LoginViewModel.NicknameOutput) {
+        
+        /// viewModel이 Output으로 방출한 결과를 viewController가 구독
+        /// 다음 버튼이 눌렸음을 알려주는 이벤트 스트림
+        /// 생일 화면으로 이동하라고 방출한 Output 이벤트 스트림 을 구독
         output.moveToBirthday
+            /// 이 이벤트가 방출되었을 때 실행할 동작을 등록(=구독)
             .drive(onNext: { [weak self] in
                 guard let self = self else { return }
                 self.view.endEditing(true)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    let birthdayVC = BirthdaySettingViewController(loginViewModel: self.loginViewModel)
-                    self.navigationController?.pushViewController(birthdayVC, animated: true)
+                    self.coordinator?.showBirthday()
                 }
+                /// 구독이 메모리에서 자동으로 해제되도록 설정
             }).disposed(by: disposeBag)
         
-        // return키 입력시 키보드 내려감
-        textField.rx.controlEvent(.editingDidEndOnExit)
-            .bind(onNext: { [weak self] in
-                guard let self = self else { return }
-                self.view.endEditing(true)
-            })
-            .disposed(by: disposeBag)
-        
-        // 텍스트가 빈 문자열이 아닐때만 다음 버튼 활성화 - vm의 버튼 활성화로직에 대한 ui 바인딩
+        /// 닉네임 유효성 검사에 따라 버튼 활성화
         output.isNicknameValid
+            /// 닉네임 유효성에 따라 버튼의 UI 상태 업데이트
             .drive(onNext: { [weak self] isValid in
                 guard let self = self else { return }
                 self.nextButton.isEnabled = isValid
                 self.nextButton.alpha = isValid ? 1.0 : 0.5
+            }).disposed(by: disposeBag)
+        
+        /// return키 입력시 키보드 내려감
+        textField.rx.controlEvent(.editingDidEndOnExit)
+            .bind(onNext: { [weak self] in
+                guard let self = self else { return }
+                self.view.endEditing(true)
             })
             .disposed(by: disposeBag)
     }
@@ -190,6 +191,7 @@ extension NicknameSettingViewController {
 }
 
 #Preview {
+    // NicknameSettingViewController(loginViewModel: LoginViewModel())
     NicknameSettingViewController(loginViewModel: LoginViewModel(loginUsecase: StubLoginUsecase()))
 }
 

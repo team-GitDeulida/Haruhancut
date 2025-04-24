@@ -17,6 +17,7 @@ extension UIColor {
     static let background = UIColor(hex: "#1A1A1A")
     static let mainBlack = UIColor(hex: "#161717")
     static let mainWhite = UIColor(hex: "#f1f1f1")
+    static let buttonTapped = UIColor(hex: "#131315")
     
     static let kakao = UIColor(hex: "#FEE500")
     static let apple = UIColor(hex: "#FFFFFF")

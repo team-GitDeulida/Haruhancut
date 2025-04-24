@@ -22,61 +22,16 @@ import KakaoSDKUser
 
 final class LoginViewController: UIViewController {
     
-    private let loginViewModel: LoginViewModel
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    init(loginViewModel: LoginViewModel) {
-        self.loginViewModel = loginViewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
     // MARK: - Properties
     private let disposeBag = DisposeBag()
     
-    // MARK: - Bind ViewModel
-    private func bindViewModel() {
-        
-        // 버튼 탭 이벤트를 viewModel의 Input으로 전달
-        let input = LoginViewModel.Input(
-            kakaoLoginTapped: kakaoLoginButton.rx.tap.asObservable(),
-            appleLoginTapped: appleLoginButton.rx.tap.asObservable(),
-            nicknameText: .never(),
-            nicknameNextBtnTapped: .never(),
-            birthdayDate: .never(),
-            birthdayNextTapped: .never()
-        )
-            
-        // viewModel의 transform함수 호출 -> Output 반환
-        let output = loginViewModel.transform(input: input)
-        bindViewModelOutput(output: output)
-    }
+    weak var coordinator: LoginFlowCoordinator?
     
-    // MARK: - Bind VoewModelOutput
-    private func bindViewModelOutput(output: LoginViewModel.Output) {
-        // 로그인 결과를 구독하여 UI 흐름 처리
-        output.loginResult
-            .drive { result in
-                switch result {
-                case .success:
-                    // 기존 유저 로그인 성공 -> 홈뷰로 이동
-                    self.navigateToNextScreen("home")
-                case .failure(let error):
-                    switch error {
-                    case .noUser:
-                        // 신규 유저 -> 닉네임 설정뷰로 이동
-                        self.navigateToNextScreen("nickname")
-                    default:
-                        print("로그인 실패: \(error.description)")
-                    }
-                }
-            }.disposed(by: disposeBag)
-    }
+    private let loginViewModel: LoginViewModel
     
     // MARK: - UI Components
     private lazy var kakaoLoginButton = SocialLoginButton(type: .kakao, title: "카카오로 계속하기")
+    
     private lazy var appleLoginButton = SocialLoginButton(type: .apple, title: "Apple로 계속하기")
     
     private lazy var stackView: UIStackView = {
@@ -117,28 +72,43 @@ final class LoginViewController: UIViewController {
         ])
     }
     
-    func navigateToNextScreen(_ destination: String) {
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    init(loginViewModel: LoginViewModel) {
+        self.loginViewModel = loginViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    // MARK: - Bind ViewModel
+    private func bindViewModel() {
+        let input = LoginViewModel
+            .LoginInput(kakaoLoginTapped: kakaoLoginButton.rx.tap.asObservable(),
+                   appleLoginTapped: appleLoginButton.rx.tap.asObservable())
         
-        switch destination {
-        case "home":
-            self.navigationController?.setViewControllers([
-                HomeViewController(loginViewModel: loginViewModel, homeViewModel: HomeViewModel())
-            ], animated: true)
-        case "nickname":
-            self.navigationController?.setViewControllers([
-                NicknameSettingViewController(loginViewModel: loginViewModel)
-            ], animated: true)
-        case "home_":
-            let sceneDelegate = UIApplication.shared.connectedScenes
-                .first?.delegate as? SceneDelegate
-            let window = sceneDelegate?.window
-
-            let homeVC = HomeViewController(loginViewModel: loginViewModel, homeViewModel: HomeViewModel())
-            window?.rootViewController = homeVC
-            window?.makeKeyAndVisible()
-        default:
-            break
-        }
+        let output = loginViewModel.transform(input: input)
+        bindViewModelOutput(output: output)
+    }
+    
+    // MARK: - Bind VoewModelOutput
+    private func bindViewModelOutput(output: LoginViewModel.LoginOutput) {
+        output.loginResult
+            .drive { result in
+                switch result {
+                case .success:
+                    print("기존 회원 - 홈으로 화면전환")
+                    self.coordinator?.showHome()
+                case .failure(let error):
+                    switch error {
+                    case .noUser:
+                        print("신규 회원 - 닉네임창으로 화면전환")
+                        self.coordinator?.showNickname()
+                    default:
+                        print("bindViewModelOutput - 로그인 실패")
+                    }
+                }
+            }.disposed(by: disposeBag)
     }
 }
 

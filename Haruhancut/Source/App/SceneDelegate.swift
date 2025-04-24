@@ -17,12 +17,9 @@ import FirebaseAuth
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    var appCoordinator: AppCoordinator?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-        // guard let _ = (scene as? UIWindowScene) else { return }
         
         // 1. scene 캡처
         guard let windowScene = (scene as? UIWindowScene) else { return }
@@ -32,56 +29,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         // 2. window scene을 가져오는 windowScene을 생성자를 사용해서 UIWindow를 생성
         let window = UIWindow(windowScene: windowScene)
+        let navigationController = UINavigationController()
         
         // 3. view 계층을 프로그래밍 방식으로 만들기
-        let usecase = DIContainer.shared.resolve(LoginUsecase.self)
-        let loginVM = LoginViewModel(loginUsecase: usecase)
-        let rootVC = LoginViewController(loginViewModel: loginVM)
-        let homeVM = HomeViewModel()
-        let homeVC = HomeViewController(loginViewModel: loginVM, homeViewModel: homeVM)
-        let navController: UINavigationController?
-        
-        if let _ = Auth.auth().currentUser {
-            print("테스트: \(UserDefaultsManager.shared.isSignupCompleted())")
-            // MARK: -
-            if UserDefaultsManager.shared.isSignupCompleted() {
-                
-                // 3.1 UINavigationController로 감싸서 루트뷰컨트롤러 설정
-                navController = UINavigationController(rootViewController: homeVC)
-                
-                // navController = UINavigationController(rootViewController: GroupViewController())
-                
-                print("로그인완료")
-            } else {
-                navController = UINavigationController(rootViewController: rootVC)
-            }
-            
-        } else {
-            // 3.1 UINavigationController로 감싸서 루트뷰컨트롤러 설정
-            navController = UINavigationController(rootViewController: rootVC)
-            print("로그인이 필요합니다")
-        }
-        
-//        if let _ = Auth.auth().currentUser {
-//            
-//
-//            
-//            // 3.1 UINavigationController로 감싸서 루트뷰컨트롤러 설정
-//            navController = UINavigationController(rootViewController: homeVC)
-//            print("로그인완료")
-//        } else {
-//            // 3.1 UINavigationController로 감싸서 루트뷰컨트롤러 설정
-//            navController = UINavigationController(rootViewController: rootVC)
-//            print("로그인이 필요합니다")
-//        }
-        
-        // 3.1 UINavigationController로 감싸서 루트뷰컨트롤러 설정
-        // let navController = UINavigationController(rootViewController: rootVC)
-        
-        // 4. viewController로 window의 root view controller를 설정
-        window.rootViewController = navController
-        
-        // 5. window를 설정하고 makeKeyAndVisible()
+        // ✅ AppCoordinator 생성 및 시작
+        let coordinator = AppCoordinator(navigationController: navigationController, isLoggedIn: false)
+        coordinator.start()
+        appCoordinator = coordinator
+
+        window.rootViewController = navigationController
         self.window = window
         window.makeKeyAndVisible()
     }

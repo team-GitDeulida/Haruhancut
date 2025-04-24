@@ -16,12 +16,13 @@ import RxSwift
 import RxCocoa
 
 final class BirthdaySettingViewController: UIViewController {
+    weak var coordinator: LoginFlowCoordinator?
     
     private let disposeBag = DisposeBag()
     
     private let loginViewModel: LoginViewModel
     
-    private lazy var mainLabel: UILabel = HCLabel(type: .main(text: "\(loginViewModel.user?.nickname ?? "닉네임") 님의 생년월일을 알려주세요."))
+    private lazy var mainLabel: UILabel = HCLabel(type: .main(text: "\(loginViewModel.user.value?.nickname ?? "닉네임") 님의 생년월일을 알려주세요."))
     
     private lazy var subLabel: UILabel = HCLabel(type: .sub(text: "가족들이 함께 생일을 축하할 수 있어요!"))
     
@@ -107,48 +108,24 @@ final class BirthdaySettingViewController: UIViewController {
     }()
     
     private func bindViewModel() {
-        let input = LoginViewModel.Input.init(
-            kakaoLoginTapped: .never(),
-            appleLoginTapped: .never(),
-            nicknameText: .never(),
-            nicknameNextBtnTapped: .never(),
-            birthdayDate: datePicker.rx.date.asObservable(),
-            birthdayNextTapped: nextButton.rx.tap.asObservable())
-        
+        let input = LoginViewModel.BirthdayInput(birthdayDate: datePicker.rx.date.asObservable(),
+                                                 nextBtnTapped: nextButton.rx.tap.asObservable())
         let output = loginViewModel.transform(input: input)
         bindViewModelOutput(output: output)
     }
     
-    private func bindViewModelOutput(output: LoginViewModel.Output) {
-        
-        // 회원가입 요청
-//        output.moveToHome
-//            .drive(onNext: { [weak self] in
-//                guard let self = self else { return }
-//                self.view.endEditing(true)
-//            })
-//            .disposed(by: disposeBag)
-        
-        // 회원가입 결과 처리
+    private func bindViewModelOutput(output: LoginViewModel.BirthdayOutput) {
         output.signUpResult
             .drive(onNext: { [weak self] result in
                 guard let self = self else { return }
                 switch result {
                 case .success:
-                    self.view.endEditing(true)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        self.navigationController?.setViewControllers([HomeViewController(loginViewModel: self.loginViewModel, homeViewModel: HomeViewModel())], animated: true)
-                    }
+                    coordinator?.showHome()
                 case .failure(let error):
-                    // 실패 알림 등 추가
                     print("❌ [VC] 회원가입 실패: \(error)")
                 }
-            })
-            .disposed(by: disposeBag)
-        
-        
+            }).disposed(by: disposeBag)
     }
-    
 }
 
 extension BirthdaySettingViewController {
@@ -188,7 +165,10 @@ extension BirthdaySettingViewController {
             guard let self = self else { return }
             self.datePicker.date = picker.date
             self.textField.text = picker.date.toKoreanDateString()
-            self.loginViewModel.user?.birthdayDate = picker.date
+            if var user = loginViewModel.user.value {
+                user.birthdayDate = picker.date
+                loginViewModel.user.accept(user)
+            }
         }))
 
         present(alert, animated: true)
@@ -196,7 +176,10 @@ extension BirthdaySettingViewController {
 
     @objc private func dateChange(_ sender: UIDatePicker) {
         textField.text = sender.date.toKoreanDateString()
-        loginViewModel.user?.birthdayDate = sender.date
+        if var user = loginViewModel.user.value {
+            user.birthdayDate = sender.date
+            loginViewModel.user.accept(user)
+        }
     }
     
     // 툴바 추가

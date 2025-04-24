@@ -23,7 +23,6 @@ struct User: Codable {
     var uid: String
     let registerDate: Date
     let loginPlatform: LoginPlatform
-    
     var nickname: String
     var profileImageURL: String?
     var birthdayDate: Date
@@ -45,7 +44,7 @@ extension User {
             birthdayDate: formatter.string(from: birthdayDate),
             gender: gender.rawValue,
             isPushEnabled: isPushEnabled,
-            groudId: groupId
+            groupId: groupId
         )
     }
     
@@ -77,8 +76,6 @@ extension User {
     }
 }
 
-
-
 // MARK: - DTO
 struct UserDTO: Codable {
     let uid: String?
@@ -89,7 +86,7 @@ struct UserDTO: Codable {
     let birthdayDate: String?
     let gender: String?
     let isPushEnabled: Bool?
-    let groudId: String?
+    let groupId: String?
 }
 
 extension UserDTO {
@@ -121,8 +118,7 @@ extension UserDTO {
             birthdayDate: birthdayDate,
             gender: gender,
             isPushEnabled: isPushEnabled,
-            groupId: groudId
+            groupId: groupId
         )
     }
 }
-
