@@ -153,6 +153,13 @@ final class HomeCoordinator: Coordinator {
         navigationController.setViewControllers([vc], animated: true)
     }
     
+    func startGroupDetail() {
+        // let viewModel = GroupDetailViewModel()
+        let vc = GroupDetailViewController()
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
     func startHome() {
         let vc = HomeViewController(loginViewModel: loginViewModel, homeViewModel: homeViewModel)
         vc.coordinator = self

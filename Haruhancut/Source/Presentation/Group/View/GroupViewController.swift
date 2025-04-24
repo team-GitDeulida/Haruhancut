@@ -87,6 +87,13 @@ final class GroupViewController: UIViewController {
     
     // MARK: - Setup UI
     private func makeUI() {
+        
+        /// 커스텀 뒤로가기
+        let backItem = UIBarButtonItem()
+        backItem.title = "뒤로가기"
+        navigationItem.backBarButtonItem = backItem
+        navigationController?.navigationBar.tintColor = .mainWhite
+        
         // 배경 색상
         view.backgroundColor = .background
         
@@ -136,7 +143,8 @@ final class GroupViewController: UIViewController {
     
     @objc
     func test() {
-        print("버튼 눌림")
+        coordinator?.startGroupDetail()
+        // print("버튼 눌림")
     }
 }
 

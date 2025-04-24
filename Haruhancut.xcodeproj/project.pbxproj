@@ -64,6 +64,8 @@
 		DFB71C152DB62F7900FE8490 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFB71C142DB62F7900FE8490 /* AppCoordinator.swift */; };
 		DFD757AA2D9C2A74008C82DF /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD757A92D9C2A74008C82DF /* DIContainer.swift */; };
 		DFF1CBD82DBA8A5E00722B04 /* GroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFF1CBD62DBA8A5E00722B04 /* GroupViewModel.swift */; };
+		DFF1CBDF2DBAAEC800722B04 /* GroupDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFF1CBDE2DBAAEC800722B04 /* GroupDetailViewModel.swift */; };
+		DFF1CBE02DBAAEC800722B04 /* GroupDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFF1CBDD2DBAAEC800722B04 /* GroupDetailViewController.swift */; };
 		DFF576A72DB0D87B007BEADA /* AppleLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFF576A62DB0D87B007BEADA /* AppleLoginManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -121,6 +123,8 @@
 		DFB71C142DB62F7900FE8490 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		DFD757A92D9C2A74008C82DF /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
 		DFF1CBD62DBA8A5E00722B04 /* GroupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewModel.swift; sourceTree = "<group>"; };
+		DFF1CBDD2DBAAEC800722B04 /* GroupDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDetailViewController.swift; sourceTree = "<group>"; };
+		DFF1CBDE2DBAAEC800722B04 /* GroupDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDetailViewModel.swift; sourceTree = "<group>"; };
 		DFF576A62DB0D87B007BEADA /* AppleLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -180,6 +184,7 @@
 		DF2AE6142DB218E4007779D9 /* Group */ = {
 			isa = PBXGroup;
 			children = (
+				DFF1CBDC2DBAAEBE00722B04 /* GroupDetail */,
 				DFF1CBD72DBA8A5E00722B04 /* ViewModel */,
 				DF2AE6122DB218E4007779D9 /* View */,
 			);
@@ -458,6 +463,15 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
+		DFF1CBDC2DBAAEBE00722B04 /* GroupDetail */ = {
+			isa = PBXGroup;
+			children = (
+				DFF1CBDD2DBAAEC800722B04 /* GroupDetailViewController.swift */,
+				DFF1CBDE2DBAAEC800722B04 /* GroupDetailViewModel.swift */,
+			);
+			path = GroupDetail;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -591,6 +605,8 @@
 				DF2715922DB4AFEC0015AF6C /* CGFloat+.swift in Sources */,
 				DF2715932DB4AFEC0015AF6C /* DynamicSize.swift in Sources */,
 				DF5F3E942D95C47700245C20 /* SceneDelegate.swift in Sources */,
+				DFF1CBDF2DBAAEC800722B04 /* GroupDetailViewModel.swift in Sources */,
+				DFF1CBE02DBAAEC800722B04 /* GroupDetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
