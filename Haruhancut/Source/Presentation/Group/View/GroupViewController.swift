@@ -53,7 +53,6 @@ final class GroupViewController: UIViewController {
             topText: "초대 코드를 받았다면",
             bottomText: "가족 방 입장하기",
             rightImage: "arrow.right")
-        // button.addTarget(self, action: #selector(startGroupEnter), for: .touchUpInside)
         return button
     }()
     
@@ -63,7 +62,6 @@ final class GroupViewController: UIViewController {
             topText: "초대 코드가 없다면",
             bottomText: "가족 방 만들기",
             rightImage: "arrow.right")
-        // button.addTarget(self, action: #selector(startGroupHost), for: .touchUpInside)
         return button
     }()
 
@@ -85,7 +83,7 @@ final class GroupViewController: UIViewController {
         super.viewDidLoad()
         setupLogoTitle()
         makeUI()
-        bindViewModel()
+        rxBtnTap()
     }
     
     // MARK: - Setup UI
@@ -136,7 +134,7 @@ final class GroupViewController: UIViewController {
 //        topViewController?.navigationItem.titleView = titleLabel
     }
     
-    func bindViewModel() {
+    func rxBtnTap() {
         
         // Coordinator 트리거
         enterButton.rx.tap
@@ -151,22 +149,7 @@ final class GroupViewController: UIViewController {
             }
             .disposed(by: disposeBag)
     }
-    
-    func bindViewModelOutput() {
-        
-    }
-    
-//    @objc
-//    func startGroupEnter() {
-//        coordinator?.startGroupEnter()
-//        // print("버튼 눌림")
-//    }
-//    
-//    @objc
-//    func startGroupHost() {
-//        coordinator?.startGroupHost()
-//        // print("버튼 눌림")
-//    }
+
 }
 
 #Preview {

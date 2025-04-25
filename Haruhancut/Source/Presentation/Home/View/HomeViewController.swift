@@ -78,11 +78,7 @@ final class HomeViewController: UIViewController {
             UserDefaultsManager.shared.clearSignupStatus()
             try Auth.auth().signOut()
             print("로그아웃 성공")
-            
-            // SceneDelegate에서 로그인 루트로 변경
-            if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
-                sceneDelegate.makeLoginRoot()
-            }
+            coordinator?.showLogin()
             
         } catch let signOutError as NSError {
             print("로그아웃 실패: %@", signOutError)

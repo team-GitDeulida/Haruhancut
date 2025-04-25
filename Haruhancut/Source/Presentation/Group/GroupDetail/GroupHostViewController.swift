@@ -92,6 +92,27 @@ final class GroupHostViewController: UIViewController {
                 self.view.endEditing(true)
             })
             .disposed(by: disposeBag)
+        
+        let input = GroupViewModel.groupHostInput(
+            groupNameText: textField.rx.text.orEmpty.asObservable(),
+            endButtonTapped: endButton.rx.tap.asObservable())
+        
+        let output = groupViewModel.transform(input: input)
+        bindViewModelOutput(output: output)
+    }
+    
+    private func bindViewModelOutput(output: GroupViewModel.groupHostOutput) {
+        output.hostResult
+            .drive(onNext: { result in
+                switch result {
+                case .success(let success):
+                    print("그룹아이디 성공: \(success)")
+                    self.coordinator?.startHome()
+                    
+                case .failure(let error):
+                    print("에러 발생: \(error)")
+                }
+            }).disposed(by: disposeBag)
     }
     
     // MARK: 외부 터치 시 키보드 내리기
