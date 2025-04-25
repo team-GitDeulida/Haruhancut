@@ -128,6 +128,8 @@ final class HomeCoordinator: Coordinator {
     
     private let loginViewModel: LoginViewModel
     private let homeViewModel = HomeViewModel()
+    private var groupViewModel: GroupViewModel?
+
     
     init(navigationController: UINavigationController, loginViewModel: LoginViewModel) {
         print("HomeCoordinator - 생성")
@@ -147,15 +149,24 @@ final class HomeCoordinator: Coordinator {
     }
     
     func startGroup() {
-        let viewModel = GroupViewModel(userId: loginViewModel.user.value?.uid ?? "")
-        let vc = GroupViewController(groupViewModel: viewModel)
+        groupViewModel = GroupViewModel(userId: loginViewModel.user.value?.uid ?? "")
+        guard let groupViewModel = groupViewModel else { return }
+        let vc = GroupViewController(groupViewModel: groupViewModel)
         vc.coordinator = self
         navigationController.setViewControllers([vc], animated: true)
     }
     
-    func startGroupDetail() {
+    func startGroupEnter() {
+        guard let groupViewModel = groupViewModel else { return }
+        let vc = GroupEnterViewController(groupViewModel: groupViewModel)
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func startGroupHost() {
         // let viewModel = GroupDetailViewModel()
-        let vc = GroupDetailViewController()
+        guard let groupViewModel = groupViewModel else { return }
+        let vc = GroupHostViewController(groupViewModel: groupViewModel)
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }

@@ -1,5 +1,5 @@
 {
-  "originHash" : "9cca9d73ac03b9b422c2d2671427eb3053b6a5eb6168a844a2c56a79662dd6ce",
+  "originHash" : "bf09bd50e07695385ab395ef9c47947e58ae082518bddd8c2500beae4fce4bb6",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/firebase-ios-sdk.git",
       "state" : {
-        "revision" : "fbd463894af94d90eb4d6a4e54080459a8179519",
-        "version" : "11.12.0"
+        "revision" : "d1f7c7e8eaa74d7e44467184dc5f592268247d33",
+        "version" : "11.11.0"
       }
     },
     {
@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleAppMeasurement.git",
       "state" : {
-        "revision" : "f7460ea630bddf172115c28493ae8b3798d95ce3",
-        "version" : "11.12.0"
+        "revision" : "dd89fc79a77183830742a16866d87e4e54785734",
+        "version" : "11.11.0"
       }
     },
     {
@@ -96,8 +96,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kakao/kakao-ios-sdk.git",
       "state" : {
-        "revision" : "2c780b70d4197be3f72deee2fd82ea3e3b767007",
-        "version" : "2.24.1"
+        "revision" : "bfe2fe42f730ccfe59e85f6e9eda2f4578e9a307",
+        "version" : "2.24.0"
       }
     },
     {
@@ -105,8 +105,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kakao/kakao-ios-sdk-rx",
       "state" : {
-        "revision" : "f3e0abce3cc4f7e20177d77a9feb5f160ee97ef3",
-        "version" : "2.24.1"
+        "revision" : "50cbeab528babee1cdd91e640b006bd5bb3b150b",
+        "version" : "2.24.0"
       }
     },
     {
@@ -116,15 +116,6 @@
       "state" : {
         "revision" : "a0bc79961d7be727d258d33d5a6b2f1023270ba1",
         "version" : "1.22.5"
-      }
-    },
-    {
-      "identity" : "lottie-spm",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/airbnb/lottie-spm",
-      "state" : {
-        "revision" : "8c6edf4f0fa84fe9c058600a4295eb0c01661c69",
-        "version" : "4.5.1"
       }
     },
     {
@@ -170,15 +161,6 @@
       "state" : {
         "revision" : "5dd1907d64f0d36f158f61a466bab75067224893",
         "version" : "6.9.0"
-      }
-    },
-    {
-      "identity" : "scalekit",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/indextrown/ScaleKit",
-      "state" : {
-        "revision" : "db4f6172b5abcc4e8d3552a01170180e0d6766f5",
-        "version" : "1.1.2"
       }
     },
     {

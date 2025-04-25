@@ -6,8 +6,11 @@
 //
 
 import UIKit
+import RxSwift
 
 final class GroupViewController: UIViewController {
+    
+    private let disposeBag = DisposeBag()
     
     private let groupViewModel: GroupViewModel
     
@@ -37,7 +40,7 @@ final class GroupViewController: UIViewController {
     private lazy var mainLabel: UILabel = {
         let label = UILabel()
         // label.text = "닉네임 님이 가입하신 모임은\n총 0개에요!"
-        label.text = "가족에게 받은\n모임 초대 코드가 있으신가요?"
+        label.text = "가족에게 받은\n그룹 초대 코드가 있으신가요?"
         label.numberOfLines = 0
         label.textColor = .mainWhite
         label.font = UIFont.hcFont(.bold, size: 20)
@@ -50,7 +53,7 @@ final class GroupViewController: UIViewController {
             topText: "초대 코드를 받았다면",
             bottomText: "가족 방 입장하기",
             rightImage: "arrow.right")
-        button.addTarget(self, action: #selector(test), for: .touchUpInside)
+        // button.addTarget(self, action: #selector(startGroupEnter), for: .touchUpInside)
         return button
     }()
     
@@ -60,7 +63,7 @@ final class GroupViewController: UIViewController {
             topText: "초대 코드가 없다면",
             bottomText: "가족 방 만들기",
             rightImage: "arrow.right")
-        button.addTarget(self, action: #selector(test), for: .touchUpInside)
+        // button.addTarget(self, action: #selector(startGroupHost), for: .touchUpInside)
         return button
     }()
 
@@ -101,7 +104,7 @@ final class GroupViewController: UIViewController {
         view.addSubview(mainLabel)
         mainLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            mainLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),
+            mainLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
             mainLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)
         ])
         
@@ -134,18 +137,36 @@ final class GroupViewController: UIViewController {
     }
     
     func bindViewModel() {
-        //let input = GroupViewModel.transform(input: enterView.rx.tap.asObservable())
+        
+        // Coordinator 트리거
+        enterButton.rx.tap
+            .bind { [weak self] in
+                self?.coordinator?.startGroupEnter()
+            }
+            .disposed(by: disposeBag)
+
+        hostButton.rx.tap
+            .bind { [weak self] in
+                self?.coordinator?.startGroupHost()
+            }
+            .disposed(by: disposeBag)
     }
     
     func bindViewModelOutput() {
         
     }
     
-    @objc
-    func test() {
-        coordinator?.startGroupDetail()
-        // print("버튼 눌림")
-    }
+//    @objc
+//    func startGroupEnter() {
+//        coordinator?.startGroupEnter()
+//        // print("버튼 눌림")
+//    }
+//    
+//    @objc
+//    func startGroupHost() {
+//        coordinator?.startGroupHost()
+//        // print("버튼 눌림")
+//    }
 }
 
 #Preview {

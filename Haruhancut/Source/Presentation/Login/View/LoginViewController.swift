@@ -20,6 +20,8 @@ import KakaoSDKAuth
 import RxKakaoSDKUser
 import KakaoSDKUser
 
+import Lottie
+
 final class LoginViewController: UIViewController {
     
     // MARK: - Properties
@@ -30,6 +32,13 @@ final class LoginViewController: UIViewController {
     private let loginViewModel: LoginViewModel
     
     // MARK: - UI Components
+    
+    let animationView: LottieAnimationView = {
+        let lottie = LottieAnimationView(name: "LottieCamera")
+        return lottie
+    }()
+    
+    
     private lazy var kakaoLoginButton = SocialLoginButton(type: .kakao, title: "카카오로 계속하기")
     
     private lazy var appleLoginButton = SocialLoginButton(type: .apple, title: "Apple로 계속하기")
@@ -52,12 +61,25 @@ final class LoginViewController: UIViewController {
         super.viewDidLoad()
         makeUI()
         bindViewModel()
+        animationView.play()
     }
     
     // MARK: - Setup UI
     func makeUI() {
         // 배경 색상
         view.backgroundColor = .background
+        
+        view.addSubview(animationView)
+        animationView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            // 위치
+            animationView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 220),
+            animationView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            // 크기
+            animationView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            animationView.heightAnchor.constraint(equalToConstant: 200)
+        ])
         
         // 스택뷰 -> 뷰에 추가
         view.addSubview(stackView)

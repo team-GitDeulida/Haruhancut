@@ -16,17 +16,4 @@ final class GroupViewModel {
     init(userId: String) {
         self.userId = userId
     }
-    
-    struct Input {
-        let enterViewTapped: Observable<Void>
-        let hostViewTapped: Observable<Void>
-    }
-    
-    struct Output {
-        
-    }
-    
-    func transform(input: Input) -> Output {
-        return Output()
-    }
 }

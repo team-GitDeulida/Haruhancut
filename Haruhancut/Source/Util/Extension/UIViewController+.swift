@@ -23,31 +23,34 @@ extension UIViewController {
     }
 }
 
-extension ViewController {
-    private func registerForKeyboardNotifications() {
-        NotificationCenter.default.addObserver(self,
-           selector: #selector(keyboardWillShow),
-           name: UIResponder.keyboardWillShowNotification,
-           object: nil)
-        NotificationCenter.default.addObserver(self,
-           selector: #selector(keyboardWillHide),
-           name: UIResponder.keyboardWillHideNotification,
-           object: nil)
-    }
-
-    @objc private func keyboardWillShow(_ notification: Notification) {
-        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
-
-        // 버튼이 키보드에 가려질 정도일 경우만 올리기
-        let bottomInset = keyboardFrame.height - view.safeAreaInsets.bottom
-        UIView.animate(withDuration: 0.3) {
-            self.view.transform = CGAffineTransform(translationX: 0, y: -bottomInset + 10)
+extension UIViewController {
+    func registerKeyboardNotifications(
+        bottomConstraint: NSLayoutConstraint,
+        defaultOffset: CGFloat = -10,
+        animationDuration: TimeInterval = 0.3
+    ) {
+        NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification,
+                                               object: nil,
+                                               queue: .main) { [weak self] notification in
+            guard let self = self,
+                  let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+            
+            let bottomInset = keyboardFrame.height - self.view.safeAreaInsets.bottom
+            bottomConstraint.constant = -bottomInset - 10
+            
+            UIView.animate(withDuration: animationDuration) {
+                self.view.layoutIfNeeded()
+            }
         }
-    }
 
-    @objc private func keyboardWillHide(_ notification: Notification) {
-        UIView.animate(withDuration: 0.3) {
-            self.view.transform = .identity
+        NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification,
+                                               object: nil,
+                                               queue: .main) { [weak self] _ in
+            bottomConstraint.constant = defaultOffset
+            
+            UIView.animate(withDuration: animationDuration) {
+                self?.view.layoutIfNeeded()
+            }
         }
     }
 }

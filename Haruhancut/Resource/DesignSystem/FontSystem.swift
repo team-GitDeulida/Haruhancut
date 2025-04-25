@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ScaleKit
 
 extension UIFont {
     enum HCFont: String {
@@ -22,7 +23,7 @@ extension UIFont {
 }
 
 extension UIFont {
-    static func hcFont(_ font: HCFont, size: CGFloat) -> UIFont {
+    @MainActor static func hcFont(_ font: HCFont, size: CGFloat) -> UIFont {
         return UIFont(name: font.rawValue, size: size.scaled) ?? UIFont.systemFont(ofSize: DynamicSize.scaledSize(size))
     }
 }

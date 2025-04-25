@@ -9,6 +9,7 @@ import UIKit
 import RxKakaoSDKAuth
 import KakaoSDKAuth
 import FirebaseAuth
+import ScaleKit
 
 /*
  https://jiwift.tistory.com/m/entry/iOSSwift-Firebase-Auth-로그인-여부-확인-코드?category=1154048
