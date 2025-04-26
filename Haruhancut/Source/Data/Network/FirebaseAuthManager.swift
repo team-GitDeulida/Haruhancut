@@ -222,7 +222,6 @@ extension FirebaseAuthManager {
 // MARK: - 그룹 관련
 extension FirebaseAuthManager {
     
-    
     /// 그룹 Creaate
     /// - Parameter groupName: 그룹 이름
     /// - Returns: Observable<Result<그룹Id, GroupError>>

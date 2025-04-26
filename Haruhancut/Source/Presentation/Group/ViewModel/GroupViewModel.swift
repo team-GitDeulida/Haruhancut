@@ -43,9 +43,9 @@ final class GroupViewModel {
     func transform(input: GroupHostInput) -> GroupHostOutput {
         let hostResult = input.endButtonTapped
             .withLatestFrom(input.groupNameText)
-            .flatMapLatest { [weak self] groupName -> Driver<Result<String, GroupError>> in
+            .flatMapLatest { [weak self] groupName -> Observable<Result<String, GroupError>> in
                 guard let self = self else {
-                    return Driver.just(.failure(.makeHostError)) // ✅ Driver.just로 수정
+                    return Observable.just(.failure(.makeHostError)) // ✅ Driver.just로 수정
                 }
                 self.groupName.accept(groupName)
                 
@@ -69,7 +69,6 @@ final class GroupViewModel {
                             return Observable.just(.failure(.makeHostError))
                         }
                     }
-                    .asDriver(onErrorJustReturn: .failure(.makeHostError))
             }.asDriver(onErrorJustReturn: .failure(.makeHostError))
         
         let isGroupnameVaild = input.groupNameText
