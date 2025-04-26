@@ -74,5 +74,9 @@ extension AppDelegate {
         let authRepository = LoginRepository(kakaoLoginManager: kakaoLoginManager, appleLoginManager: appleLoginManager, firebaseAuthManager: firebaseAuthManager)
         let loginUsecase = LoginUsecase(repository: authRepository)
         DIContainer.shared.register(LoginUsecase.self, dependency: loginUsecase)
+        
+        let groupRepository = GroupRepository(firebaseAuthManager: firebaseAuthManager)
+        let groupUsecase = GroupUsecase(repository: groupRepository)
+        DIContainer.shared.register(GroupUsecase.self, dependency: groupUsecase)
     }
 }

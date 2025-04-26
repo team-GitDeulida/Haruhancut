@@ -149,7 +149,7 @@ final class HomeCoordinator: Coordinator {
     }
     
     func startGroup() {
-        groupViewModel = GroupViewModel(userId: loginViewModel.user.value?.uid ?? "")
+        groupViewModel = GroupViewModel(userId: loginViewModel.user.value?.uid ?? "", groupUsecase: DIContainer.shared.resolve(GroupUsecase.self))
         guard let groupViewModel = groupViewModel else { return }
         let vc = GroupViewController(groupViewModel: groupViewModel)
         vc.coordinator = self

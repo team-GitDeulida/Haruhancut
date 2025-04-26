@@ -16,14 +16,17 @@ enum GroupError: Error {
 
 final class GroupViewModel {
     
+    private let groupUsecase: GroupUsecaseProtocol
+    
     private let disposeBag = DisposeBag()
     
     let userId: String
     
     var groupName = BehaviorRelay<String>(value: "")
     
-    init(userId: String) {
+    init(userId: String, groupUsecase: GroupUsecaseProtocol) {
         self.userId = userId
+        self.groupUsecase = groupUsecase
     }
     
     struct GroupHostInput {
@@ -45,7 +48,28 @@ final class GroupViewModel {
                     return Driver.just(.failure(.makeHostError)) // ✅ Driver.just로 수정
                 }
                 self.groupName.accept(groupName)
-                return self.createGroupInFirebase(groupName: groupName)
+                
+                /// 그룹 만들기
+                return groupUsecase.createGroup(groupName: groupName)
+                    .flatMapLatest { result -> Observable<Result<String, GroupError>> in
+                        switch result {
+                        case .success(let groupId):
+                            /// 그룹 만들기 성공 -> 유저 업데이트 시도
+                            return self.groupUsecase.updateUserGroupId(groupId: groupId)
+                                .map { updateResult in
+                                    switch updateResult {
+                                    case .success:
+                                        return .success(groupId) /// 둘 다 성공했으면 최종 성공
+                                    case .failure(_):
+                                        return .failure(.makeHostError) /// 업데이트 실패
+                                    }
+                                }
+                        case .failure:
+                            /// 그룹 만들기 실패
+                            return Observable.just(.failure(.makeHostError))
+                        }
+                    }
+                    .asDriver(onErrorJustReturn: .failure(.makeHostError))
             }.asDriver(onErrorJustReturn: .failure(.makeHostError))
         
         let isGroupnameVaild = input.groupNameText
@@ -54,32 +78,5 @@ final class GroupViewModel {
             .asDriver(onErrorJustReturn: false) // 에러 발생 시에도 false를 대신 방출
         
         return GroupHostOutput(hostResult: hostResult, isGroupnameVaild: isGroupnameVaild)
-    }
-    
-    // MARK: - Firebase에 그룹 생성
-    private func createGroupInFirebase(groupName: String) -> Driver<Result<String, GroupError>> {
-        return Single.create { single in
-            let ref = Database.database(url: "https://haruhancut-default-rtdb.asia-southeast1.firebasedatabase.app").reference()
-            let newGroupRef = ref.child("groups").childByAutoId()
-            
-            let groupData: [String: Any] = [
-                "groupId": newGroupRef.key ?? "",
-                "groupName": groupName,
-                "createdAt": ISO8601DateFormatter().string(from: Date()),
-                "hostUserId": self.userId
-            ]
-            
-            newGroupRef.setValue(groupData) { error, _ in
-                if let error = error {
-                    print("❌ 그룹 생성 실패: \(error.localizedDescription)")
-                    single(.success(.failure(.makeHostError)))
-                } else {
-                    print("✅ 그룹 생성 성공! ID: \(newGroupRef.key ?? "")")
-                    single(.success(.success(newGroupRef.key ?? "")))
-                }
-            }
-            return Disposables.create()
-        }
-        .asDriver(onErrorJustReturn: .failure(.makeHostError))
     }
 }

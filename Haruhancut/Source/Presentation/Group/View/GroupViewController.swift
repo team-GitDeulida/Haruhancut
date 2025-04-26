@@ -153,5 +153,5 @@ final class GroupViewController: UIViewController {
 }
 
 #Preview {
-    GroupViewController(groupViewModel: GroupViewModel(userId: "testId"))
+    GroupViewController(groupViewModel: GroupViewModel(userId: "testId", groupUsecase: GroupUsecase(repository: GroupRepository(firebaseAuthManager: FirebaseAuthManager.shared))))
 }

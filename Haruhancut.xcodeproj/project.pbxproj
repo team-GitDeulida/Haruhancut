@@ -65,6 +65,9 @@
 		DFC142912DBB538800EC6063 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = DFC142902DBB538800EC6063 /* FirebaseStorage */; };
 		DFD269712DBB559D00F90C12 /* ScaleKit in Frameworks */ = {isa = PBXBuildFile; productRef = DFD269702DBB559D00F90C12 /* ScaleKit */; };
 		DFD757AA2D9C2A74008C82DF /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD757A92D9C2A74008C82DF /* DIContainer.swift */; };
+		DFDC82672DBD4998003C597D /* GroupUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFDC82662DBD4998003C597D /* GroupUsecase.swift */; };
+		DFDC82692DBD49D9003C597D /* GroupRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFDC82682DBD49D9003C597D /* GroupRepositoryProtocol.swift */; };
+		DFDC826B2DBD4A12003C597D /* GroupRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFDC826A2DBD4A12003C597D /* GroupRepository.swift */; };
 		DFF1CBD82DBA8A5E00722B04 /* GroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFF1CBD62DBA8A5E00722B04 /* GroupViewModel.swift */; };
 		DFF1CBE02DBAAEC800722B04 /* GroupEnterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFF1CBDD2DBAAEC800722B04 /* GroupEnterViewController.swift */; };
 		DFF576A72DB0D87B007BEADA /* AppleLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFF576A62DB0D87B007BEADA /* AppleLoginManager.swift */; };
@@ -120,6 +123,9 @@
 		DFA98D2C2DBB35AA00C22770 /* GroupHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupHostViewController.swift; sourceTree = "<group>"; };
 		DFB71C142DB62F7900FE8490 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		DFD757A92D9C2A74008C82DF /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
+		DFDC82662DBD4998003C597D /* GroupUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupUsecase.swift; sourceTree = "<group>"; };
+		DFDC82682DBD49D9003C597D /* GroupRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupRepositoryProtocol.swift; sourceTree = "<group>"; };
+		DFDC826A2DBD4A12003C597D /* GroupRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupRepository.swift; sourceTree = "<group>"; };
 		DFF1CBD62DBA8A5E00722B04 /* GroupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewModel.swift; sourceTree = "<group>"; };
 		DFF1CBDD2DBAAEC800722B04 /* GroupEnterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupEnterViewController.swift; sourceTree = "<group>"; };
 		DFF576A62DB0D87B007BEADA /* AppleLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginManager.swift; sourceTree = "<group>"; };
@@ -186,6 +192,7 @@
 			isa = PBXGroup;
 			children = (
 				DF3CBB482DA809DB00AD5788 /* LoginRepository.swift */,
+				DFDC826A2DBD4A12003C597D /* GroupRepository.swift */,
 			);
 			path = RepositoryImpl;
 			sourceTree = "<group>";
@@ -194,6 +201,7 @@
 			isa = PBXGroup;
 			children = (
 				DF3CBB4C2DA80A6800AD5788 /* LoginRepositoryProtocol.swift */,
+				DFDC82682DBD49D9003C597D /* GroupRepositoryProtocol.swift */,
 			);
 			path = RepositoryProtocol;
 			sourceTree = "<group>";
@@ -432,6 +440,7 @@
 			isa = PBXGroup;
 			children = (
 				DF3CBB4E2DA814F100AD5788 /* LoginUsecase.swift */,
+				DFDC82662DBD4998003C597D /* GroupUsecase.swift */,
 			);
 			path = UseCase;
 			sourceTree = "<group>";
@@ -570,8 +579,10 @@
 				DFF576A72DB0D87B007BEADA /* AppleLoginManager.swift in Sources */,
 				DF4B5BA62DAEBAD300A7ADD7 /* LoginViewModel.swift in Sources */,
 				DF3CBB492DA809DB00AD5788 /* LoginRepository.swift in Sources */,
+				DFDC82672DBD4998003C597D /* GroupUsecase.swift in Sources */,
 				DF4B5BA02DAEBACE00A7ADD7 /* BirthdaySettingViewController.swift in Sources */,
 				DF35040E2DB388B8002C1269 /* TextFieldSystem.swift in Sources */,
+				DFDC826B2DBD4A12003C597D /* GroupRepository.swift in Sources */,
 				DF4B5BA12DAEBACE00A7ADD7 /* LoginViewController.swift in Sources */,
 				DF4B5BA22DAEBACE00A7ADD7 /* NicknameSettingViewController.swift in Sources */,
 				DF3CBA1D2DA8079600AD5788 /* KakaoLoginManager.swift in Sources */,
@@ -600,6 +611,7 @@
 				DF0C249D2DACF65F00022AB0 /* UIViewController+.swift in Sources */,
 				DF5F3E942D95C47700245C20 /* SceneDelegate.swift in Sources */,
 				DFF1CBE02DBAAEC800722B04 /* GroupEnterViewController.swift in Sources */,
+				DFDC82692DBD49D9003C597D /* GroupRepositoryProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
