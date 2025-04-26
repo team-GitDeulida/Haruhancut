@@ -34,6 +34,7 @@ final class GroupViewModel {
     struct GroupHostOutput {
         /// 그룹 ID 반환
         let hostResult: Driver<Result<String, GroupError>>
+        let isGroupnameVaild: Driver<Bool>
     }
     
     func transform(input: GroupHostInput) -> GroupHostOutput {
@@ -46,7 +47,13 @@ final class GroupViewModel {
                 self.groupName.accept(groupName)
                 return self.createGroupInFirebase(groupName: groupName)
             }.asDriver(onErrorJustReturn: .failure(.makeHostError))
-        return GroupHostOutput(hostResult: hostResult)
+        
+        let isGroupnameVaild = input.groupNameText
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines).count >= 2 }
+            .distinctUntilChanged() // 중복된 값은 무시하고 변경될 때만 아래로 전달
+            .asDriver(onErrorJustReturn: false) // 에러 발생 시에도 false를 대신 방출
+        
+        return GroupHostOutput(hostResult: hostResult, isGroupnameVaild: isGroupnameVaild)
     }
     
     // MARK: - Firebase에 그룹 생성

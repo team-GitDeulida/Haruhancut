@@ -113,6 +113,15 @@ final class GroupHostViewController: UIViewController {
                     print("에러 발생: \(error)")
                 }
             }).disposed(by: disposeBag)
+        
+        /// 그룹 유효성 검사에 따라 활성화
+        output.isGroupnameVaild
+            /// 그룹 유효성에 따라 버튼의 UI 상태 업데이트
+            .drive(onNext: { [weak self] isValid in
+                guard let self = self else { return }
+                self.endButton.isEnabled = isValid
+                self.endButton.alpha = isValid ? 1.0 : 0.5
+            }).disposed(by: disposeBag)
     }
     
     // MARK: 외부 터치 시 키보드 내리기

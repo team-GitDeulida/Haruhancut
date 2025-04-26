@@ -79,7 +79,7 @@ extension User {
 }
 
 // MARK: - DTO
-struct UserDTO: Decodable { /// Json -> Swift 객체(서버 응답용)
+struct UserDTO: Codable { /// Json -> Swift 객체(서버 응답용)
     let uid: String?
     let registerDate: String?
     let loginPlatform: String?
