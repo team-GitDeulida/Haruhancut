@@ -8,6 +8,7 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import FirebaseDatabase
 
 enum GroupError: Error {
     case makeHostError
@@ -25,30 +26,53 @@ final class GroupViewModel {
         self.userId = userId
     }
     
-    struct groupHostInput {
+    struct GroupHostInput {
         let groupNameText: Observable<String>
         let endButtonTapped: Observable<Void>
     }
     
-    struct groupHostOutput {
-        let hostResult: Driver<Result<Void, GroupError>>
+    struct GroupHostOutput {
+        /// 그룹 ID 반환
+        let hostResult: Driver<Result<String, GroupError>>
     }
     
-    func transform(input: groupHostInput) -> groupHostOutput {
-        let endButtonTapped = input.endButtonTapped
+    func transform(input: GroupHostInput) -> GroupHostOutput {
+        let hostResult = input.endButtonTapped
             .withLatestFrom(input.groupNameText)
-            .map { [weak self] groupName -> Result<Void, GroupError> in
-                self?.groupName.accept(groupName)
-                return .success(())
-            }
-            .asDriver(onErrorJustReturn: .failure(.makeHostError))
-//            .bind(onNext: { [weak self] groupName in
-//                guard let self = self else { return }
-//                self.groupName.accept(groupName)
-//            })
-
+            .flatMapLatest { [weak self] groupName -> Driver<Result<String, GroupError>> in
+                guard let self = self else {
+                    return Driver.just(.failure(.makeHostError)) // ✅ Driver.just로 수정
+                }
+                self.groupName.accept(groupName)
+                return self.createGroupInFirebase(groupName: groupName)
+            }.asDriver(onErrorJustReturn: .failure(.makeHostError))
+        return GroupHostOutput(hostResult: hostResult)
+    }
+    
+    // MARK: - Firebase에 그룹 생성
+    private func createGroupInFirebase(groupName: String) -> Driver<Result<String, GroupError>> {
+        return Single.create { single in
+            let ref = Database.database(url: "https://haruhancut-default-rtdb.asia-southeast1.firebasedatabase.app").reference()
+            let newGroupRef = ref.child("groups").childByAutoId()
             
-                    
-        return groupHostOutput(hostResult: endButtonTapped)
+            let groupData: [String: Any] = [
+                "groupId": newGroupRef.key ?? "",
+                "groupName": groupName,
+                "createdAt": ISO8601DateFormatter().string(from: Date()),
+                "hostUserId": self.userId
+            ]
+            
+            newGroupRef.setValue(groupData) { error, _ in
+                if let error = error {
+                    print("❌ 그룹 생성 실패: \(error.localizedDescription)")
+                    single(.success(.failure(.makeHostError)))
+                } else {
+                    print("✅ 그룹 생성 성공! ID: \(newGroupRef.key ?? "")")
+                    single(.success(.success(newGroupRef.key ?? "")))
+                }
+            }
+            return Disposables.create()
+        }
+        .asDriver(onErrorJustReturn: .failure(.makeHostError))
     }
 }

@@ -93,7 +93,7 @@ final class GroupHostViewController: UIViewController {
             })
             .disposed(by: disposeBag)
         
-        let input = GroupViewModel.groupHostInput(
+        let input = GroupViewModel.GroupHostInput(
             groupNameText: textField.rx.text.orEmpty.asObservable(),
             endButtonTapped: endButton.rx.tap.asObservable())
         
@@ -101,7 +101,7 @@ final class GroupHostViewController: UIViewController {
         bindViewModelOutput(output: output)
     }
     
-    private func bindViewModelOutput(output: GroupViewModel.groupHostOutput) {
+    private func bindViewModelOutput(output: GroupViewModel.GroupHostOutput) {
         output.hostResult
             .drive(onNext: { result in
                 switch result {

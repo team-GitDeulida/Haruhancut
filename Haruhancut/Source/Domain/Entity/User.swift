@@ -19,7 +19,7 @@ enum LoginPlatform: String, Codable {
 }
 
 // MARK: - Model
-struct User: Codable {
+struct User: Encodable { /// Swift객체 -> Json(서버로 보낼때)
     var uid: String
     let registerDate: Date
     let loginPlatform: LoginPlatform
@@ -72,12 +72,14 @@ extension User {
     }
 
     static func from(data: Data) -> User? {
-        try? JSONDecoder().decode(User.self, from: data)
+        guard let dto = try? JSONDecoder().decode(UserDTO.self, from: data) else { return nil }
+        return dto.toModel()
+        //try? JSONDecoder().decode(User.self, from: data)
     }
 }
 
 // MARK: - DTO
-struct UserDTO: Codable {
+struct UserDTO: Decodable { /// Json -> Swift 객체(서버 응답용)
     let uid: String?
     let registerDate: String?
     let loginPlatform: String?
