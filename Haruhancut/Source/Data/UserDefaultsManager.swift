@@ -47,18 +47,17 @@ final class UserDefaultsManager {
     // MARK: - Sign up
     
     // 회원가입 완료 여부
-    func isSignupCompleted() -> Bool {
-        return UserDefaults.standard.bool(forKey: signupKey)
-    }
+//    func isSignupCompleted() -> Bool {
+//        return UserDefaults.standard.bool(forKey: signupKey)
+//    }
     
     // 회원가입 완료
-    func markSignupCompleted() {
-        UserDefaults.standard.set(true, forKey: signupKey)
-    }
+//    func markSignupCompleted() {
+//        UserDefaults.standard.set(true, forKey: signupKey)
+//    }
     
     // 회원가입 초기화(탈퇴시)
-    func clearSignupStatus() {
-        UserDefaults.standard.removeObject(forKey: signupKey)
-    }
-    
+//    func clearSignupStatus() {
+//        UserDefaults.standard.removeObject(forKey: signupKey)
+//    }
 }

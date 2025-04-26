@@ -17,15 +17,14 @@ enum GroupError: Error {
 final class GroupViewModel {
     
     private let groupUsecase: GroupUsecaseProtocol
+    private let loginViewModel: LoginViewModel
     
     private let disposeBag = DisposeBag()
     
-    let userId: String
-    
     var groupName = BehaviorRelay<String>(value: "")
     
-    init(userId: String, groupUsecase: GroupUsecaseProtocol) {
-        self.userId = userId
+    init(loginViewModel: LoginViewModel, groupUsecase: GroupUsecaseProtocol) {
+        self.loginViewModel = loginViewModel
         self.groupUsecase = groupUsecase
     }
     
@@ -59,6 +58,12 @@ final class GroupViewModel {
                                 .map { updateResult in
                                     switch updateResult {
                                     case .success:
+                                        /// ✅ 그룹 생성 성공했으면 메모리 속 user.groupId도 업데이트
+                                        if var currentUser = self.loginViewModel.user.value {
+                                            currentUser.groupId = groupId
+                                            self.loginViewModel.user.accept(currentUser)
+                                            UserDefaultsManager.shared.saveUser(currentUser)
+                                        }
                                         return .success(groupId) /// 둘 다 성공했으면 최종 성공
                                     case .failure(_):
                                         return .failure(.makeHostError) /// 업데이트 실패

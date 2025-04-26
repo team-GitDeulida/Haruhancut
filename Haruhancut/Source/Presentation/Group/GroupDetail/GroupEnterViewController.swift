@@ -106,5 +106,5 @@ final class GroupEnterViewController: UIViewController {
 
 
 #Preview {
-    GroupEnterViewController(groupViewModel: GroupViewModel(userId: "testUser", groupUsecase: GroupUsecase(repository: GroupRepository(firebaseAuthManager: FirebaseAuthManager.shared))))
+    GroupEnterViewController(groupViewModel: GroupViewModel(loginViewModel: LoginViewModel(loginUsecase: StubLoginUsecase()), groupUsecase: GroupUsecase(repository: GroupRepository(firebaseAuthManager: FirebaseAuthManager.shared))))
 }

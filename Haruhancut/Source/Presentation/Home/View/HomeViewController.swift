@@ -75,7 +75,7 @@ final class HomeViewController: UIViewController {
     
     @objc func test() {
         do {
-            UserDefaultsManager.shared.clearSignupStatus()
+            UserDefaultsManager.shared.removeUser()
             try Auth.auth().signOut()
             print("로그아웃 성공")
             coordinator?.showLogin()

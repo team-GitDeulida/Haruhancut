@@ -33,14 +33,32 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let navigationController = UINavigationController()
         
         // 3. view 계층을 프로그래밍 방식으로 만들기
-        // ✅ AppCoordinator 생성 및 시작
+//        // ✅ AppCoordinator 생성 및 시작
+//        let coordinator = AppCoordinator(navigationController: navigationController, isLoggedIn: false)
+//        coordinator.start()
+//        appCoordinator = coordinator
+//
+//        window.rootViewController = navigationController
+//        self.window = window
+//        window.makeKeyAndVisible()
+        
         let coordinator = AppCoordinator(navigationController: navigationController, isLoggedIn: false)
-        coordinator.start()
-        appCoordinator = coordinator
-
         window.rootViewController = navigationController
         self.window = window
         window.makeKeyAndVisible()
+        
+        ///
+        if let _ = Auth.auth().currentUser {
+            if let _ = UserDefaultsManager.shared.loadUser() {
+                coordinator.startHomeCoordinator()
+            }
+        } else {
+            
+            coordinator.start()
+            appCoordinator = coordinator
+
+            
+        }
     }
     
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {

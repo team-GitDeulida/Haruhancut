@@ -83,11 +83,14 @@ final class LoginViewModel {
                             if let user = user {
                                 self.user.accept(user)
                                 UserDefaultsManager.shared.saveUser(user)
-                                UserDefaultsManager.shared.markSignupCompleted()
+                                // UserDefaultsManager.shared.markSignupCompleted()
                                 return .success(())
                             } else {
                                 /// 신규 유저라면
                                 self.user.accept(User.empty(loginPlatform: .kakao))
+//                                if let user = user {
+//                                    UserDefaultsManager.shared.saveUser(user)
+//                                }
                                 return .failure(.noUser)
                             }
                         }
@@ -122,11 +125,14 @@ final class LoginViewModel {
                                 /// 기존 회원
                                 self.user.accept(user)
                                 UserDefaultsManager.shared.saveUser(user)
-                                UserDefaultsManager.shared.markSignupCompleted()
+                                // UserDefaultsManager.shared.markSignupCompleted()
                                 return .success(())
                             } else {
                                 /// 신규 회원
                                 self.user.accept(User.empty(loginPlatform: .apple))
+//                                if let user = user {
+//                                    UserDefaultsManager.shared.saveUser(user)
+//                                }
                                 return .failure(.noUser)
                             }
                         }
@@ -252,7 +258,7 @@ final class LoginViewModel {
                 if case .success(let user) = result {
                     self?.user.accept(user)
                      UserDefaultsManager.shared.saveUser(user)
-                     UserDefaultsManager.shared.markSignupCompleted()
+                     // UserDefaultsManager.shared.markSignupCompleted()
                 }
                 return result.mapToVoid()
             }

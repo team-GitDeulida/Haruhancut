@@ -138,8 +138,7 @@ final class HomeCoordinator: Coordinator {
     }
     
     func start() {
-        if let group = loginViewModel.user.value?.groupId {
-            print("그룹 존재: \(group)")
+        if let _ = loginViewModel.user.value?.groupId {
             /// 홈으로 이동
             startHome()
         } else {
@@ -149,7 +148,8 @@ final class HomeCoordinator: Coordinator {
     }
     
     func startGroup() {
-        groupViewModel = GroupViewModel(userId: loginViewModel.user.value?.uid ?? "", groupUsecase: DIContainer.shared.resolve(GroupUsecase.self))
+        groupViewModel = GroupViewModel(loginViewModel: loginViewModel, groupUsecase: DIContainer.shared.resolve(GroupUsecase.self))
+        // groupViewModel = GroupViewModel(userId: loginViewModel.user.value?.uid ?? "", groupUsecase: DIContainer.shared.resolve(GroupUsecase.self), loginViewModel: loginViewModel)
         guard let groupViewModel = groupViewModel else { return }
         let vc = GroupViewController(groupViewModel: groupViewModel)
         vc.coordinator = self
