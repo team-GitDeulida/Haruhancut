@@ -30,6 +30,17 @@ final class LoginViewModel {
 
     init(loginUsecase: LoginUsecaseProtocol) {
         self.loginUsecase = loginUsecase
+        
+        // 앱 실행 시 캐시된 유저 불러오기
+        if let cachedUser = UserDefaultsManager.shared.loadUser() {
+            print("✅ 캐시에서 불러온 유저: \(cachedUser)")
+            self.user.accept(cachedUser)
+        } else {
+            print("❌ 캐시에 저장된 유저 없음")
+        }
+        
+        fetchMyInfo()
+        
     }
     
     // MARK: - LoginViewController
@@ -71,6 +82,8 @@ final class LoginViewModel {
                             /// 기존 유저라면
                             if let user = user {
                                 self.user.accept(user)
+                                UserDefaultsManager.shared.saveUser(user)
+                                UserDefaultsManager.shared.markSignupCompleted()
                                 return .success(())
                             } else {
                                 /// 신규 유저라면
@@ -108,6 +121,8 @@ final class LoginViewModel {
                             if let user = user {
                                 /// 기존 회원
                                 self.user.accept(user)
+                                UserDefaultsManager.shared.saveUser(user)
+                                UserDefaultsManager.shared.markSignupCompleted()
                                 return .success(())
                             } else {
                                 /// 신규 회원
@@ -125,6 +140,42 @@ final class LoginViewModel {
             .asDriver(onErrorJustReturn: .failure(.signUpError))
         
         return LoginOutput(loginResult: mergedResult)
+    }
+    
+    private func fetchMyInfo() {
+        
+        // 1. 현재 로그인된 유저 UID 가져오기
+        guard let uid = Auth.auth().currentUser?.uid else {
+            print("🔸 로그인된 유저 없음")
+            return
+        }
+
+        // 2. Realtime Database 참조 설정
+        let ref = Database.database(url: "https://haruhancut-default-rtdb.asia-southeast1.firebasedatabase.app").reference()
+        let userRef = ref.child("users").child(uid)
+        
+        // 3. 데이터 fetch
+        userRef.observeSingleEvent(of: .value) { [weak self] snapshot, _  in
+            guard let value = snapshot.value as? [String: Any] else {
+                print("❌ 사용자 정보 없음")
+                return
+            }
+            
+            do {
+                // 4. Dictionary → Data → UserDTO → User
+                let data = try JSONSerialization.data(withJSONObject: value, options: [])
+                let dto = try JSONDecoder().decode(UserDTO.self, from: data)
+                let user = dto.toModel()
+                guard let self = self else { return }
+                if let user = user {
+                    self.user.accept(user)
+                    UserDefaultsManager.shared.saveUser(user)
+                }
+                print("✅ 기존 유저 정보 불러옴: \(String(describing: user))")
+            } catch {
+                print("❌ 유저 디코딩 실패: \(error.localizedDescription)")
+            }
+        }
     }
     
     // MARK: - NicknameViewController
@@ -200,8 +251,8 @@ final class LoginViewModel {
             .map { [weak self] result -> Result<Void, LoginError> in
                 if case .success(let user) = result {
                     self?.user.accept(user)
-                    // UserDefaultsManager.shared.saveUser(user)
-                    // UserDefaultsManager.shared.markSignupCompleted()
+                     UserDefaultsManager.shared.saveUser(user)
+                     UserDefaultsManager.shared.markSignupCompleted()
                 }
                 return result.mapToVoid()
             }

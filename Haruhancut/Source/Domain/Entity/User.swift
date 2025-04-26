@@ -67,16 +67,39 @@ extension User {
 
 // User를 캐싱 가능한 형태로 만들기
 extension User {
+//    func toData() -> Data? {
+//        try? JSONEncoder().encode(self)
+//    }
+//
+//    static func from(data: Data) -> User? {
+//        guard let dto = try? JSONDecoder().decode(UserDTO.self, from: data) else { return nil }
+//        return dto.toModel()
+//        //try? JSONDecoder().decode(User.self, from: data)
+//    }
+}
+
+extension User {
     func toData() -> Data? {
-        try? JSONEncoder().encode(self)
+        do {
+            let data = try JSONEncoder().encode(self)
+            return data
+        } catch {
+            print("❌ User toData() 실패: \(error.localizedDescription)")
+            return nil
+        }
     }
 
     static func from(data: Data) -> User? {
-        guard let dto = try? JSONDecoder().decode(UserDTO.self, from: data) else { return nil }
-        return dto.toModel()
-        //try? JSONDecoder().decode(User.self, from: data)
+        do {
+            let dto = try JSONDecoder().decode(UserDTO.self, from: data)
+            return dto.toModel()
+        } catch {
+            print("❌ User from(data:) 실패: \(error.localizedDescription)")
+            return nil
+        }
     }
 }
+
 
 struct HCGroup: Encodable {
     let groupId: String

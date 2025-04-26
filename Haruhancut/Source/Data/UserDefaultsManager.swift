@@ -17,15 +17,27 @@ final class UserDefaultsManager {
     // MARK: - 유저
     // 저장
     func saveUser(_ user: User) {
-        guard let data = user.toData() else { return }
+        let dto = user.toDTO()
+        guard let data = try? JSONEncoder().encode(dto) else { return }
         UserDefaults.standard.set(data, forKey: userKey)
     }
 
-    // 불러오기
     func loadUser() -> User? {
         guard let data = UserDefaults.standard.data(forKey: userKey) else { return nil }
-        return User.from(data: data)
+        guard let dto = try? JSONDecoder().decode(UserDTO.self, from: data) else { return nil }
+        return dto.toModel()
     }
+
+//    func saveUser(_ user: User) {
+//        guard let data = user.toData() else { return }
+//        UserDefaults.standard.set(data, forKey: userKey)
+//    }
+//
+//    // 불러오기
+//    func loadUser() -> User? {
+//        guard let data = UserDefaults.standard.data(forKey: userKey) else { return nil }
+//        return User.from(data: data)
+//    }
 
     // 삭제
     func removeUser() {
