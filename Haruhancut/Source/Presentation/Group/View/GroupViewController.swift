@@ -81,14 +81,13 @@ final class GroupViewController: UIViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupLogoTitle()
         makeUI()
         rxBtnTap()
     }
     
     // MARK: - Setup UI
     private func makeUI() {
-        
+        setupLogoTitle()
         /// 커스텀 뒤로가기
         let backItem = UIBarButtonItem()
         backItem.title = "뒤로가기"

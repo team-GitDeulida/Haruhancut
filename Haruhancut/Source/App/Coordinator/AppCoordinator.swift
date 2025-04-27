@@ -177,6 +177,12 @@ final class HomeCoordinator: Coordinator {
         navigationController.setViewControllers([vc], animated: true)
     }
     
+    func startProfile() {
+        let profileViewController = ProfileViewController()
+        profileViewController.coordinator = self
+        navigationController.pushViewController(profileViewController, animated: true)
+    }
+    
 //    func didFinishGroupHost() { 
 //        navigationController.popViewController(animated: true)
 //    }
@@ -188,6 +194,7 @@ final class HomeCoordinator: Coordinator {
 //            appCoordinator.startLoginFlowCoordinator()
 //        }
 //    }
+    
     
     func showLogin() {
         finishFlow() // 현재 흐름 종료(자신을 부모에서 제거

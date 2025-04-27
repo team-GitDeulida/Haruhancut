@@ -32,36 +32,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
         let navigationController = UINavigationController()
         
-        // 3. view 계층을 프로그래밍 방식으로 만들기
-//        // ✅ AppCoordinator 생성 및 시작
-//        let coordinator = AppCoordinator(navigationController: navigationController, isLoggedIn: false)
-//        coordinator.start()
-//        appCoordinator = coordinator
-//
-//        window.rootViewController = navigationController
-//        self.window = window
-//        window.makeKeyAndVisible()
-        
-        /////
-//        let coordinator = AppCoordinator(navigationController: navigationController, isLoggedIn: false)
-//        window.rootViewController = navigationController
-//        self.window = window
-//        window.makeKeyAndVisible()
-//        
-//        ///
-//        if let _ = Auth.auth().currentUser {
-//            if let _ = UserDefaultsManager.shared.loadUser() {
-//                coordinator.startHomeCoordinator()
-//            }
-//        } else {
-//            
-//            coordinator.start()
-//            appCoordinator = coordinator
-//
-//            
-//        }
-        
-        
+        // 3. view 계층을 프로그래밍 방식으로 만들기        
         // 로그인 여부 확인
         let isLoggedIn = Auth.auth().currentUser != nil && UserDefaultsManager.shared.loadUser() != nil
         let coordinator = AppCoordinator(navigationController: navigationController, isLoggedIn: isLoggedIn)

@@ -5,6 +5,11 @@
 //  Created by 김동현 on 4/11/25.
 //
 
+/*
+ reference
+ - https://dmtopolog.com/navigation-bar-customization/ (navigation bar)
+ */
+
 import UIKit
 import FirebaseAuth
 import RxSwift
@@ -29,62 +34,39 @@ final class HomeViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
-    private lazy var testBtn: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Test", for: .normal)
-        return button
-    }()
-    
-    private lazy var logoutBtn: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("로그아웃", for: .normal)
-        /// button.addTarget(self, action: #selector(test), for: .touchUpInside)
-        return button
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "하루한컷"
+        label.font = UIFont.hcFont(.bold, size: 20)
+        label.textColor = .mainWhite
+        return label
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         makeUI()
-        bindViewModel()
+        // bindViewModel()
     }
     
     func makeUI() {
+        setupLogoTitle()
         view.backgroundColor = .background
-        
-        view.addSubview(logoutBtn)
-        logoutBtn.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            logoutBtn.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            logoutBtn.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-        ])
-        
-        view.addSubview(testBtn)
-        testBtn.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            testBtn.topAnchor.constraint(equalTo: logoutBtn.bottomAnchor, constant: 50),
-            testBtn.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        ])
     }
     
-    private func bindViewModel() {
-        homeViewModel.bindButtonTap(tap: testBtn.rx.tap.asObservable())
+    func setupLogoTitle() {
+        self.navigationController?.navigationBar.tintColor = .mainWhite // 버튼 색
         
-        logoutBtn.rx.tap
-            .bind(onNext: { [weak self] in
-                guard let self = self else { return }
-                self.logout()
-            }).disposed(by: disposeBag)
+        self.navigationItem.titleView = titleLabel
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "person"),
+            style: .plain,
+            target: self,
+            action: #selector(startProfile)
+        )
     }
     
-    @objc func logout() {
-        do {
-            UserDefaultsManager.shared.removeUser()
-            try Auth.auth().signOut()
-            print("로그아웃 성공")
-            coordinator?.showLogin()
-            
-        } catch let signOutError as NSError {
-            print("로그아웃 실패: %@", signOutError)
-        }
+    /// Rx처리가 오히려 오버 엔지니어링이라고 판단됨
+    @objc func startProfile() {
+        coordinator?.startProfile()
     }
 }

@@ -42,6 +42,7 @@ final class UserDefaultsManager {
     // 삭제
     func removeUser() {
         UserDefaults.standard.removeObject(forKey: userKey)
+        print("캐시 유저 삭제: \(String(describing: self.loadUser()))")
     }
     
     // MARK: - Sign up
