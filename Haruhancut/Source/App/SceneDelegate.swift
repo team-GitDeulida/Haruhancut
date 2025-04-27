@@ -35,6 +35,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // 3. view 계층을 프로그래밍 방식으로 만들기
         // 로그인 여부 확인
         let isLoggedIn = Auth.auth().currentUser != nil && UserDefaultsManager.shared.loadUser() != nil
+        // && UserDefaultsManager.shared.loadUser() != nil
         let coordinator = AppCoordinator(navigationController: navigationController, isLoggedIn: isLoggedIn)
         self.appCoordinator = coordinator
         coordinator.start()

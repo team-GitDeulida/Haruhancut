@@ -55,8 +55,6 @@ final class UserDefaultsManager {
         UserDefaults.standard.removeObject(forKey: groupKey)
         print("캐시 그룹 삭제: \(String(describing: self.loadGroup()))")
     }
-    
-
 }
 
 

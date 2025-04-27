@@ -138,7 +138,8 @@ final class HomeCoordinator: Coordinator {
     }
     
     func start() {
-        if let _ = loginViewModel.user.value?.groupId {
+        if let _ = loginViewModel.group.value {
+        // if let _ = loginViewModel.user.value?.groupId {
             /// 홈으로 이동
             startHome()
         } else {

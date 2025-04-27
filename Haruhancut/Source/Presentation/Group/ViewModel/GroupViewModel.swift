@@ -64,8 +64,21 @@ final class GroupViewModel {
                                             currentUser.groupId = groupId
                                             self.loginViewModel.user.accept(currentUser)
                                             UserDefaultsManager.shared.saveUser(currentUser)
+                                            
+                                            /// loginViewModel의 groupRelay도 갱신
+                                            let group = HCGroup(
+                                                groupId: groupId,
+                                                groupName: groupName,
+                                                createdAt: Date(),
+                                                hostUserId: currentUser.uid,
+                                                posts: [])
+                                            self.loginViewModel.group.accept(group)
+                                            UserDefaultsManager.shared.saveGroup(group)
                                         }
+                                        
                                         return .success(groupId) /// 둘 다 성공했으면 최종 성공
+                                        
+                                        
                                     case .failure(_):
                                         return .failure(.makeHostError) /// 업데이트 실패
                                     }

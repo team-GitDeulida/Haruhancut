@@ -47,12 +47,10 @@ final class LoginViewModel {
                 print("✅ 캐시에서 불러온 그룹: \(cachedGroup)")
                 self.group.accept(cachedGroup)
             }
+            fetchUserInfo()
         } else {
             print("❌ 캐시에 저장된 유저 없음")
-        }
-        
-        fetchUserInfo()
-        
+        }        
     }
     
     // MARK: - LoginViewController
@@ -96,18 +94,18 @@ final class LoginViewModel {
                                 self.user.accept(user)
                                 UserDefaultsManager.shared.saveUser(user)
                                 
+                                // 그룹Id가 있다면 파이어베이스에서 그룹 데이터 가져오기
                                 if let groupId = user.groupId {
                                     self.fetchGroup(groupId: groupId)
                                 }
-                                
-                                // UserDefaultsManager.shared.markSignupCompleted()
                                 return .success(())
+                                
                             } else {
                                 /// 신규 유저라면
                                 self.user.accept(User.empty(loginPlatform: .kakao))
-//                                if let user = user {
-//                                    UserDefaultsManager.shared.saveUser(user)
-//                                }
+                                if let user = user {
+                                    UserDefaultsManager.shared.saveUser(user)
+                                }
                                 return .failure(.noUser)
                             }
                         }
@@ -142,17 +140,17 @@ final class LoginViewModel {
                                 /// 기존 회원
                                 self.user.accept(user)
                                 UserDefaultsManager.shared.saveUser(user)
+                                
                                 if let groupId = user.groupId {
                                     self.fetchGroup(groupId: groupId)
                                 }
-                                // UserDefaultsManager.shared.markSignupCompleted()
                                 return .success(())
                             } else {
                                 /// 신규 회원
                                 self.user.accept(User.empty(loginPlatform: .apple))
-//                                if let user = user {
-//                                    UserDefaultsManager.shared.saveUser(user)
-//                                }
+                                if let user = user {
+                                    UserDefaultsManager.shared.saveUser(user)
+                                }
                                 return .failure(.noUser)
                             }
                         }
@@ -170,13 +168,12 @@ final class LoginViewModel {
      
     private func fetchUserInfo() {
         loginUsecase.fetchUserInfo()
-            .subscribe(onNext: { [weak self] user in
+            .bind(onNext: { [weak self] user in
                 guard let self = self else { return }
                 if let user = user {
                     self.user.accept(user)
                     UserDefaultsManager.shared.saveUser(user)
                     
-                    // 필요하면 여기서 fetchGroup(groupId:) 호출
                     if let groupId = user.groupId {
                         self.fetchGroup(groupId: groupId)
                     }
@@ -194,7 +191,7 @@ final class LoginViewModel {
                 case .success(let group):
                     print("✅ 그룹 가져오기 성공: \(group)")
                     self.group.accept(group)
-                    UserDefaultsManager.shared.saveGroup(group)
+                     UserDefaultsManager.shared.saveGroup(group)
                 case .failure(let error):
                     print("❌ 그룹 가져오기 실패: \(error)")
                 }
@@ -275,8 +272,7 @@ final class LoginViewModel {
             .map { [weak self] result -> Result<Void, LoginError> in
                 if case .success(let user) = result {
                     self?.user.accept(user)
-                     UserDefaultsManager.shared.saveUser(user)
-                     // UserDefaultsManager.shared.markSignupCompleted()
+                    UserDefaultsManager.shared.saveUser(user)
                 }
                 return result.mapToVoid()
             }

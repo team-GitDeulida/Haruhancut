@@ -58,6 +58,7 @@ final class ProfileViewController: UIViewController {
     @objc func logout() {
         do {
             UserDefaultsManager.shared.removeUser()
+            UserDefaultsManager.shared.removeGroup()
             try Auth.auth().signOut()
             print("로그아웃 성공")
             coordinator?.showLogin()
