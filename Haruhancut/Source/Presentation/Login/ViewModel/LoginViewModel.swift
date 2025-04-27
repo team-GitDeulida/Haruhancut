@@ -98,6 +98,7 @@ final class LoginViewModel {
                                 if let groupId = user.groupId {
                                     self.fetchGroup(groupId: groupId)
                                 }
+                                
                                 return .success(())
                                 
                             } else {
@@ -191,7 +192,8 @@ final class LoginViewModel {
                 case .success(let group):
                     print("✅ 그룹 가져오기 성공: \(group)")
                     self.group.accept(group)
-                     UserDefaultsManager.shared.saveGroup(group)
+                    UserDefaultsManager.shared.saveGroup(group)
+                    
                 case .failure(let error):
                     print("❌ 그룹 가져오기 실패: \(error)")
                 }

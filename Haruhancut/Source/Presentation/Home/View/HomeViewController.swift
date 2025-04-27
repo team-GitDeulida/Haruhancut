@@ -9,8 +9,6 @@
  reference
  - https://dmtopolog.com/navigation-bar-customization/ (navigation bar)
  
- 
- 
  ContentMode    설명
  .scaleAspectFit    이미지 비율 유지하면서 버튼 안에 "모두" 들어오게
  .scaleAspectFill    이미지가 버튼을 "가득" 채우게 (비율은 유지하지만 잘릴 수도 있음)
@@ -34,24 +32,24 @@ final class HomeViewController: UIViewController {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "하루한컷"
-        label.font = UIFont.hcFont(.bold, size: 20)
+        label.font = UIFont.hcFont(.bold, size: 20.scaled)
         label.textColor = .mainWhite
         return label
     }()
     
-    private lazy var testLabel: UILabel = {
-        let label = UILabel()
-        // label.text = "\(String(describing: loginViewModel.group.value))"
-        label.font = UIFont.hcFont(.bold, size: 20)
-        label.textColor = .mainWhite
-        return label
-    }()
+//    private lazy var testLabel: UILabel = {
+//        let label = UILabel()
+//        // label.text = "\(String(describing: loginViewModel.group.value))"
+//        label.font = UIFont.hcFont(.bold, size: 20.scaled)
+//        label.textColor = .mainWhite
+//        return label
+//    }()
     
     private lazy var cameraBtn: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "button.programmable"), for: .normal)
         button.tintColor = .mainWhite
-        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 70), forImageIn: .normal)
+        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 70.scaled), forImageIn: .normal)
         button.imageView?.contentMode = .scaleAspectFit
         button.addTarget(self, action: #selector(startCamera), for: .touchUpInside)
         return button
@@ -81,7 +79,7 @@ final class HomeViewController: UIViewController {
         loginViewModel.group
             // .compactMap { $0?.groupName }
             .map { "\($0?.groupName ?? "그룹 없음")" }
-            .bind(to: testLabel.rx.text)
+            .bind(to: titleLabel.rx.text)
             .disposed(by: disposeBag)
     }
     
@@ -89,18 +87,18 @@ final class HomeViewController: UIViewController {
         setupLogoTitle()
         view.backgroundColor = .background
         
-        view.addSubview(testLabel)
-        testLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            testLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            testLabel.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
-        ])
+//        view.addSubview(testLabel)
+//        testLabel.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            testLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+//            testLabel.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
+//        ])
         
         view.addSubview(cameraBtn)
         cameraBtn.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             // 위치
-            cameraBtn.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
+            cameraBtn.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50.scaled),
             cameraBtn.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             
         ])
