@@ -19,14 +19,16 @@ final class GroupViewModel {
     
     private let groupUsecase: GroupUsecaseProtocol
     private let loginViewModel: LoginViewModel
+    private let homeViewModel: HomeViewModel
     
     private let disposeBag = DisposeBag()
     
     var groupName = BehaviorRelay<String>(value: "")
     
-    init(loginViewModel: LoginViewModel, groupUsecase: GroupUsecaseProtocol) {
+    init(loginViewModel: LoginViewModel, groupUsecase: GroupUsecaseProtocol, homeViewModel: HomeViewModel) {
         self.loginViewModel = loginViewModel
         self.groupUsecase = groupUsecase
+        self.homeViewModel = homeViewModel
     }
     
     struct GroupHostInput {
@@ -72,7 +74,8 @@ final class GroupViewModel {
                                                 createdAt: Date(),
                                                 hostUserId: currentUser.uid,
                                                 posts: [])
-                                            self.loginViewModel.group.accept(group)
+//                                            self.loginViewModel.group.accept(group)
+                                            self.homeViewModel.group.accept(group)
                                             UserDefaultsManager.shared.saveGroup(group)
                                         }
                                         

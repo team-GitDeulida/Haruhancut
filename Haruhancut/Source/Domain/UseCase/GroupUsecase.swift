@@ -38,7 +38,7 @@ final class GroupUsecase: GroupUsecaseProtocol {
     }
 }
 
-final class StupGroupUsecase: GroupUsecaseProtocol {
+final class StubGroupUsecase: GroupUsecaseProtocol {
     
     func createGroup(groupName: String) -> RxSwift.Observable<Result<String, GroupError>> {
         return .just(.success("testGroupId"))

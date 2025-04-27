@@ -204,5 +204,5 @@ extension BirthdaySettingViewController {
 
 #Preview {
     BirthdaySettingViewController(
-        loginViewModel: LoginViewModel(loginUsecase: StubLoginUsecase(), groupUsecase: StupGroupUsecase()))
+        loginViewModel: LoginViewModel(loginUsecase: StubLoginUsecase()))
 }

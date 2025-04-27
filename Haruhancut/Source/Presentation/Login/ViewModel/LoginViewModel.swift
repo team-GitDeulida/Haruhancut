@@ -19,7 +19,6 @@ import KakaoSDKAuth
 
 final class LoginViewModel {
     private let loginUsecase: LoginUsecaseProtocol
-    private let groupUsecase: GroupUsecaseProtocol
     private let disposeBag = DisposeBag()
     private(set) var token: String?
     
@@ -27,30 +26,30 @@ final class LoginViewModel {
     private let signUpResultRelay = PublishRelay<Result<Void, LoginError>>()
     
     var user = BehaviorRelay<User?>(value: nil)
-    var group = BehaviorRelay<HCGroup?>(value: nil)
     let isNewUser = BehaviorRelay<Bool>(value: false)
 
     init(
-        loginUsecase: LoginUsecaseProtocol,
-        groupUsecase: GroupUsecaseProtocol
+        loginUsecase: LoginUsecaseProtocol
+        // groupUsecase: GroupUsecaseProtocol
     ) {
         self.loginUsecase = loginUsecase
-        self.groupUsecase = groupUsecase
+        // self.groupUsecase = groupUsecase
         
         // ✅ 1. 캐시된 유저 불러오기
         if let cachedUser = UserDefaultsManager.shared.loadUser() {
             print("✅ 캐시에서 불러온 유저: \(cachedUser)")
             self.user.accept(cachedUser)
             
-            // ✅ 2. 유저가 있으면 그룹 캐시도 불러오기
-            if let cachedGroup = UserDefaultsManager.shared.loadGroup() {
-                print("✅ 캐시에서 불러온 그룹: \(cachedGroup)")
-                self.group.accept(cachedGroup)
+//            // ✅ 2. 유저가 있으면 그룹 캐시도 불러오기
+////            if let cachedGroup = UserDefaultsManager.shared.loadGroup() {
+////                print("✅ 캐시에서 불러온 그룹: \(cachedGroup)")
+////                self.group.accept(cachedGroup)
+    
             }
-            fetchUserInfo()
-        } else {
-            print("❌ 캐시에 저장된 유저 없음")
-        }        
+////            fetchUserInfo()
+//        } else {
+//            print("❌ 캐시에 저장된 유저 없음")
+//        }        
     }
     
     // MARK: - LoginViewController
@@ -93,11 +92,6 @@ final class LoginViewModel {
                             if let user = user {
                                 self.user.accept(user)
                                 UserDefaultsManager.shared.saveUser(user)
-                                
-                                // 그룹Id가 있다면 파이어베이스에서 그룹 데이터 가져오기
-                                if let groupId = user.groupId {
-                                    self.fetchGroup(groupId: groupId)
-                                }
                                 
                                 return .success(())
                                 
@@ -142,9 +136,6 @@ final class LoginViewModel {
                                 self.user.accept(user)
                                 UserDefaultsManager.shared.saveUser(user)
                                 
-                                if let groupId = user.groupId {
-                                    self.fetchGroup(groupId: groupId)
-                                }
                                 return .success(())
                             } else {
                                 /// 신규 회원
@@ -174,28 +165,8 @@ final class LoginViewModel {
                 if let user = user {
                     self.user.accept(user)
                     UserDefaultsManager.shared.saveUser(user)
-                    
-                    if let groupId = user.groupId {
-                        self.fetchGroup(groupId: groupId)
-                    }
                 } else {
                     print("❌ 사용자 정보 없음")
-                }
-            })
-            .disposed(by: disposeBag)
-    }
-    
-    private func fetchGroup(groupId: String) {
-        groupUsecase.fetchGroup(groupId: groupId)
-            .bind(onNext: { result in
-                switch result {
-                case .success(let group):
-                    print("✅ 그룹 가져오기 성공: \(group)")
-                    self.group.accept(group)
-                    UserDefaultsManager.shared.saveGroup(group)
-                    
-                case .failure(let error):
-                    print("❌ 그룹 가져오기 실패: \(error)")
                 }
             })
             .disposed(by: disposeBag)

@@ -76,12 +76,27 @@ final class HomeViewController: UIViewController {
     
     // 비동기 데이터 받아오면 UI에 반영
     private func bindViewModel() {
-        loginViewModel.group
+        // loginViewModel.group
+        homeViewModel.group
             // .compactMap { $0?.groupName }
             .map { "\($0?.groupName ?? "그룹 없음")" }
-            .bind(to: titleLabel.rx.text)
+            .observe(on: MainScheduler.instance)
+            .bind(onNext: { [weak self] text in
+                guard let self = self else { return }
+                self.titleLabel.text = text
+                self.titleLabel.sizeToFit()
+            })
             .disposed(by: disposeBag)
     }
+    
+//    private func bindViewModel2() {
+//        // loginViewModel.group
+//        homeViewModel.group
+//            // .compactMap { $0?.groupName }
+//            .map { "\($0?.groupName ?? "그룹 없음")" }
+//            .bind(to: titleLabel.rx.text)
+//            .disposed(by: disposeBag)
+//    }
     
     func makeUI() {
         setupLogoTitle()
@@ -102,9 +117,6 @@ final class HomeViewController: UIViewController {
             cameraBtn.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             
         ])
-        
-        
-        
     }
     
     func setupLogoTitle() {
@@ -112,7 +124,9 @@ final class HomeViewController: UIViewController {
         self.navigationController?.navigationBar.tintColor = .mainWhite
         
         /// 네비게이션 제목
+        titleLabel.sizeToFit() // 글자 길이에 맞게 label 크기 조정
         self.navigationItem.titleView = titleLabel
+        
         
         /// 네비게이션 버튼
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(

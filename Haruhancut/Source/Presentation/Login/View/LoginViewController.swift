@@ -157,5 +157,5 @@ final class LoginViewController: UIViewController {
 #Preview {
     LoginViewController(
         loginViewModel: .init(loginUsecase: LoginUsecase(repository: LoginRepository(
-            kakaoLoginManager: KakaoLoginManager.shared, appleLoginManager: AppleLoginManager.shared, firebaseAuthManager: FirebaseAuthManager.shared)), groupUsecase: StupGroupUsecase()))
+            kakaoLoginManager: KakaoLoginManager.shared, appleLoginManager: AppleLoginManager.shared, firebaseAuthManager: FirebaseAuthManager.shared))))
 }
