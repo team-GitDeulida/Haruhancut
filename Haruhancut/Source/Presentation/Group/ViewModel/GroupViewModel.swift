@@ -12,6 +12,7 @@ import FirebaseDatabase
 
 enum GroupError: Error {
     case makeHostError
+    case fetchGroupError
 }
 
 final class GroupViewModel {

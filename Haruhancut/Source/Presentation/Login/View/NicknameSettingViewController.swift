@@ -192,6 +192,6 @@ extension NicknameSettingViewController {
 
 #Preview {
     // NicknameSettingViewController(loginViewModel: LoginViewModel())
-    NicknameSettingViewController(loginViewModel: LoginViewModel(loginUsecase: StubLoginUsecase()))
+    NicknameSettingViewController(loginViewModel: LoginViewModel(loginUsecase: StubLoginUsecase(), groupUsecase: StupGroupUsecase()))
 }
 

@@ -39,12 +39,21 @@ final class HomeViewController: UIViewController {
         return label
     }()
     
+    private lazy var testLabel: UILabel = {
+        let label = UILabel()
+        // label.text = "\(String(describing: loginViewModel.group.value))"
+        label.font = UIFont.hcFont(.bold, size: 20)
+        label.textColor = .mainWhite
+        return label
+    }()
+    
     private lazy var cameraBtn: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "button.programmable"), for: .normal)
         button.tintColor = .mainWhite
         button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 70), forImageIn: .normal)
         button.imageView?.contentMode = .scaleAspectFit
+        button.addTarget(self, action: #selector(startCamera), for: .touchUpInside)
         return button
     }()
     
@@ -64,12 +73,28 @@ final class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         makeUI()
-        // bindViewModel()
+        bindViewModel()
+    }
+    
+    // 비동기 데이터 받아오면 UI에 반영
+    private func bindViewModel() {
+        loginViewModel.group
+            // .compactMap { $0?.groupName }
+            .map { "\($0?.groupName ?? "그룹 없음")" }
+            .bind(to: testLabel.rx.text)
+            .disposed(by: disposeBag)
     }
     
     func makeUI() {
         setupLogoTitle()
         view.backgroundColor = .background
+        
+        view.addSubview(testLabel)
+        testLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            testLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            testLabel.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
+        ])
         
         view.addSubview(cameraBtn)
         cameraBtn.translatesAutoresizingMaskIntoConstraints = false
@@ -79,6 +104,8 @@ final class HomeViewController: UIViewController {
             cameraBtn.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             
         ])
+        
+        
         
     }
     
@@ -104,7 +131,13 @@ final class HomeViewController: UIViewController {
     }
     
     /// Rx처리가 오히려 오버 엔지니어링이라고 판단됨
+    /// 프로필 화면 이동
     @objc func startProfile() {
         coordinator?.startProfile()
+    }
+    
+    /// 카메라 화면 이동
+    @objc func startCamera() {
+        coordinator?.startCamera()
     }
 }

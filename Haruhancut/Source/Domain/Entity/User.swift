@@ -125,9 +125,9 @@ struct Comment: Encodable {
 }
 
 extension HCGroup {
-    func toDTO() -> GroupDTO {
+    func toDTO() -> HCGroupDTO {
         let formatter = ISO8601DateFormatter()
-        return GroupDTO(
+        return HCGroupDTO(
             groupId: groupId,
             groupName: groupName,
             createdAt: formatter.string(from: createdAt),
@@ -208,7 +208,7 @@ extension UserDTO {
     }
 }
 
-struct GroupDTO: Codable {
+struct HCGroupDTO: Codable {
     let groupId: String?
     let groupName: String?
     let createdAt: String?
@@ -216,7 +216,7 @@ struct GroupDTO: Codable {
     var posts: [PostDTO]?
 }
 
-extension GroupDTO {
+extension HCGroupDTO {
     func toModel() -> HCGroup? {
         let formatter = ISO8601DateFormatter()
                 

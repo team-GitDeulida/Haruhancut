@@ -34,7 +34,7 @@ final class AppCoordinator: Coordinator {
     var isLoggedIn: Bool = false
     
     // MARK: - 공유가 필요하기 때문에 AppCoordinator에 만들기
-    private let loginViewModel = LoginViewModel(loginUsecase: DIContainer.shared.resolve(LoginUsecase.self))
+    private let loginViewModel = LoginViewModel(loginUsecase: DIContainer.shared.resolve(LoginUsecase.self), groupUsecase: DIContainer.shared.resolve(GroupUsecase.self))
     
     init(navigationController: UINavigationController, isLoggedIn: Bool) {
         print("AppCoordinator - 생성")
@@ -181,6 +181,12 @@ final class HomeCoordinator: Coordinator {
         let profileViewController = ProfileViewController()
         profileViewController.coordinator = self
         navigationController.pushViewController(profileViewController, animated: true)
+    }
+    
+    func startCamera() {
+        let cameraViewController = CameraViewController()
+        cameraViewController.coordinator = self
+        navigationController.pushViewController(cameraViewController, animated: true)
     }
     
 //    func didFinishGroupHost() { 

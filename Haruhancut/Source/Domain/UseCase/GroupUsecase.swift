@@ -11,6 +11,7 @@ import RxSwift
 protocol GroupUsecaseProtocol {
     func createGroup(groupName: String) -> Observable<Result<String, GroupError>>
     func updateUserGroupId(groupId: String) -> Observable<Result<Void, GroupError>>
+    func fetchGroup(groupId: String) -> Observable<Result<HCGroup, GroupError>>
 }
 
 final class GroupUsecase: GroupUsecaseProtocol {
@@ -31,6 +32,10 @@ final class GroupUsecase: GroupUsecaseProtocol {
     func updateUserGroupId(groupId: String) -> Observable<Result<Void, GroupError>> {
         repository.updateUserGroupId(groupId: groupId)
     }
+    
+    func fetchGroup(groupId: String) -> Observable<Result<HCGroup, GroupError>> {
+        repository.fetchGroup(groupId: groupId)
+    }
 }
 
 final class StupGroupUsecase: GroupUsecaseProtocol {
@@ -41,5 +46,9 @@ final class StupGroupUsecase: GroupUsecaseProtocol {
     
     func updateUserGroupId(groupId: String) -> RxSwift.Observable<Result<Void, GroupError>> {
         return .just(.success(()))
+    }
+    
+    func fetchGroup(groupId: String) -> Observable<Result<HCGroup, GroupError>> {
+        return .just(.failure(.fetchGroupError))
     }
 }

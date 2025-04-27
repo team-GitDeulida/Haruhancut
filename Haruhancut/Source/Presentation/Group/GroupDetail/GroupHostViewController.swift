@@ -132,5 +132,5 @@ final class GroupHostViewController: UIViewController {
 }
 
 #Preview {
-    GroupHostViewController(groupViewModel: GroupViewModel(loginViewModel: LoginViewModel(loginUsecase: StubLoginUsecase()), groupUsecase: GroupUsecase(repository: GroupRepository(firebaseAuthManager: FirebaseAuthManager.shared))))
+    GroupHostViewController(groupViewModel: GroupViewModel(loginViewModel: LoginViewModel(loginUsecase: StubLoginUsecase(), groupUsecase: StupGroupUsecase()), groupUsecase: GroupUsecase(repository: GroupRepository(firebaseAuthManager: FirebaseAuthManager.shared))))
 }

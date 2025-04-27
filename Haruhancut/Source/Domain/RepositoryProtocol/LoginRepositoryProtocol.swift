@@ -13,5 +13,5 @@ protocol LoginRepositoryProtocol {
     func loginWithApple() -> Observable<Result<(String, String), LoginError>>
     func authenticateUser(prividerID: String, idToken: String, rawNonce: String?) -> Observable<Result<Void, LoginError>>
     func registerUserToRealtimeDatabase(user: User) -> Observable<Result<User, LoginError>>
-    func fetchUserFromDatabase() -> Observable<User?>
+    func fetchUserInfo() -> Observable<User?>
 }

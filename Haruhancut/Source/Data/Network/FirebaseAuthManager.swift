@@ -25,8 +25,11 @@ enum ProviderID: String {
 protocol FirebaseAuthManagerProtocol {
     func authenticateUser(prividerID: String, idToken: String, rawNonce: String?) -> Observable<Result<Void, LoginError>>
     func registerUserToRealtimeDatabase(user: User) -> Observable<Result<User, LoginError>>
+    func fetchUserInfo() -> Observable<User?>
+    
     func createGroup(groupName: String) -> Observable<Result<String, GroupError>>
     func updateUserGroupId(groupId: String) -> Observable<Result<Void, GroupError>>
+    func fetchGroup(groupId: String) -> Observable<Result<HCGroup, GroupError>>
 }
 
 final class FirebaseAuthManager: FirebaseAuthManagerProtocol {
@@ -124,6 +127,43 @@ extension FirebaseAuthManager {
             return Disposables.create()
         }
     }
+    
+    
+    /// 현재 유저 정보 가죠오기
+    /// - Returns: Observable<User?>
+    func fetchUserInfo() -> Observable<User?> {
+        return Observable.create { observer in
+            guard let uid = Auth.auth().currentUser?.uid else {
+                print("🔸 로그인된 유저 없음")
+                observer.onNext(nil)
+                observer.onCompleted()
+                return Disposables.create()
+            }
+
+            let userRef = self.databaseRef.child("users").child(uid)
+            
+            userRef.observeSingleEvent(of: .value) { snapshot in
+                guard let value = snapshot.value else {
+                    observer.onNext(nil)
+                    observer.onCompleted()
+                    return
+                }
+                
+                do {
+                    let data = try JSONSerialization.data(withJSONObject: value, options: [])
+                    let dto = try JSONDecoder().decode(UserDTO.self, from: data)
+                    let user = dto.toModel()
+                    observer.onNext(user)
+                } catch {
+                    print("❌ 유저 디코딩 실패: \(error.localizedDescription)")
+                    observer.onNext(nil)
+                }
+                observer.onCompleted()
+            }
+            
+            return Disposables.create()
+        }
+    }
 }
 
 // MARK: - 제네릭 함수
@@ -136,45 +176,9 @@ extension FirebaseAuthManager {
     /// - Returns: Observable<Bool>
     func setValue<T: Encodable>(path: String, value: T) -> Observable<Bool> {
         return Observable.create { observer in
-
-            guard let dict = value.toDictionary() else {
-                observer.onNext(false)
-                observer.onCompleted()
-                return Disposables.create()
-            }
-            
-            self.databaseRef.child(path).setValue(dict) { error, _ in
-                if let error = error {
-                    print("🔥 setValue 실패: \(error.localizedDescription)")
-                    observer.onNext(false)
-                } else {
-                    observer.onNext(true)
-                }
-                observer.onCompleted()
-            }
-                
-            return Disposables.create()
-        }
-    }
-    
-    /// Create or Overwrite
-    /// - Parameters:
-    ///   - path: 경로
-    ///   - value: 값
-    /// - Returns: Observable<Bool>
-    func setValue_save<T: Encodable>(path: String, value: T) -> Observable<Bool> {
-        return Observable.create { observer in
             do {
-                 let data = try JSONEncoder().encode(value)
-                 let dict = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-                
-                /*
-                guard let dict = value.toDictionary() else {
-                    observer.onNext(false)
-                    observer.onCompleted()
-                    return Disposables.create()
-                }
-                 */
+                let data = try JSONEncoder().encode(value)
+                let dict = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
                 
                 self.databaseRef.child(path).setValue(dict) { error, _ in
                     if let error = error {
@@ -192,6 +196,60 @@ extension FirebaseAuthManager {
         }
     }
     
+    /// Read
+    /// - Parameters:
+    ///   - path: 경로
+    ///   - type: 값
+    /// - Returns: Observable<T>
+    func observeValue<T: Decodable>(path: String, type: T.Type) -> Observable<T> {
+        return Observable.create { observer in
+            
+            self.databaseRef.child(path).observeSingleEvent(of: .value) { snapshot in
+                guard let value = snapshot.value else {
+                    observer.onError(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "값이 존재하지 않음"]))
+                    return
+                }
+                
+                do {
+                    let data = try JSONSerialization.data(withJSONObject: value, options: [])
+                    let decoded = try JSONDecoder().decode(T.self, from: data)
+                    observer.onNext(decoded)
+                } catch {
+                    observer.onError(error)
+                }
+                observer.onCompleted()
+            }
+            return Disposables.create()
+        }
+    }
+    
+    /// Create or Overwrite
+    /// - Parameters:
+    ///   - path: 경로
+    ///   - value: 값
+    /// - Returns: Observable<Bool>
+    func setValue_save<T: Encodable>(path: String, value: T) -> Observable<Bool> {
+        return Observable.create { observer in
+            
+            guard let dict = value.toDictionary() else {
+                observer.onNext(false)
+                observer.onCompleted()
+                return Disposables.create()
+            }
+            
+            self.databaseRef.child(path).setValue(dict) { error, _ in
+                if let error = error {
+                    print("🔥 setValue 실패: \(error.localizedDescription)")
+                    observer.onNext(false)
+                } else {
+                    observer.onNext(true)
+                }
+                observer.onCompleted()
+            }
+            
+            return Disposables.create()
+        }
+    }
     
     /// Read
     /// - Parameters:
@@ -205,6 +263,15 @@ extension FirebaseAuthManager {
                     observer.onError(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "값이 존재하지 않음"]))
                     return
                 }
+                
+                /*
+                 guard let dict = value.toDictionary() else {
+                 observer.onNext(false)
+                 observer.onCompleted()
+                 return Disposables.create()
+                 }
+                 */
+                
                 do {
                     let data = try JSONSerialization.data(withJSONObject: value, options: [])
                     let decoded = try JSONDecoder().decode(T.self, from: data)
@@ -257,6 +324,10 @@ extension FirebaseAuthManager {
             }
     }
     
+    
+    /// 그룹 Create후 유저속성에 추가
+    /// - Parameter groupId: 그룹 Id
+    /// - Returns: Observable<Result<Void, GroupError>>
     func updateUserGroupId(groupId: String) -> Observable<Result<Void, GroupError>> {
         return Observable.create { observer in
             guard let currentUserId = Auth.auth().currentUser?.uid else {
@@ -280,60 +351,87 @@ extension FirebaseAuthManager {
             return Disposables.create()
         }
     }
-
-    /*
-    private func createGroupInFirebase(groupName: String) -> Driver<Result<String, GroupError>> {
-        return Single.create { single in
-            let ref = Database.database(url: "https://haruhancut-default-rtdb.asia-southeast1.firebasedatabase.app").reference()
-            
-            let newGroupRef = ref.child("groups").childByAutoId()
-            
-            /*
-             [기존 방식]
-            let groupData: [String: Any] = [
-                "groupId": newGroupRef.key ?? "",
-                "groupName": groupName,
-                "createdAt": ISO8601DateFormatter().string(from: Date()),
-                "hostUserId": self.userId
-            ]
-            
-            newGroupRef.setValue(groupData) { error, _ in
-                if let error = error {
-                    print("❌ 그룹 생성 실패: \(error.localizedDescription)")
-                    single(.success(.failure(.makeHostError)))
+    
+    /// 그룹 Fetch
+    /// - Parameter groupId: 그룹 ID
+    /// - Returns: Observable<Result<HCGroup, GroupError>>
+    func fetchGroup(groupId: String) -> Observable<Result<HCGroup, GroupError>> {
+        return observeValue(path: "groups/\(groupId)", type: HCGroupDTO.self)
+            .map { dto in
+                if let group = dto.toModel() {
+                    return .success(group)
                 } else {
-                    print("✅ 그룹 생성 성공! ID: \(newGroupRef.key ?? "")")
-                    single(.success(.success(newGroupRef.key ?? "")))
+                    return .failure(.fetchGroupError)
                 }
             }
-             */
-            
-            // Model
-            let groupData = HCGroup(
-                groupId: newGroupRef.key ?? "",
-                groupName: groupName,
-                createdAt: Date(),
-                hostUserId: self.userId,
-                posts: [])
-            
-            // Model -> DTO -> Dictionary
-            guard let groupDict = groupData.toDTO().toDictionary() else {
-                single(.success(.failure(.makeHostError)))
-                return Disposables.create()
+            .catch { error in
+                print("❌ 그룹 정보 가져오기 실패: \(error.localizedDescription)")
+                return Observable.just(.failure(.fetchGroupError))
             }
-            
-            newGroupRef.setValue(groupDict) { error, _ in
-                if let error = error {
-                    print("❌ 그룹 생성 실패: \(error.localizedDescription)")
-                    single(.success(.failure(.makeHostError)))
-                } else {
-                    print("✅ 그룹 생성 성공! ID: \(newGroupRef.key ?? "")")
-                    single(.success(.success(newGroupRef.key ?? "")))
-                }
-            }
-            return Disposables.create()
-        }
-        .asDriver(onErrorJustReturn: .failure(.makeHostError))
     }
-    */
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /*
+     private func createGroupInFirebase(groupName: String) -> Driver<Result<String, GroupError>> {
+     return Single.create { single in
+     let ref = Database.database(url: "https://haruhancut-default-rtdb.asia-southeast1.firebasedatabase.app").reference()
+     
+     let newGroupRef = ref.child("groups").childByAutoId()
+     
+     /*
+      [기존 방식]
+      let groupData: [String: Any] = [
+      "groupId": newGroupRef.key ?? "",
+      "groupName": groupName,
+      "createdAt": ISO8601DateFormatter().string(from: Date()),
+      "hostUserId": self.userId
+      ]
+      
+      newGroupRef.setValue(groupData) { error, _ in
+      if let error = error {
+      print("❌ 그룹 생성 실패: \(error.localizedDescription)")
+      single(.success(.failure(.makeHostError)))
+      } else {
+      print("✅ 그룹 생성 성공! ID: \(newGroupRef.key ?? "")")
+      single(.success(.success(newGroupRef.key ?? "")))
+      }
+      }
+      */
+     
+     // Model
+     let groupData = HCGroup(
+     groupId: newGroupRef.key ?? "",
+     groupName: groupName,
+     createdAt: Date(),
+     hostUserId: self.userId,
+     posts: [])
+     
+     // Model -> DTO -> Dictionary
+     guard let groupDict = groupData.toDTO().toDictionary() else {
+     single(.success(.failure(.makeHostError)))
+     return Disposables.create()
+     }
+     
+     newGroupRef.setValue(groupDict) { error, _ in
+     if let error = error {
+     print("❌ 그룹 생성 실패: \(error.localizedDescription)")
+     single(.success(.failure(.makeHostError)))
+     } else {
+     print("✅ 그룹 생성 성공! ID: \(newGroupRef.key ?? "")")
+     single(.success(.success(newGroupRef.key ?? "")))
+     }
+     }
+     return Disposables.create()
+     }
+     .asDriver(onErrorJustReturn: .failure(.makeHostError))
+     }
+     */
 }

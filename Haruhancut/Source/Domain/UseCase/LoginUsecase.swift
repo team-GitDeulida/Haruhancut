@@ -13,7 +13,7 @@ protocol LoginUsecaseProtocol {
     func loginWithApple() -> Observable<Result<(String, String), LoginError>>
     func authenticateUser(prividerID: String, idToken: String, rawNonce: String?) -> Observable<Result<Void, LoginError>>
     func registerUserToRealtimeDatabase(user: User) -> Observable<Result<User, LoginError>>
-    func fetchUserFromDatabase() -> Observable<User?>
+    func fetchUserInfo() -> Observable<User?>
 }
 
 final class LoginUsecase: LoginUsecaseProtocol {
@@ -53,8 +53,8 @@ final class LoginUsecase: LoginUsecaseProtocol {
     
     /// 본인 정보 불러오기
     /// - Returns: Observable<User?>
-    func fetchUserFromDatabase() -> Observable<User?> {
-        return repository.fetchUserFromDatabase()
+    func fetchUserInfo() -> Observable<User?> {
+        return repository.fetchUserInfo()
     }
 }
 
@@ -81,7 +81,7 @@ final class StubLoginUsecase: LoginUsecaseProtocol {
             isPushEnabled: true)))
     }
     
-    func fetchUserFromDatabase() -> Observable<User?> {
+    func fetchUserInfo() -> Observable<User?> {
         return .just(
             User(
                 uid: "testUser",

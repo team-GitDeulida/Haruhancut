@@ -19,6 +19,7 @@ import KakaoSDKAuth
 
 final class LoginViewModel {
     private let loginUsecase: LoginUsecaseProtocol
+    private let groupUsecase: GroupUsecaseProtocol
     private let disposeBag = DisposeBag()
     private(set) var token: String?
     
@@ -26,22 +27,31 @@ final class LoginViewModel {
     private let signUpResultRelay = PublishRelay<Result<Void, LoginError>>()
     
     var user = BehaviorRelay<User?>(value: nil)
+    var group = BehaviorRelay<HCGroup?>(value: nil)
     let isNewUser = BehaviorRelay<Bool>(value: false)
 
-    init(loginUsecase: LoginUsecaseProtocol) {
+    init(
+        loginUsecase: LoginUsecaseProtocol,
+        groupUsecase: GroupUsecaseProtocol
+    ) {
         self.loginUsecase = loginUsecase
+        self.groupUsecase = groupUsecase
         
-        // 앱 실행 시 캐시된 유저 불러오기
+        // ✅ 1. 캐시된 유저 불러오기
         if let cachedUser = UserDefaultsManager.shared.loadUser() {
             print("✅ 캐시에서 불러온 유저: \(cachedUser)")
             self.user.accept(cachedUser)
+            
+            // ✅ 2. 유저가 있으면 그룹 캐시도 불러오기
+            if let cachedGroup = UserDefaultsManager.shared.loadGroup() {
+                print("✅ 캐시에서 불러온 그룹: \(cachedGroup)")
+                self.group.accept(cachedGroup)
+            }
         } else {
             print("❌ 캐시에 저장된 유저 없음")
-            
-            
         }
         
-        fetchMyInfo()
+        fetchUserInfo()
         
     }
     
@@ -79,12 +89,17 @@ final class LoginViewModel {
                 guard let self = self else { return .empty() }
                 switch result {
                 case .success:
-                    return self.loginUsecase.fetchUserFromDatabase()
+                    return self.loginUsecase.fetchUserInfo()
                         .map { user -> Result<Void, LoginError> in
                             /// 기존 유저라면
                             if let user = user {
                                 self.user.accept(user)
                                 UserDefaultsManager.shared.saveUser(user)
+                                
+                                if let groupId = user.groupId {
+                                    self.fetchGroup(groupId: groupId)
+                                }
+                                
                                 // UserDefaultsManager.shared.markSignupCompleted()
                                 return .success(())
                             } else {
@@ -121,12 +136,15 @@ final class LoginViewModel {
                 guard let self = self else { return .empty() }
                 switch result {
                 case .success:
-                    return self.loginUsecase.fetchUserFromDatabase()
+                    return self.loginUsecase.fetchUserInfo()
                         .map { user -> Result<Void, LoginError> in
                             if let user = user {
                                 /// 기존 회원
                                 self.user.accept(user)
                                 UserDefaultsManager.shared.saveUser(user)
+                                if let groupId = user.groupId {
+                                    self.fetchGroup(groupId: groupId)
+                                }
                                 // UserDefaultsManager.shared.markSignupCompleted()
                                 return .success(())
                             } else {
@@ -149,41 +167,39 @@ final class LoginViewModel {
         
         return LoginOutput(loginResult: mergedResult)
     }
-    
-    private func fetchMyInfo() {
-        
-        // 1. 현재 로그인된 유저 UID 가져오기
-        guard let uid = Auth.auth().currentUser?.uid else {
-            print("🔸 로그인된 유저 없음")
-            return
-        }
-
-        // 2. Realtime Database 참조 설정
-        let ref = Database.database(url: "https://haruhancut-default-rtdb.asia-southeast1.firebasedatabase.app").reference()
-        let userRef = ref.child("users").child(uid)
-        
-        // 3. 데이터 fetch
-        userRef.observeSingleEvent(of: .value) { [weak self] snapshot, _  in
-            guard let value = snapshot.value as? [String: Any] else {
-                print("❌ 사용자 정보 없음")
-                return
-            }
-            
-            do {
-                // 4. Dictionary → Data → UserDTO → User
-                let data = try JSONSerialization.data(withJSONObject: value, options: [])
-                let dto = try JSONDecoder().decode(UserDTO.self, from: data)
-                let user = dto.toModel()
+     
+    private func fetchUserInfo() {
+        loginUsecase.fetchUserInfo()
+            .subscribe(onNext: { [weak self] user in
                 guard let self = self else { return }
                 if let user = user {
                     self.user.accept(user)
                     UserDefaultsManager.shared.saveUser(user)
+                    
+                    // 필요하면 여기서 fetchGroup(groupId:) 호출
+                    if let groupId = user.groupId {
+                        self.fetchGroup(groupId: groupId)
+                    }
+                } else {
+                    print("❌ 사용자 정보 없음")
                 }
-                print("✅ 기존 유저 정보 불러옴: \(String(describing: user))")
-            } catch {
-                print("❌ 유저 디코딩 실패: \(error.localizedDescription)")
-            }
-        }
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func fetchGroup(groupId: String) {
+        groupUsecase.fetchGroup(groupId: groupId)
+            .bind(onNext: { result in
+                switch result {
+                case .success(let group):
+                    print("✅ 그룹 가져오기 성공: \(group)")
+                    self.group.accept(group)
+                    UserDefaultsManager.shared.saveGroup(group)
+                case .failure(let error):
+                    print("❌ 그룹 가져오기 실패: \(error)")
+                }
+            })
+            .disposed(by: disposeBag)
     }
     
     // MARK: - NicknameViewController

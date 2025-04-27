@@ -23,4 +23,8 @@ final class GroupRepository: GroupRepositoryProtocol {
     func updateUserGroupId(groupId: String) -> Observable<Result<Void, GroupError>> {
         firebaseAuthManager.updateUserGroupId(groupId: groupId)
     }
+    
+    func fetchGroup(groupId: String) -> Observable<Result<HCGroup, GroupError>> {
+        firebaseAuthManager.fetchGroup(groupId: groupId)
+    }
 }

@@ -32,7 +32,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
         let navigationController = UINavigationController()
         
-        // 3. view 계층을 프로그래밍 방식으로 만들기        
+        // 3. view 계층을 프로그래밍 방식으로 만들기
         // 로그인 여부 확인
         let isLoggedIn = Auth.auth().currentUser != nil && UserDefaultsManager.shared.loadUser() != nil
         let coordinator = AppCoordinator(navigationController: navigationController, isLoggedIn: isLoggedIn)
@@ -83,24 +83,24 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 }
 
-extension SceneDelegate {
-    
-    func changeRootView(to viewController: UIViewController, animated: Bool = true) {
-        guard let window = self.window else { return }
-        window.rootViewController = viewController
-        if animated {
-            UIView.transition(with: window, duration: 0.4, options: .transitionFlipFromLeft, animations: nil)
-        }
-        window.makeKeyAndVisible()
-    }
-    
-    /// 로그인 화면을 루트로 바꾸는 함수 (로그아웃 등에서 호출)
-    func makeLoginRoot() {
-        let usecase = DIContainer.shared.resolve(LoginUsecase.self)
-        let loginVM = LoginViewModel(loginUsecase: usecase)
-        let loginVC = LoginViewController(loginViewModel: loginVM)
-        let nav = UINavigationController(rootViewController: loginVC)
-        changeRootView(to: nav)
-    }
-}
+//extension SceneDelegate {
+//    
+//    func changeRootView(to viewController: UIViewController, animated: Bool = true) {
+//        guard let window = self.window else { return }
+//        window.rootViewController = viewController
+//        if animated {
+//            UIView.transition(with: window, duration: 0.4, options: .transitionFlipFromLeft, animations: nil)
+//        }
+//        window.makeKeyAndVisible()
+//    }
+//    
+//    /// 로그인 화면을 루트로 바꾸는 함수 (로그아웃 등에서 호출)
+//    func makeLoginRoot() {
+//        let usecase = DIContainer.shared.resolve(LoginUsecase.self)
+//        let loginVM = LoginViewModel(loginUsecase: usecase)
+//        let loginVC = LoginViewController(loginViewModel: loginVM)
+//        let nav = UINavigationController(rootViewController: loginVC)
+//        changeRootView(to: nav)
+//    }
+//}
 
