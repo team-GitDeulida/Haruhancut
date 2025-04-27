@@ -54,15 +54,24 @@ final class HomeViewController: UIViewController {
     }
     
     func setupLogoTitle() {
-        self.navigationController?.navigationBar.tintColor = .mainWhite // 버튼 색
+        /// 네비게이션 버튼 색상
+        self.navigationController?.navigationBar.tintColor = .mainWhite
         
+        /// 네비게이션 제목
         self.navigationItem.titleView = titleLabel
+        
+        /// 네비게이션 버튼
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(
             image: UIImage(systemName: "person"),
             style: .plain,
             target: self,
             action: #selector(startProfile)
         )
+        
+        /// 자식 화면에서 뒤로가기
+        let backItem = UIBarButtonItem()
+        backItem.title = "홈으로"
+        navigationItem.backBarButtonItem = backItem
     }
     
     /// Rx처리가 오히려 오버 엔지니어링이라고 판단됨
