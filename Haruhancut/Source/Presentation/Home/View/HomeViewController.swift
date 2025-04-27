@@ -38,21 +38,14 @@ final class HomeViewController: UIViewController {
     private lazy var logoutBtn: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("로그아웃", for: .normal)
-        button.addTarget(self, action: #selector(test), for: .touchUpInside)
+        /// button.addTarget(self, action: #selector(test), for: .touchUpInside)
         return button
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         makeUI()
-        bind()
-        
-//        FirebaseAuthManager.shared.observeValue(path: "users/\(loginViewModel.user!.uid)", type: UserDTO.self)
-//            .subscribe(onNext: { userDTO in
-//                // print("현재유저: \(userDTO.toModel()!)")
-//                dump(userDTO.toModel()!)
-//            })
-//            .disposed(by: disposeBag)
+        bindViewModel()
     }
     
     func makeUI() {
@@ -73,7 +66,17 @@ final class HomeViewController: UIViewController {
         ])
     }
     
-    @objc func test() {
+    private func bindViewModel() {
+        homeViewModel.bindButtonTap(tap: testBtn.rx.tap.asObservable())
+        
+        logoutBtn.rx.tap
+            .bind(onNext: { [weak self] in
+                guard let self = self else { return }
+                self.logout()
+            }).disposed(by: disposeBag)
+    }
+    
+    @objc func logout() {
         do {
             UserDefaultsManager.shared.removeUser()
             try Auth.auth().signOut()
@@ -83,9 +86,5 @@ final class HomeViewController: UIViewController {
         } catch let signOutError as NSError {
             print("로그아웃 실패: %@", signOutError)
         }
-    }
-    
-    private func bind() {
-        homeViewModel.bindButtonTap(tap: testBtn.rx.tap.asObservable())
     }
 }

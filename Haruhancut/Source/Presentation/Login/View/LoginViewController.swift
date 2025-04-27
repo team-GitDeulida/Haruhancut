@@ -38,7 +38,6 @@ final class LoginViewController: UIViewController {
         return lottie
     }()
     
-    
     private lazy var kakaoLoginButton = SocialLoginButton(type: .kakao, title: "카카오로 계속하기")
     
     private lazy var appleLoginButton = SocialLoginButton(type: .apple, title: "Apple로 계속하기")
@@ -62,6 +61,7 @@ final class LoginViewController: UIViewController {
         makeUI()
         bindViewModel()
         animationView.play()
+        // observeUserState()
     }
     
     // MARK: - Setup UI
@@ -115,6 +115,7 @@ final class LoginViewController: UIViewController {
     
     // MARK: - Bind VoewModelOutput
     private func bindViewModelOutput(output: LoginViewModel.LoginOutput) {
+        /// 버튼을 눌렀을 때 로그인 흐름 결과
         output.loginResult
             .drive { result in
                 switch result {
@@ -132,6 +133,25 @@ final class LoginViewController: UIViewController {
                 }
             }.disposed(by: disposeBag)
     }
+    
+    /// 앱 실행 직후 or 유저 정보가 변할 때
+//    private func observeUserState() {
+//        loginViewModel.user
+//            .asDriver()
+//            .drive(onNext: { [weak self] user in
+//                guard let self = self else { return }
+//                
+//                if let user = user {
+//                    // 🔥 유저가 생겼으면 자동으로 홈 화면 이동
+//                    print("✅ 캐시나 자동 로그인 성공 → 홈으로 이동")
+//                    self.coordinator?.showHome()
+//                } else {
+//                    // 🔥 유저 없으면 로그인 버튼만 보여줌
+//                    print("❌ 유저 없음 → 로그인 버튼 보여주는 중")
+//                }
+//            })
+//            .disposed(by: disposeBag)
+//    }
 }
 
 #Preview {

@@ -42,23 +42,35 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //        self.window = window
 //        window.makeKeyAndVisible()
         
-        let coordinator = AppCoordinator(navigationController: navigationController, isLoggedIn: false)
+        /////
+//        let coordinator = AppCoordinator(navigationController: navigationController, isLoggedIn: false)
+//        window.rootViewController = navigationController
+//        self.window = window
+//        window.makeKeyAndVisible()
+//        
+//        ///
+//        if let _ = Auth.auth().currentUser {
+//            if let _ = UserDefaultsManager.shared.loadUser() {
+//                coordinator.startHomeCoordinator()
+//            }
+//        } else {
+//            
+//            coordinator.start()
+//            appCoordinator = coordinator
+//
+//            
+//        }
+        
+        
+        // 로그인 여부 확인
+        let isLoggedIn = Auth.auth().currentUser != nil && UserDefaultsManager.shared.loadUser() != nil
+        let coordinator = AppCoordinator(navigationController: navigationController, isLoggedIn: isLoggedIn)
+        self.appCoordinator = coordinator
+        coordinator.start()
+        
         window.rootViewController = navigationController
         self.window = window
         window.makeKeyAndVisible()
-        
-        ///
-        if let _ = Auth.auth().currentUser {
-            if let _ = UserDefaultsManager.shared.loadUser() {
-                coordinator.startHomeCoordinator()
-            }
-        } else {
-            
-            coordinator.start()
-            appCoordinator = coordinator
-
-            
-        }
     }
     
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {

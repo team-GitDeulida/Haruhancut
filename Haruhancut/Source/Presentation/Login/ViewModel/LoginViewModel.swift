@@ -37,6 +37,8 @@ final class LoginViewModel {
             self.user.accept(cachedUser)
         } else {
             print("❌ 캐시에 저장된 유저 없음")
+            
+            
         }
         
         fetchMyInfo()
