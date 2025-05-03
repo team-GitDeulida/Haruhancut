@@ -117,6 +117,30 @@ struct Post: Encodable {
     let comments: [Comment]
 }
 
+extension Post {
+    static var samplePost1 = [
+        Post(postId: "postId",
+             imageURL: "https://picsum.photos/300",
+             createdAt: .now,
+             likeCount: 10,
+             comments: [])
+    ]
+    static var samplePost2 = [
+        Post(postId: "postId",
+             imageURL: "https://picsum.photos/300",
+             createdAt: .now,
+             likeCount: 10,
+             comments: [])
+    ]
+    static var samplePost3 = [
+        Post(postId: "postId",
+             imageURL: "https://picsum.photos/300",
+             createdAt: .now,
+             likeCount: 10,
+             comments: [])
+    ]
+}
+
 struct Comment: Encodable {
     let commentId: String
     let userId: String

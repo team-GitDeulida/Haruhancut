@@ -37,19 +37,12 @@ final class LoginViewModel {
         
         // ✅ 1. 캐시된 유저 불러오기
         if let cachedUser = UserDefaultsManager.shared.loadUser() {
-            print("✅ 캐시에서 불러온 유저: \(cachedUser)")
+            print("✅ loginVM - 캐시에서 불러온 유저: \(cachedUser)")
             self.user.accept(cachedUser)
             
-//            // ✅ 2. 유저가 있으면 그룹 캐시도 불러오기
-////            if let cachedGroup = UserDefaultsManager.shared.loadGroup() {
-////                print("✅ 캐시에서 불러온 그룹: \(cachedGroup)")
-////                self.group.accept(cachedGroup)
-    
-            }
-////            fetchUserInfo()
-//        } else {
-//            print("❌ 캐시에 저장된 유저 없음")
-//        }        
+        // ✅ 2. 서버에서 유저 불러오기
+        fetchUserInfo()
+        }
     }
     
     // MARK: - LoginViewController
@@ -163,6 +156,7 @@ final class LoginViewModel {
             .bind(onNext: { [weak self] user in
                 guard let self = self else { return }
                 if let user = user {
+                    print("✅ loginVM - 서버에서 불러온 유저: \(user)")
                     self.user.accept(user)
                     UserDefaultsManager.shared.saveUser(user)
                 } else {

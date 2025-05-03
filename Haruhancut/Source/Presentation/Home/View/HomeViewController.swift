@@ -23,8 +23,6 @@ import RxSwift
 
 final class HomeViewController: UIViewController {
     weak var coordinator: HomeCoordinator?
-    
-    private let loginViewModel: LoginViewModel
     private let homeViewModel: HomeViewModel
     private let disposeBag = DisposeBag()
     
@@ -36,14 +34,6 @@ final class HomeViewController: UIViewController {
         label.textColor = .mainWhite
         return label
     }()
-    
-//    private lazy var testLabel: UILabel = {
-//        let label = UILabel()
-//        // label.text = "\(String(describing: loginViewModel.group.value))"
-//        label.font = UIFont.hcFont(.bold, size: 20.scaled)
-//        label.textColor = .mainWhite
-//        return label
-//    }()
     
     private lazy var cameraBtn: UIButton = {
         let button = UIButton()
@@ -59,11 +49,7 @@ final class HomeViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(
-    loginViewModel: LoginViewModel,
-    homeViewModel: HomeViewModel
-    ) {
-        self.loginViewModel = loginViewModel
+    init(loginViewModel: LoginViewModel, homeViewModel: HomeViewModel) {
         self.homeViewModel = homeViewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -76,7 +62,7 @@ final class HomeViewController: UIViewController {
     
     // 비동기 데이터 받아오면 UI에 반영
     private func bindViewModel() {
-        // loginViewModel.group
+        // homeViewModel.group
         homeViewModel.group
             // .compactMap { $0?.groupName }
             .map { "\($0?.groupName ?? "그룹 없음")" }
@@ -89,25 +75,9 @@ final class HomeViewController: UIViewController {
             .disposed(by: disposeBag)
     }
     
-//    private func bindViewModel2() {
-//        // loginViewModel.group
-//        homeViewModel.group
-//            // .compactMap { $0?.groupName }
-//            .map { "\($0?.groupName ?? "그룹 없음")" }
-//            .bind(to: titleLabel.rx.text)
-//            .disposed(by: disposeBag)
-//    }
-    
     func makeUI() {
         setupLogoTitle()
         view.backgroundColor = .background
-        
-//        view.addSubview(testLabel)
-//        testLabel.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            testLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-//            testLabel.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
-//        ])
         
         view.addSubview(cameraBtn)
         cameraBtn.translatesAutoresizingMaskIntoConstraints = false
@@ -115,7 +85,6 @@ final class HomeViewController: UIViewController {
             // 위치
             cameraBtn.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50.scaled),
             cameraBtn.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            
         ])
     }
     
@@ -152,4 +121,8 @@ final class HomeViewController: UIViewController {
     @objc func startCamera() {
         coordinator?.startCamera()
     }
+}
+
+#Preview {
+    HomeViewController(loginViewModel: LoginViewModel(loginUsecase: StubLoginUsecase()), homeViewModel: HomeViewModel(loginUsecase: StubLoginUsecase(), groupUsecase: StubGroupUsecase(), userRelay: .init(value: User.empty(loginPlatform: .kakao))))
 }

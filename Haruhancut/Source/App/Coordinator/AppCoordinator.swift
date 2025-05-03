@@ -63,47 +63,12 @@ final class AppCoordinator: Coordinator {
         childCoordinators.append(coordinator)
         coordinator.start()
     }
-    
-//    func startHomeCoordinator() {
-//        let homeViewModel = HomeViewModel(groupUsecase: DIContainer.shared.resolve(GroupUsecase.self))
-//        
-//        // 캐시된 user로 먼저 세팅
-//        if let cachedUser = loginViewModel.user.value {
-//            homeViewModel.setUser(user: cachedUser)
-//        } else {
-//            print("❌ 유저 없음")
-//        }
-//        
-//        let coordinator = HomeCoordinator(navigationController: navigationController,
-//                                           loginViewModel: loginViewModel,
-//                                           homeViewModel: homeViewModel)
-//        coordinator.parentCoordinator = self
-//        childCoordinators.append(coordinator)
-//        coordinator.start()
-//        
-//        // ✅ 홈은 일단 띄우고
-//        // ✅ 최신 유저 정보 오면 homeViewModel.user 업데이트
-//        bindLoginUserToHomeUser(homeViewModel: homeViewModel)
-//    }
-//
-//    private func bindLoginUserToHomeUser(homeViewModel: HomeViewModel) {
-//        loginViewModel.user
-//            .skip(1) // 캐시된 초기값은 무시하고 (최신값부터)
-//            .compactMap { $0 }
-//            .observe(on: MainScheduler.instance)
-//            .subscribe(onNext: { user in
-//                homeViewModel.setUser(user: user)
-//                print("✅ 홈뷰모델 유저 최신화됨: \(user)")
-//            })
-//            .disposed(by: disposeBag)
-//    }
 
-
-    
     func startHomeCoordinator() {
         let homeViewModel = HomeViewModel(
             loginUsecase: DIContainer.shared.resolve(LoginUsecase.self),
-            groupUsecase: DIContainer.shared.resolve(GroupUsecase.self)
+            groupUsecase: DIContainer.shared.resolve(GroupUsecase.self),
+            userRelay: loginViewModel.user
         )
         
         let coordinator = HomeCoordinator(
@@ -115,28 +80,6 @@ final class AppCoordinator: Coordinator {
         childCoordinators.append(coordinator)
         coordinator.start()
     }
-
-    /// 세이브
-//    func startHomeCoordinator() {
-//        let homeViewModel = HomeViewModel(groupUsecase: DIContainer.shared.resolve(GroupUsecase.self))
-//        if let user = loginViewModel.user.value {
-//            homeViewModel.setUser(user: user)
-//        } else {
-//            print("❌ 유저 정보 없음 - 홈뷰모델에 세팅 실패")
-//        }
-//        
-////        if let group = loginViewModel.group.value {
-////            homeViewModel.setGroup(group: group)
-////        } else {
-////            print("❌ 그룹 정보 없음 - 홈뷰모델에 세팅 실패")
-////        }
-//        
-//        let coordinator = HomeCoordinator(navigationController: navigationController,
-//                                          loginViewModel: loginViewModel, homeViewModel: homeViewModel)
-//        coordinator.parentCoordinator = self
-//        childCoordinators.append(coordinator)
-//        coordinator.start()
-//    }
 }
 
 final class LoginFlowCoordinator: Coordinator {
@@ -260,19 +203,6 @@ final class HomeCoordinator: Coordinator {
         cameraViewController.coordinator = self
         navigationController.pushViewController(cameraViewController, animated: true)
     }
-    
-//    func didFinishGroupHost() { 
-//        navigationController.popViewController(animated: true)
-//    }
-    
-//    func showLogin() {
-//        finishFlow() // 현재 흐름 종료(자신을 부모에서 제거
-//        if let appCoordinator = parentCoordinator as? AppCoordinator {
-//            // ✅ AppCoordinator가 로그인 코디네이터 시작
-//            appCoordinator.startLoginFlowCoordinator()
-//        }
-//    }
-    
     
     func showLogin() {
         finishFlow() // 현재 흐름 종료(자신을 부모에서 제거

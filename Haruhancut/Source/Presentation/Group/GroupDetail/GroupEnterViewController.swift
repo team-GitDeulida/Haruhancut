@@ -104,7 +104,7 @@ final class GroupEnterViewController: UIViewController {
 
 #Preview {
     GroupEnterViewController(groupViewModel: GroupViewModel(loginViewModel: LoginViewModel(loginUsecase: StubLoginUsecase()),
-                                                            groupUsecase: StubGroupUsecase(), homeViewModel: HomeViewModel(loginUsecase: StubLoginUsecase(), groupUsecase: StubGroupUsecase())))
+                                                            groupUsecase: StubGroupUsecase(), homeViewModel: HomeViewModel(loginUsecase: StubLoginUsecase(), groupUsecase: StubGroupUsecase(), userRelay: .init(value: User.empty(loginPlatform: .kakao)))))
 }
 
 
