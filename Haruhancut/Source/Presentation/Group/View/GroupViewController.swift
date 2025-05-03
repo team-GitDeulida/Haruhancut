@@ -82,32 +82,43 @@ final class GroupViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         makeUI()
+        setupConstraints()
         rxBtnTap()
+    }
+    
+    func setupLogoTitle() {
+        self.navigationItem.titleView = titleLabel
     }
     
     // MARK: - Setup UI
     private func makeUI() {
+        /// 타이틀 설정
         setupLogoTitle()
+        
         /// 커스텀 뒤로가기
         let backItem = UIBarButtonItem()
         backItem.title = "뒤로가기"
         navigationItem.backBarButtonItem = backItem
         navigationController?.navigationBar.tintColor = .mainWhite
         
+        /// setupUI
+        [mainLabel, viewStackView].forEach {
+            view.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+    }
+    
+    private func setupConstraints() {
         // 배경 색상
         view.backgroundColor = .background
         
         // MARK: - mainLabel
-        view.addSubview(mainLabel)
-        mainLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             mainLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
             mainLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)
         ])
         
         // MARK: - viewStack
-        view.addSubview(viewStackView)
-        viewStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             // 위치
             viewStackView.topAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 50),
@@ -119,21 +130,7 @@ final class GroupViewController: UIViewController {
         ])
     }
     
-    func setupLogoTitle() {
-        self.navigationItem.titleView = titleLabel
-//        let titleLabel: UILabel = {
-//            $0.attributedText =
-//                .RLAttributedString(
-//                    text: "Runlog",
-//                    font: .Logo2,
-//                    color: .LightGreen
-//                )
-//            $0.textAlignment = .center
-//        }
-//        topViewController?.navigationItem.titleView = titleLabel
-    }
-    
-    func rxBtnTap() {
+    private func rxBtnTap() {
         
         // Coordinator 트리거
         enterButton.rx.tap

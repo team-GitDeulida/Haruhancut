@@ -41,7 +41,8 @@ final class HomeViewModel {
         }
         
         /// 임시 하드코딩
-        posts.accept(Post.samplePost1 + Post.samplePost2 + Post.samplePost3)
+        // posts.accept(Post.samplePosts)
+        posts.accept(HCGroup.sampleGroup.posts)
     }
     
     func transform() -> Output {

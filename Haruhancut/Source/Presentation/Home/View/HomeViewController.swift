@@ -8,6 +8,7 @@
 /*
  reference
  - https://dmtopolog.com/navigation-bar-customization/ (navigation bar)
+ - https://dongdida.tistory.com/170 (CollectionView)
  
  ContentMode    설명
  .scaleAspectFit    이미지 비율 유지하면서 버튼 안에 "모두" 들어오게
@@ -20,6 +21,7 @@
 import UIKit
 import FirebaseAuth
 import RxSwift
+import RxCocoa
 
 final class HomeViewController: UIViewController {
     weak var coordinator: HomeCoordinator?
@@ -45,6 +47,19 @@ final class HomeViewController: UIViewController {
         return button
     }()
     
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = layout.calculateItemSize(columns: 2)
+        layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        layout.minimumInteritemSpacing = 16
+        layout.minimumLineSpacing = 16
+        
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.register(PostCell.self, forCellWithReuseIdentifier: PostCell.identifier)
+        collectionView.backgroundColor = .background
+        return collectionView
+    }()
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -57,12 +72,14 @@ final class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         makeUI()
+        setupConstraints()
         bindViewModel()
+        print("✅ homeVC - \(homeViewModel.posts.value)")
     }
     
     // 비동기 데이터 받아오면 UI에 반영
     private func bindViewModel() {
-        // homeViewModel.group
+        // 그룹 이름 바인딩
         homeViewModel.group
             // .compactMap { $0?.groupName }
             .map { "\($0?.groupName ?? "그룹 없음")" }
@@ -73,14 +90,49 @@ final class HomeViewController: UIViewController {
                 self.titleLabel.sizeToFit()
             })
             .disposed(by: disposeBag)
+        
+        // 포스트 바인딩
+        homeViewModel.transform().posts
+            .drive(collectionView.rx.items(
+                cellIdentifier: PostCell.identifier,
+                cellType: PostCell.self)
+            ) { _, post, cell in
+                cell.configure(with: post)
+            }
+            .disposed(by: disposeBag)
+        
+        // 포스트 터치 바인딩
+        collectionView.rx.modelSelected(Post.self)
+            .observe(on: MainScheduler.instance)
+            .bind(onNext: { post in
+                let detailVC = PostDetailViewController()
+                detailVC.modalPresentationStyle = .pageSheet
+                self.present(detailVC, animated: true)
+                print("✅ 셀 선택됨: \(post.postId)")
+            })
+            .disposed(by: disposeBag)
     }
     
-    func makeUI() {
+    private func makeUI() {
         setupLogoTitle()
         view.backgroundColor = .background
+
+        /// setupUI
+        [collectionView, cameraBtn].forEach {
+            view.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+    }
+    
+    private func setupConstraints() {
         
-        view.addSubview(cameraBtn)
-        cameraBtn.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: cameraBtn.topAnchor, constant: -20),
+        ])
+        
         NSLayoutConstraint.activate([
             // 위치
             cameraBtn.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50.scaled),
@@ -88,7 +140,8 @@ final class HomeViewController: UIViewController {
         ])
     }
     
-    func setupLogoTitle() {
+    /// 로고 타이틀 설정
+    private func setupLogoTitle() {
         /// 네비게이션 버튼 색상
         self.navigationController?.navigationBar.tintColor = .mainWhite
         
@@ -113,16 +166,66 @@ final class HomeViewController: UIViewController {
     
     /// Rx처리가 오히려 오버 엔지니어링이라고 판단됨
     /// 프로필 화면 이동
-    @objc func startProfile() {
+    @objc private func startProfile() {
         coordinator?.startProfile()
     }
     
     /// 카메라 화면 이동
-    @objc func startCamera() {
+    @objc private func startCamera() {
         coordinator?.startCamera()
+    }
+}
+
+extension UICollectionViewFlowLayout {
+    /// 컬렉션 뷰 셀 크기를 자동으로 계산해주는 함수
+    /// - Parameters:
+    ///   - columns: 한 행에 보여줄 셀 개수
+    ///   - spacing: 셀 사이 간격 (기본값 16)
+    ///   - inset: 좌우 마진 (기본값 16)
+    /// - Returns: 계산된 셀 크기
+    func calculateItemSize(columns: Int, spacing: CGFloat = 16, inset: CGFloat = 16) -> CGSize {
+        let screenWidth = UIScreen.main.bounds.width
+        let totalSpacing = spacing * CGFloat(columns - 1) + inset * 2
+        let itemWidth = (screenWidth - totalSpacing) / CGFloat(columns)
+        return CGSize(width: itemWidth, height: itemWidth) // 정사각형 셀
     }
 }
 
 #Preview {
     HomeViewController(loginViewModel: LoginViewModel(loginUsecase: StubLoginUsecase()), homeViewModel: HomeViewModel(loginUsecase: StubLoginUsecase(), groupUsecase: StubGroupUsecase(), userRelay: .init(value: User.empty(loginPlatform: .kakao))))
+}
+
+final class PostDetailViewController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .white
+    }
+    
+    /// 화면에 보여지기 직전에 호출되는 생명주기 메서드
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        /// pageSheet일때만
+        if let sheet = self.sheetPresentationController {
+            if #available(iOS 16.0, *) {
+                let fiftyPercentDetent = UISheetPresentationController.Detent.custom(identifier: .init("fiftyPercent")) { context in
+                                return context.maximumDetentValue * 0.6
+                            }
+
+                let eightyPercentDetent = UISheetPresentationController.Detent.custom(identifier: .init("eightyPercent")) { context in
+                    return context.maximumDetentValue * 0.9
+                }
+                
+                sheet.detents = [fiftyPercentDetent, eightyPercentDetent]
+            } else {
+                sheet.detents = [.medium(), .large()]
+            }
+            /// 바텀시트 상단에 손잡이(Grabber) 표시 여부
+            sheet.prefersGrabberVisible = true
+            /// 시트의 상단 모서리를 30pt 둥글게
+            sheet.preferredCornerRadius = 30
+        }
+        
+        modalPresentationStyle = .pageSheet
+    }
 }

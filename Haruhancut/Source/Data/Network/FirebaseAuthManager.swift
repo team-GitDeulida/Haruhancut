@@ -350,6 +350,7 @@ extension FirebaseAuthManager {
             groupName: groupName,
             createdAt: Date(),
             hostUserId: currentUserId,
+            members: [],
             posts: []
         )
         

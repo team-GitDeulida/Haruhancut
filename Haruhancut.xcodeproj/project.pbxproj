@@ -67,6 +67,8 @@
 		DFC1428D2DBB538800EC6063 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = DFC1428C2DBB538800EC6063 /* FirebaseDatabase */; };
 		DFC1428F2DBB538800EC6063 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = DFC1428E2DBB538800EC6063 /* FirebaseFirestore */; };
 		DFC142912DBB538800EC6063 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = DFC142902DBB538800EC6063 /* FirebaseStorage */; };
+		DFD096D22DC6485400DE909C /* PostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD096D12DC6485400DE909C /* PostCell.swift */; };
+		DFD096D52DC651E500DE909C /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = DFD096D42DC651E500DE909C /* Kingfisher */; };
 		DFD269712DBB559D00F90C12 /* ScaleKit in Frameworks */ = {isa = PBXBuildFile; productRef = DFD269702DBB559D00F90C12 /* ScaleKit */; };
 		DFD757AA2D9C2A74008C82DF /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD757A92D9C2A74008C82DF /* DIContainer.swift */; };
 		DFDC82672DBD4998003C597D /* GroupUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFDC82662DBD4998003C597D /* GroupUsecase.swift */; };
@@ -130,6 +132,7 @@
 		DFA5BE2D2DAF94A900CAD5D3 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		DFA98D2C2DBB35AA00C22770 /* GroupHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupHostViewController.swift; sourceTree = "<group>"; };
 		DFB71C142DB62F7900FE8490 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		DFD096D12DC6485400DE909C /* PostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCell.swift; sourceTree = "<group>"; };
 		DFD757A92D9C2A74008C82DF /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
 		DFDC82662DBD4998003C597D /* GroupUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupUsecase.swift; sourceTree = "<group>"; };
 		DFDC82682DBD49D9003C597D /* GroupRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupRepositoryProtocol.swift; sourceTree = "<group>"; };
@@ -152,6 +155,7 @@
 				DFC1427E2DBB533000EC6063 /* RxKakaoSDK in Frameworks */,
 				DFC142882DBB533000EC6063 /* RxKakaoSDKUser in Frameworks */,
 				DFC1428D2DBB538800EC6063 /* FirebaseDatabase in Frameworks */,
+				DFD096D52DC651E500DE909C /* Kingfisher in Frameworks */,
 				DFD269712DBB559D00F90C12 /* ScaleKit in Frameworks */,
 				DFC142912DBB538800EC6063 /* FirebaseStorage in Frameworks */,
 				DFC142842DBB533000EC6063 /* RxKakaoSDKFriend in Frameworks */,
@@ -166,6 +170,7 @@
 			isa = PBXGroup;
 			children = (
 				DF2AE6082DB218A7007779D9 /* HomeViewController.swift */,
+				DFD096D12DC6485400DE909C /* PostCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -528,6 +533,7 @@
 				DFC1428E2DBB538800EC6063 /* FirebaseFirestore */,
 				DFC142902DBB538800EC6063 /* FirebaseStorage */,
 				DFD269702DBB559D00F90C12 /* ScaleKit */,
+				DFD096D42DC651E500DE909C /* Kingfisher */,
 			);
 			productName = Haruhancut;
 			productReference = DF66506C2D88023400820F1A /* Haruhancut.app */;
@@ -562,6 +568,7 @@
 				DFC1427C2DBB533000EC6063 /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */,
 				DFC142892DBB538800EC6063 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				DFD2696F2DBB559D00F90C12 /* XCRemoteSwiftPackageReference "ScaleKit" */,
+				DFD096D32DC651E500DE909C /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = DF66506D2D88023400820F1A /* Products */;
@@ -638,6 +645,7 @@
 				DF4962C92DACEF140001437B /* TextField+.swift in Sources */,
 				DF2AE60E2DB218C6007779D9 /* HomeViewModel.swift in Sources */,
 				DF156B762DAD610B00918EE6 /* UserDTO.swift in Sources */,
+				DFD096D22DC6485400DE909C /* PostCell.swift in Sources */,
 				DFB71C152DB62F7900FE8490 /* AppCoordinator.swift in Sources */,
 				DF5F3E932D95C47700245C20 /* AppDelegate.swift in Sources */,
 				DF0C249D2DACF65F00022AB0 /* UIViewController+.swift in Sources */,
@@ -910,6 +918,14 @@
 				minimumVersion = 11.12.0;
 			};
 		};
+		DFD096D32DC651E500DE909C /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.3.2;
+			};
+		};
 		DFD2696F2DBB559D00F90C12 /* XCRemoteSwiftPackageReference "ScaleKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/indextrown/ScaleKit";
@@ -975,6 +991,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = DFC142892DBB538800EC6063 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		DFD096D42DC651E500DE909C /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DFD096D32DC651E500DE909C /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 		DFD269702DBB559D00F90C12 /* ScaleKit */ = {
 			isa = XCSwiftPackageProductDependency;

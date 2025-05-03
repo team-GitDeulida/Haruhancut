@@ -72,7 +72,7 @@ final class GroupViewModel {
                                                 groupId: groupId,
                                                 groupName: groupName,
                                                 createdAt: Date(),
-                                                hostUserId: currentUser.uid,
+                                                hostUserId: currentUser.uid, members: [],
                                                 posts: [])
 //                                            self.loginViewModel.group.accept(group)
                                             self.homeViewModel.group.accept(group)

@@ -1,5 +1,5 @@
 {
-  "originHash" : "9cca9d73ac03b9b422c2d2671427eb3053b6a5eb6168a844a2c56a79662dd6ce",
+  "originHash" : "36443a7b10515baeb945b379f8709c54e0fe0009cd172e99d7525e8da6d40474",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleUtilities.git",
       "state" : {
-        "revision" : "53156c7ec267db846e6b64c9f4c4e31ba4cf75eb",
-        "version" : "8.0.2"
+        "revision" : "60da361632d0de02786f709bdc0c4df340f7613e",
+        "version" : "8.1.0"
       }
     },
     {
@@ -107,6 +107,15 @@
       "state" : {
         "revision" : "f3e0abce3cc4f7e20177d77a9feb5f160ee97ef3",
         "version" : "2.24.1"
+      }
+    },
+    {
+      "identity" : "kingfisher",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/onevcat/Kingfisher",
+      "state" : {
+        "revision" : "7deda23bbdca612076c5c315003d8638a08ed0f1",
+        "version" : "8.3.2"
       }
     },
     {
