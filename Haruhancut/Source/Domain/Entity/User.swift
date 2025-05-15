@@ -93,28 +93,25 @@ struct HCGroup: Encodable {
     let groupName: String
     let createdAt: Date
     let hostUserId: String
-    var members: [User]
-    var posts: [Post]
+    var members: [String]
+    // var posts: [Post]
+    var postsByDate: [String: [Post]]
 }
 
 extension HCGroup {
-    static var sampleGroup = HCGroup(groupId: "testGroupId",
-                                     groupName: "테스트 가족바",
-                                     createdAt: .koreanDate(year: 2025, month: 5, day: 1),
-                                     hostUserId: "index",
-                                     members: [
-                                         User(uid: "index",
-                                              registerDate: .now,
-                                              loginPlatform: .kakao,
-                                              nickname: "동현",
-                                              profileImageURL: nil,
-                                              birthdayDate: .now,
-                                              gender: .male,
-                                              isPushEnabled: true,
-                                              groupId: "testGroupId"),
-                                         User(uid: "anotherUser", registerDate: .now, loginPlatform: .apple, nickname: "영선", profileImageURL: nil, birthdayDate: .now, gender: .female, isPushEnabled: true, groupId: "testGroupId")
-                                     ],
-                                     posts: Post.samplePosts)
+    static var sampleGroup: HCGroup {
+        let posts = Post.samplePosts
+        let grouped = posts.groupedByDate()
+        return HCGroup(groupId: "testGroupId",
+                 groupName: "테스트 가족바",
+                 createdAt: .koreanDate(year: 2025, month: 5, day: 1),
+                 hostUserId: "index",
+                 members: [
+                     "123"
+                 ],
+                 postsByDate: grouped)
+        
+    }
 }
 
 struct Post: Encodable {
@@ -125,7 +122,19 @@ struct Post: Encodable {
     let imageURL: String
     let createdAt: Date
     let likeCount: Int
-    let comments: [Comment]
+    let comments: [String: Comment]
+}
+
+extension Post {
+    var isToday: Bool {
+        Calendar.current.isDateInToday(createdAt)
+    }
+}
+
+extension Array where Element == Post {
+    func groupedByDate() -> [String: [Post]] {
+        return Dictionary(grouping: self) { $0.createdAt.toKoreanDateString() }
+    }
 }
 
 extension Post {
@@ -135,15 +144,16 @@ extension Post {
              nickname: "동현",
              profileImageURL: nil,
              imageURL: "https://upload.wikimedia.org/wikipedia/en/5/5f/Original_Doge_meme.jpg",
-             createdAt: .now,
+             createdAt: .koreanDate(year: 2025, month: 5, day: 16),
              likeCount: 10,
              comments: [
-                Comment(commentId: "c1",
-                        userId: "anotherUser",
-                        nickname: "영선",
-                        profileImageURL: nil,
-                        text: "귀여운 사진이네요!",
-                        createdAt: .now)
+                 "c1": Comment(
+                     commentId: "c1",
+                     userId: "anotherUser",
+                     nickname: "영선",
+                     profileImageURL: nil,
+                     text: "귀여운 사진이네요!",
+                     createdAt: .now)
              ]),
         
         Post(postId: "postId2",
@@ -151,42 +161,43 @@ extension Post {
              nickname: "동현1",
              profileImageURL: nil,
              imageURL: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Gatto_europeo4.jpg/500px-Gatto_europeo4.jpg",
-             createdAt: .now,
+             createdAt: .koreanDate(year: 2025, month: 5, day: 16),
              likeCount: 10,
              comments: [
-                Comment(commentId: "c2",
-                        userId: "index",
-                        nickname: "동현",
-                        profileImageURL: nil,
-                        text: "고양이 너무 사랑스럽다!",
-                        createdAt: .now),
-                Comment(commentId: "c3",
-                        userId: "anotherUser",
-                        nickname: "영선",
-                        profileImageURL: nil,
-                        text: "진짜 귀엽다 ㅠㅠ",
-                        createdAt: .now)
+                 "c2": Comment(
+                     commentId: "c2",
+                     userId: "index",
+                     nickname: "동현",
+                     profileImageURL: nil,
+                     text: "고양이 너무 사랑스럽다!",
+                     createdAt: .now),
+                 "c3": Comment(
+                     commentId: "c3",
+                     userId: "anotherUser",
+                     nickname: "영선",
+                     profileImageURL: nil,
+                     text: "진짜 귀엽다 ㅠㅠ",
+                     createdAt: .now)
              ]),
         
         Post(postId: "postId3",
              userId: "index",
              nickname: "동현2",
              profileImageURL: nil,
-             imageURL: "https://file.notion.so/f/f/a2bacc83-1924-4309-80e8-d18801d486d0/bd8545fe-4083-4435-8a7b-ae734f93b40f/jito.jpg?table=block&id=1e8db9e7-36cf-80a8-aa42-f8e5d779b05b&spaceId=a2bacc83-1924-4309-80e8-d18801d486d0&expirationTimestamp=1746316800000&signature=-yJ-JYfQo_98js6jatr9j-bJKmwIAW7irxV8_dRLnZ8&downloadName=jito.jpg",
-             createdAt: .now,
+             imageURL: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Gatto_europeo4.jpg/500px-Gatto_europeo4.jpg",
+             createdAt: .koreanDate(year: 2025, month: 5, day: 16),
              likeCount: 10,
              comments: [
-                Comment(commentId: "c4",
-                        userId: "anotherUser",
-                        nickname: "영선",
-                        profileImageURL: nil,
-                        text: "사진 너무 잘 나왔어요!",
-                        createdAt: .now)
+                 "c4": Comment(
+                     commentId: "c4",
+                     userId: "anotherUser",
+                     nickname: "영선",
+                     profileImageURL: nil,
+                     text: "사진 너무 잘 나왔어요!",
+                     createdAt: .now)
              ])
     ]
 }
-
-
 
 struct Comment: Encodable {
     let commentId: String
@@ -200,13 +211,18 @@ struct Comment: Encodable {
 extension HCGroup {
     func toDTO() -> HCGroupDTO {
         let formatter = ISO8601DateFormatter()
+        let postsDTO: [String: [String: PostDTO]] = postsByDate.mapValues { postList in
+            Dictionary(uniqueKeysWithValues: postList.map { ($0.postId, $0.toDTO()) })
+        }
+        
         return HCGroupDTO(
             groupId: groupId,
             groupName: groupName,
             createdAt: formatter.string(from: createdAt),
             hostUserId: hostUserId,
-            members: members.map { $0.toDTO() },
-            posts: posts.map { $0.toDTO() }
+            members: members,
+            //members: members.map { $0.toDTO() },
+            postsByDate: postsDTO
         )
     }
 }
@@ -214,6 +230,10 @@ extension HCGroup {
 extension Post {
     func toDTO() -> PostDTO {
         let formatter = ISO8601DateFormatter()
+        let commentDTOs = Dictionary(uniqueKeysWithValues: comments.map { key, comment in
+                    (key, comment.toDTO())
+                })
+        
         return PostDTO(
             postId: postId,
             userId: userId,
@@ -222,7 +242,7 @@ extension Post {
             imageURL: imageURL,
             createdAt: formatter.string(from: createdAt),
             likeCount: likeCount,
-            comments: comments.map { $0.toDTO() }
+            comments: commentDTOs
         )
     }
 }
@@ -292,8 +312,8 @@ struct HCGroupDTO: Codable {
     let groupName: String?
     let createdAt: String?
     let hostUserId: String?
-    let members: [UserDTO]?
-    var posts: [PostDTO]?
+    let members: [String]?
+    var postsByDate: [String: [String: PostDTO]]? // postId가 key인 딕셔너리
 }
 
 extension HCGroupDTO {
@@ -310,16 +330,24 @@ extension HCGroupDTO {
             return nil
         }
         
-        let members = self.members?.compactMap { $0.toModel() } ?? []
-        let posts = self.posts?.compactMap { $0.toModel() } ?? []
+        // let members = self.members?.compactMap { $0.toModel() } ?? []
+        let memberIds = members ?? []
+        
+        var postsByDate: [String: [Post]] = [:]
+        postsByDate = postsByDate.merging(
+            self.postsByDate?.compactMapValues { dict in
+                dict.compactMap { $0.value.toModel() }
+            } ?? [:],
+            uniquingKeysWith: { $1 }
+        )
         
         return HCGroup(
             groupId: groupId,
             groupName: groupName,
             createdAt: createdAt,
             hostUserId: hostUserId,
-            members: members,
-            posts: posts
+            members: memberIds,
+            postsByDate: postsByDate
         )
     }
 }
@@ -332,7 +360,7 @@ struct PostDTO: Codable {
     let imageURL: String?
     let createdAt: String?
     let likeCount: Int?
-    let comments: [CommentDTO]?
+    let comments: [String: CommentDTO]?
 }
 
 extension PostDTO {
@@ -351,8 +379,9 @@ extension PostDTO {
             return nil
         }
         
-        let comments = self.comments?.compactMap { $0.toModel() } ?? []
-        
+        // let comments = self.comments?.compactMap { $0.toModel() } ?? []
+        let commentList = self.comments?.compactMapValues { $0.toModel() } ?? [:]
+
         return Post(
             postId: postId,
             userId: userId,
@@ -361,7 +390,7 @@ extension PostDTO {
             imageURL: imageURL,
             createdAt: createdAt,
             likeCount: likeCount,
-            comments: comments
+            comments: commentList
         )
     }
 }

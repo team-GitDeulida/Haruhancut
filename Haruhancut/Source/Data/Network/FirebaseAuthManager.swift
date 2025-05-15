@@ -248,13 +248,13 @@ extension FirebaseAuthManager {
     /// - Returns: Observable<T>
     func observeValue<T: Decodable>(path: String, type: T.Type) -> Observable<T> {
         return Observable.create { observer in
-            
             self.databaseRef.child(path).observeSingleEvent(of: .value) { snapshot in
                 guard let value = snapshot.value else {
                     observer.onError(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "값이 존재하지 않음"]))
                     return
                 }
-                
+                print("🔥 observeValue snapshot.value = \(value)")
+
                 do {
                     let data = try JSONSerialization.data(withJSONObject: value, options: [])
                     let decoded = try JSONDecoder().decode(T.self, from: data)
@@ -281,6 +281,7 @@ extension FirebaseAuthManager {
                 observer.onCompleted()
                 return Disposables.create()
             }
+            
             
             self.databaseRef.child(path).setValue(dict) { error, _ in
                 if let error = error {
@@ -351,7 +352,7 @@ extension FirebaseAuthManager {
             createdAt: Date(),
             hostUserId: currentUserId,
             members: [],
-            posts: []
+            postsByDate: [:]
         )
         
         /// 이미 Observable이 있다면 .map { }으로 변환 후 바로 리턴
@@ -415,69 +416,39 @@ extension FirebaseAuthManager {
                 return Observable.just(.failure(.fetchGroupError))
             }
     }
+}
+
+// MARK: - 실시간 스냅샷 관련
+extension FirebaseAuthManager {
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    /*
-     private func createGroupInFirebase(groupName: String) -> Driver<Result<String, GroupError>> {
-     return Single.create { single in
-     let ref = Database.database(url: "https://haruhancut-default-rtdb.asia-southeast1.firebasedatabase.app").reference()
-     
-     let newGroupRef = ref.child("groups").childByAutoId()
-     
-     /*
-      [기존 방식]
-      let groupData: [String: Any] = [
-      "groupId": newGroupRef.key ?? "",
-      "groupName": groupName,
-      "createdAt": ISO8601DateFormatter().string(from: Date()),
-      "hostUserId": self.userId
-      ]
-      
-      newGroupRef.setValue(groupData) { error, _ in
-      if let error = error {
-      print("❌ 그룹 생성 실패: \(error.localizedDescription)")
-      single(.success(.failure(.makeHostError)))
-      } else {
-      print("✅ 그룹 생성 성공! ID: \(newGroupRef.key ?? "")")
-      single(.success(.success(newGroupRef.key ?? "")))
-      }
-      }
-      */
-     
-     // Model
-     let groupData = HCGroup(
-     groupId: newGroupRef.key ?? "",
-     groupName: groupName,
-     createdAt: Date(),
-     hostUserId: self.userId,
-     posts: [])
-     
-     // Model -> DTO -> Dictionary
-     guard let groupDict = groupData.toDTO().toDictionary() else {
-     single(.success(.failure(.makeHostError)))
-     return Disposables.create()
-     }
-     
-     newGroupRef.setValue(groupDict) { error, _ in
-     if let error = error {
-     print("❌ 그룹 생성 실패: \(error.localizedDescription)")
-     single(.success(.failure(.makeHostError)))
-     } else {
-     print("✅ 그룹 생성 성공! ID: \(newGroupRef.key ?? "")")
-     single(.success(.success(newGroupRef.key ?? "")))
-     }
-     }
-     return Disposables.create()
-     }
-     .asDriver(onErrorJustReturn: .failure(.makeHostError))
-     }
-     */
+    /// Firebase Realtime Database에서 특정 경로(path)의 데이터를 **실시간으로 관찰**합니다.
+    /// 해당 경로의 데이터가 변경될 때마다 최신 데이터를 가져와 스트림으로 방출합니다.
+    /// - Parameters:
+    ///   - path: Firebase Realtime Database 내에서 데이터를 관찰할 경로 문자열
+    ///   - type: 디코딩할 모델 타입 (`Decodable`을 준수하는 타입)
+    /// - Returns: 실시간으로 감지된 데이터를 방출하는 `Observable<T>`
+    func observeValueStream<T: Decodable>(path: String, type: T.Type) -> Observable<T> {
+        return Observable.create { observer in
+            let ref = self.databaseRef.child(path)
+            let handle = ref.observe(.value) { snapshot in
+                guard let value = snapshot.value else {
+                    print("📛 실시간 observe: value 없음")
+                    return
+                }
+                do {
+                    let data = try JSONSerialization.data(withJSONObject: value, options: [])
+                    let decoded = try JSONDecoder().decode(T.self, from: data)
+                    observer.onNext(decoded)
+                } catch {
+                    print("❌ observeValueStream 디코딩 실패: \(error.localizedDescription)")
+                }
+            }
+
+            return Disposables.create {
+                ref.removeObserver(withHandle: handle)
+            }
+        }
+    }
+
 }

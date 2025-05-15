@@ -20,6 +20,7 @@ final class HomeViewModel {
     
     struct Output {
         let posts: Driver<[Post]>
+        let groupName: Driver<String>
     }
     
     init(loginUsecase: LoginUsecaseProtocol, groupUsecase: GroupUsecaseProtocol, userRelay: BehaviorRelay<User?>) {
@@ -37,22 +38,39 @@ final class HomeViewModel {
         
         /// 서버에서 그룹 불러오기
         if let groupId = user.value?.groupId {
-            fetchGroup(groupId: groupId)
+            // fetchGroup(groupId: groupId)
+            observeGroupRealtime(groupId: groupId)
         }
         
         /// 임시 하드코딩
         // posts.accept(Post.samplePosts)
-        posts.accept(HCGroup.sampleGroup.posts)
+        
+        // MARK: - 하드코딩
+        // posts.accept(HCGroup.sampleGroup.postsByDate.flatMap { $0.value })
     }
     
     func transform() -> Output {
-        return Output(posts: posts.asDriver())
+        
+        let todayPosts = posts
+            .map { $0.filter { $0.isToday } }
+            .asDriver(onErrorJustReturn: [])
+        
+        let groupName = group
+            .map { $0?.groupName ?? "그룹 없음" }
+            .asDriver(onErrorJustReturn: "그룹 없음")
+        
+        return Output(posts: todayPosts, groupName: groupName)
     }
     
     func fetchDefaultGroup() {
         if let cachedGroup = UserDefaultsManager.shared.loadGroup() {
             print("✅ homeVM - 캐시에서 불러온 그룹: \(cachedGroup)")
             self.group.accept(cachedGroup)
+            
+            // posts 업데이트
+            let allPosts = cachedGroup.postsByDate.flatMap { $0.value }
+            let sortedPosts = allPosts.sorted(by: { $0.createdAt < $1.createdAt }) // 오래된 순
+            self.posts.accept(sortedPosts)
         } else {
             print("❌ 캐시된 그룹 없음 --- ")
         }
@@ -69,59 +87,39 @@ final class HomeViewModel {
                     self.group.accept(group)
                     UserDefaultsManager.shared.saveGroup(group)
                     
+                    // posts 업데이트
+                    let allPosts = group.postsByDate.flatMap { $0.value }
+                    let sortedPosts = allPosts.sorted(by: { $0.createdAt < $1.createdAt }) // 오래된 순
+                    self.posts.accept(sortedPosts)
+                    
                 case .failure(let error):
                     print("❌ 그룹 가져오기 실패: \(error)")
                 }
             })
             .disposed(by: disposeBag)
     }
-}
-
-/*
-/// 캐시 정보 불러오기
-private func loadCachedUserAndGroup() {
-    if let cachedUser = UserDefaultsManager.shared.loadUser() {
-        print("✅ homeVM - loadCachedUserAndGroup() 캐시된 유저 불러오기 성공: \(cachedUser)")
-        self.user.accept(cachedUser)
-    } else {
-        print("❌ 캐시된 유저 없음 --- ")
-    }
     
-    if let cachedGroup = UserDefaultsManager.shared.loadGroup() {
-        print("✅ homeVM - loadCachedUserAndGroup() 캐시된 그룹 불러오기 성공: \(cachedGroup)")
-        self.group.accept(cachedGroup)
-    } else {
-        print("❌ 캐시된 그룹 없음 --- ")
+    
+    /// 서버의 데이터를 실시간으로 관찰
+    /// - Parameter groupId: 그룹 Id
+    private func observeGroupRealtime(groupId: String) {
+        let path = "groups/\(groupId)"
+
+        FirebaseAuthManager.shared.observeValueStream(path: path, type: HCGroupDTO.self)
+            .compactMap { $0.toModel() }
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] group in
+                guard let self = self else { return }
+                print("🔥 observeGroupRealtime 변경 감지됨: \(group)")
+                self.group.accept(group)
+                let todayPosts = group.postsByDate
+                    .flatMap { $0.value }.filter { $0.isToday }
+                    .filter { $0.isToday }
+                    .sorted(by: { $0.createdAt < $1.createdAt }) // 오래된 순
+                self.posts.accept(todayPosts)
+            })
+            .disposed(by: disposeBag)
     }
-}
- */
 
-/*
-/// 서버에서 유저 정보 불러오기
-private func fetchUserInfo() {
-    loginUsecase.fetchUserInfo()
-        .observe(on: MainScheduler.instance)
-        .subscribe(onNext: { [weak self] user in
-            guard let self = self, let user = user else {
-                print("❌ 유저 가져오기 실패")
-                return
-            }
-            print("✅ homeVM - fetchUserInfo(): \(user)")
-            self.user.accept(user)
-            
-            if let groupId = user.groupId {
-                self.fetchGroup(groupId: groupId)
-            }
-        })
-        .disposed(by: disposeBag)
 }
- */
 
-/*
- func bindButtonTap(tap: Observable<Void>) {
-     tap.subscribe(onNext: {
-         print("hello world")
-     })
-     .disposed(by: disposeBag)
- }
- */

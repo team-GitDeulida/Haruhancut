@@ -73,7 +73,7 @@ final class GroupViewModel {
                                                 groupName: groupName,
                                                 createdAt: Date(),
                                                 hostUserId: currentUser.uid, members: [],
-                                                posts: [])
+                                                postsByDate: [:])
 //                                            self.loginViewModel.group.accept(group)
                                             self.homeViewModel.group.accept(group)
                                             UserDefaultsManager.shared.saveGroup(group)

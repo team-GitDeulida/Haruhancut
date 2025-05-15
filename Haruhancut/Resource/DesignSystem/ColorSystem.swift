@@ -7,12 +7,6 @@
 
 import UIKit
 
-enum HCColor {
-    case background
-    case mainBlack
-    case mainWHite
-}
-
 extension UIColor {
     static let background = UIColor(hex: "#1A1A1A")
     static let mainBlack = UIColor(hex: "#161717")

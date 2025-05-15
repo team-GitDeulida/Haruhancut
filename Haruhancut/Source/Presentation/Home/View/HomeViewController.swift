@@ -60,6 +60,17 @@ final class HomeViewController: UIViewController {
         return collectionView
     }()
     
+    private lazy var emptyLabel: UILabel = {
+        let label = UILabel()
+        label.text = "오늘의 하루를 추가해보세요"
+        label.font = UIFont.hcFont(.medium, size: 16.scaled)
+        label.textColor = .mainWhite
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.isHidden = true
+        return label
+    }()
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -80,11 +91,8 @@ final class HomeViewController: UIViewController {
     // 비동기 데이터 받아오면 UI에 반영
     private func bindViewModel() {
         // 그룹 이름 바인딩
-        homeViewModel.group
-            // .compactMap { $0?.groupName }
-            .map { "\($0?.groupName ?? "그룹 없음")" }
-            .observe(on: MainScheduler.instance)
-            .bind(onNext: { [weak self] text in
+        homeViewModel.transform().groupName
+            .drive(onNext: { [weak self] text in
                 guard let self = self else { return }
                 self.titleLabel.text = text
                 self.titleLabel.sizeToFit()
@@ -99,6 +107,14 @@ final class HomeViewController: UIViewController {
             ) { _, post, cell in
                 cell.configure(with: post)
             }
+            .disposed(by: disposeBag)
+        
+        // 포스트가 비었을 때
+        homeViewModel.transform().posts
+            .drive(onNext: { [weak self] posts in
+                guard let self = self else { return }
+                self.emptyLabel.isHidden = !posts.isEmpty
+            })
             .disposed(by: disposeBag)
         
         // 포스트 터치 바인딩
@@ -118,7 +134,7 @@ final class HomeViewController: UIViewController {
         view.backgroundColor = .background
 
         /// setupUI
-        [collectionView, cameraBtn].forEach {
+        [collectionView, cameraBtn, emptyLabel].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -138,6 +154,12 @@ final class HomeViewController: UIViewController {
             cameraBtn.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50.scaled),
             cameraBtn.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
         ])
+        
+        NSLayoutConstraint.activate([
+            emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        
     }
     
     /// 로고 타이틀 설정
@@ -198,7 +220,7 @@ extension UICollectionViewFlowLayout {
 final class PostDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .Gray700
     }
     
     /// 화면에 보여지기 직전에 호출되는 생명주기 메서드
