@@ -117,16 +117,20 @@ final class HomeViewController: UIViewController {
             })
             .disposed(by: disposeBag)
         
-        // 포스트 터치 바인딩
+        // 포스트 터치 바인딩(댓글창)
         collectionView.rx.modelSelected(Post.self)
             .observe(on: MainScheduler.instance)
             .bind(onNext: { post in
-                let detailVC = PostDetailViewController()
+                // let commentList = Array(post.comments.values) // Dictionary → Array
+                // let detailVC = PostDetailViewController(comments: commentList)
+                let detailVC = PostDetailViewController(homeViewModel: self.homeViewModel, post: post)
                 detailVC.modalPresentationStyle = .pageSheet
                 self.present(detailVC, animated: true)
                 print("✅ 셀 선택됨: \(post.postId)")
             })
             .disposed(by: disposeBag)
+        
+        
     }
     
     private func makeUI() {
@@ -217,37 +221,4 @@ extension UICollectionViewFlowLayout {
     HomeViewController(loginViewModel: LoginViewModel(loginUsecase: StubLoginUsecase()), homeViewModel: HomeViewModel(loginUsecase: StubLoginUsecase(), groupUsecase: StubGroupUsecase(), userRelay: .init(value: User.empty(loginPlatform: .kakao))))
 }
 
-final class PostDetailViewController: UIViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .Gray700
-    }
-    
-    /// 화면에 보여지기 직전에 호출되는 생명주기 메서드
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        /// pageSheet일때만
-        if let sheet = self.sheetPresentationController {
-            if #available(iOS 16.0, *) {
-                let fiftyPercentDetent = UISheetPresentationController.Detent.custom(identifier: .init("fiftyPercent")) { context in
-                                return context.maximumDetentValue * 0.6
-                            }
 
-                let eightyPercentDetent = UISheetPresentationController.Detent.custom(identifier: .init("eightyPercent")) { context in
-                    return context.maximumDetentValue * 0.9
-                }
-                
-                sheet.detents = [fiftyPercentDetent, eightyPercentDetent]
-            } else {
-                sheet.detents = [.medium(), .large()]
-            }
-            /// 바텀시트 상단에 손잡이(Grabber) 표시 여부
-            sheet.prefersGrabberVisible = true
-            /// 시트의 상단 모서리를 30pt 둥글게
-            sheet.preferredCornerRadius = 30
-        }
-        
-        modalPresentationStyle = .pageSheet
-    }
-}

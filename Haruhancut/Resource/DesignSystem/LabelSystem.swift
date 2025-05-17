@@ -29,12 +29,16 @@ import UIKit
 final class HCLabel: UILabel {
     
     enum LabelType {
-        case main(text: String)
-        case sub(text: String)
+        case main(text: String)              // 큰 제목
+        case sub(text: String)               // 부제목
+        case commentAuther(text: String)     // 댓글 작성자
+        case commentContent(text: String)    // 댓글 본문
+        case custom(text: String, font: UIFont, color: UIColor)   // 커스텀 크기
     }
     
     init(type: LabelType) {
         super.init(frame: .zero)
+        translatesAutoresizingMaskIntoConstraints = false
         configure(type: type)
     }
     
@@ -53,6 +57,18 @@ final class HCLabel: UILabel {
         case .sub(let text):
             textColor = .gray
             font = UIFont.hcFont(.semiBold, size: 15.scaled)
+            self.text = text
+        case .commentAuther(let text):
+            textColor = .mainWhite
+            font = UIFont.hcFont(.semiBold, size: 14.scaled)
+            self.text = text
+        case .commentContent(let text):
+            textColor = .mainWhite.withAlphaComponent(0.8)
+            font = UIFont.hcFont(.semiBold, size: 12.scaled)
+            self.text = text
+        case .custom(let text, let customFont, let customColor):
+            textColor = customColor
+            font = customFont
             self.text = text
         }
     }

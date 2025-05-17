@@ -41,11 +41,10 @@ final class HomeViewModel {
             // fetchGroup(groupId: groupId)
             observeGroupRealtime(groupId: groupId)
         }
+ 
         
         /// 임시 하드코딩
         // posts.accept(Post.samplePosts)
-        
-        // MARK: - 하드코딩
         // posts.accept(HCGroup.sampleGroup.postsByDate.flatMap { $0.value })
     }
     
@@ -112,6 +111,9 @@ final class HomeViewModel {
                 guard let self = self else { return }
                 print("🔥 observeGroupRealtime 변경 감지됨: \(group)")
                 self.group.accept(group)
+                
+                // 캐시 저장
+                UserDefaultsManager.shared.saveGroup(group)
                 let todayPosts = group.postsByDate
                     .flatMap { $0.value }.filter { $0.isToday }
                     .filter { $0.isToday }
