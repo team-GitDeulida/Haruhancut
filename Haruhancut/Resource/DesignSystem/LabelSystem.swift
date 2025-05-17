@@ -60,7 +60,7 @@ final class HCLabel: UILabel {
             self.text = text
         case .commentAuther(let text):
             textColor = .mainWhite
-            font = UIFont.hcFont(.semiBold, size: 14.scaled)
+            font = UIFont.hcFont(.semiBold, size: 12.scaled)
             self.text = text
         case .commentContent(let text):
             textColor = .mainWhite.withAlphaComponent(0.8)

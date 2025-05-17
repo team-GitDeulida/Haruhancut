@@ -8,153 +8,96 @@
 import UIKit
 import RxSwift
 
+
 final class PostDetailViewController: UIViewController {
     
-    private let homeViewModel: HomeViewModel
+    weak var coordinator: HomeCoordinator?
     private let post: Post
+    
+    private let homeViewModel: HomeViewModel
     private let disposeBag = DisposeBag()
-    private var comments: [(commentId: String, comment: Comment)] = []
-
-    // MARK: - UI Component
-    
-    private let headerLabel: UILabel = {
-        let label = HCLabel(type: .custom(text: "댓글", font: .hcFont(.bold, size: 16), color: .mainWhite))
-        return label
-    }()
-    
-    private lazy var tableView: UITableView = {
-        let tableView = UITableView()
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(CommentCell.self, forCellReuseIdentifier: CommentCell.reuseIdentifier)
-        tableView.separatorStyle = .none
-        tableView.backgroundColor = .clear
-        return tableView
-    }()
     
     init(homeViewModel: HomeViewModel, post: Post) {
-        self.homeViewModel = homeViewModel
         self.post = post
+        self.homeViewModel = homeViewModel
         super.init(nibName: nil, bundle: nil)
-        print(post)
+        self.configure(with: post)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func configure(with post: Post) {
+        let url = URL(string: post.imageURL)
+        imageView.kf.setImage(with: url)
+    }
+    
+    // MARK: - UI Comoinent
+    // 이미지 뷰: 셀의 배경 이미지를 보여줌
+    private lazy var imageView: UIImageView = {
+        let iv = UIImageView()
+        iv.contentMode = .scaleAspectFill           // 셀 채우되 비율 유지
+        iv.clipsToBounds = true                     // 셀 밖 이미지 자르기
+        iv.layer.cornerRadius = 15                  // 모서리 둥글게
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        return iv
+    }()
+    
+    private lazy var commentButton: HCCommentButton = {
+        let button = HCCommentButton(image: UIImage(systemName: "message")!, count: post.comments.count)
+        return button
+    }()
+    
+    // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .Gray700
-        
-        configureTableView()
-        configureUI()
+        makeUI()
+        setupConstraints()
         bindViewModel()
     }
     
-    private func configureTableView() {
-        self.tableView.dataSource = self
-    }
-    
-    private func configureUI() {
+    // MARK: - UI Setting
+    private func makeUI() {
+        view.backgroundColor = .background
         
-        // MARK: - 테이블뷰 관련
-        [headerLabel, tableView].forEach {
+        [imageView, commentButton].forEach {
             view.addSubview($0)
         }
-        
+    }
+    
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            headerLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor)
+            // 위치
+            imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -20),
+            
+            // 크기
+            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor)
         ])
         
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 16),
-            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            // 위치
+            commentButton.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 20),
+            commentButton.trailingAnchor.constraint(equalTo: imageView.trailingAnchor)
         ])
     }
     
+    // MARK: - Bind
     private func bindViewModel() {
-        homeViewModel
-            .posts
+        commentButton.rx.tap
             .asDriver()
-            .drive(onNext: { [weak self] posts in
+            .drive(onNext: { [weak self] in
                 guard let self = self else { return }
-                guard let latestPost = posts.first(where: { $0.postId == self.post.postId }) else { return }
-
-                let sorted = latestPost.comments
-                    .sorted { $0.value.createdAt < $1.value.createdAt }
-                    .map { (commentId: $0.key, comment: $0.value) }
-                
-                self.comments = sorted // [(key, Comment)]
-                self.tableView.reloadData()
+                let commentVC = PostCommentViewController(homeViewModel: self.homeViewModel, post: post)
+                commentVC.modalPresentationStyle = .pageSheet
+                self.present(commentVC, animated: true)
             })
             .disposed(by: disposeBag)
-
-    }
-    
-    /// 화면에 보여지기 직전에 호출되는 생명주기 메서드
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        /// pageSheet일때만
-        if let sheet = self.sheetPresentationController {
-            if #available(iOS 16.0, *) {
-                let fiftyPercentDetent = UISheetPresentationController.Detent.custom(identifier: .init("fiftyPercent")) { context in
-                                return context.maximumDetentValue * 0.6
-                            }
-
-                let eightyPercentDetent = UISheetPresentationController.Detent.custom(identifier: .init("eightyPercent")) { context in
-                    return context.maximumDetentValue * 0.9
-                }
-                
-                sheet.detents = [fiftyPercentDetent, eightyPercentDetent]
-            } else {
-                sheet.detents = [.medium(), .large()]
-            }
-            /// 바텀시트 상단에 손잡이(Grabber) 표시 여부
-            sheet.prefersGrabberVisible = true
-            /// 시트의 상단 모서리를 30pt 둥글게
-            sheet.preferredCornerRadius = 30
-        }
-        
-        modalPresentationStyle = .pageSheet
     }
 }
 
-
-
-extension PostDetailViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        post.comments.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: CommentCell.reuseIdentifier, for: indexPath) as? CommentCell else {
-            return UITableViewCell()
-        }
-        
-        let comment = comments[indexPath.row].comment
-        cell.configure(comment: comment)
-        
-        // 선택 효과 제거(터치는 가능하지만 시각적 변화 X)
-        cell.selectionStyle = .none
-        return cell
-    }
+#Preview {
+    PostDetailViewController(homeViewModel: HomeViewModel(loginUsecase: StubLoginUsecase(), groupUsecase: StubGroupUsecase(), userRelay: .init(value: User.empty(loginPlatform: .kakao))), post: .samplePosts[0])
 }
-
-protocol ReuseIdentifiable {
-    // 프로토콜에서 로직을 정의할 수 없어서 가져올 수 있도록 설정
-    static var reuseIdentifier: String { get }
-}
-
-extension ReuseIdentifiable {
-    // 로직에 대한 정의는 Extension에서 간능
-    static var reuseIdentifier: String {
-        return String(describing: Self.self)
-    }
-}
-
-extension UITableViewCell: ReuseIdentifiable {}

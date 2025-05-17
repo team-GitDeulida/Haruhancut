@@ -13,7 +13,7 @@
 		DF2AE60A2DB218A7007779D9 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2AE6082DB218A7007779D9 /* HomeViewController.swift */; };
 		DF2AE60E2DB218C6007779D9 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2AE60C2DB218C6007779D9 /* HomeViewModel.swift */; };
 		DF2AE6172DB218FD007779D9 /* GroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2AE6162DB218FD007779D9 /* GroupViewController.swift */; };
-		DF2B5C962DD852FB0091B5F4 /* PostDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2B5C952DD852FB0091B5F4 /* PostDetailViewController.swift */; };
+		DF2B5C962DD852FB0091B5F4 /* PostCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2B5C952DD852FB0091B5F4 /* PostCommentViewController.swift */; };
 		DF3502E32DB36BBF002C1269 /* ButtonSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3502E22DB36BBF002C1269 /* ButtonSystem.swift */; };
 		DF35040E2DB388B8002C1269 /* TextFieldSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF35040D2DB388B8002C1269 /* TextFieldSystem.swift */; };
 		DF3504102DB39892002C1269 /* LabelSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF35040F2DB39892002C1269 /* LabelSystem.swift */; };
@@ -41,6 +41,7 @@
 		DF4B5BA22DAEBACE00A7ADD7 /* NicknameSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4B5B9D2DAEBACE00A7ADD7 /* NicknameSettingViewController.swift */; };
 		DF4B5BA62DAEBAD300A7ADD7 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4B5BA42DAEBAD300A7ADD7 /* LoginViewModel.swift */; };
 		DF548D7D2DD872BA005F0178 /* CommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF548D7C2DD872BA005F0178 /* CommentCell.swift */; };
+		DF548D7F2DD88DF9005F0178 /* PostDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF548D7E2DD88DF9005F0178 /* PostDetailViewController.swift */; };
 		DF590B662DAB843F00956E54 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DF590B652DAB843F00956E54 /* GoogleService-Info.plist */; };
 		DF590B682DAB8D9F00956E54 /* FirebaseAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF590B672DAB8D9F00956E54 /* FirebaseAuthManager.swift */; };
 		DF590B6A2DAB926600956E54 /* FirebaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF590B692DAB926600956E54 /* FirebaseError.swift */; };
@@ -88,7 +89,7 @@
 		DF2AE6082DB218A7007779D9 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		DF2AE60C2DB218C6007779D9 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		DF2AE6162DB218FD007779D9 /* GroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewController.swift; sourceTree = "<group>"; };
-		DF2B5C952DD852FB0091B5F4 /* PostDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailViewController.swift; sourceTree = "<group>"; };
+		DF2B5C952DD852FB0091B5F4 /* PostCommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCommentViewController.swift; sourceTree = "<group>"; };
 		DF3502E22DB36BBF002C1269 /* ButtonSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonSystem.swift; sourceTree = "<group>"; };
 		DF35040D2DB388B8002C1269 /* TextFieldSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldSystem.swift; sourceTree = "<group>"; };
 		DF35040F2DB39892002C1269 /* LabelSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelSystem.swift; sourceTree = "<group>"; };
@@ -116,6 +117,7 @@
 		DF4B5B9D2DAEBACE00A7ADD7 /* NicknameSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameSettingViewController.swift; sourceTree = "<group>"; };
 		DF4B5BA42DAEBAD300A7ADD7 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		DF548D7C2DD872BA005F0178 /* CommentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentCell.swift; sourceTree = "<group>"; };
+		DF548D7E2DD88DF9005F0178 /* PostDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailViewController.swift; sourceTree = "<group>"; };
 		DF590B652DAB843F00956E54 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DF590B672DAB8D9F00956E54 /* FirebaseAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthManager.swift; sourceTree = "<group>"; };
 		DF590B692DAB926600956E54 /* FirebaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseError.swift; sourceTree = "<group>"; };
@@ -174,7 +176,8 @@
 			isa = PBXGroup;
 			children = (
 				DF2AE6082DB218A7007779D9 /* HomeViewController.swift */,
-				DF2B5C952DD852FB0091B5F4 /* PostDetailViewController.swift */,
+				DF548D7E2DD88DF9005F0178 /* PostDetailViewController.swift */,
+				DF2B5C952DD852FB0091B5F4 /* PostCommentViewController.swift */,
 				DFD096D12DC6485400DE909C /* PostCell.swift */,
 				DF548D7C2DD872BA005F0178 /* CommentCell.swift */,
 			);
@@ -638,6 +641,7 @@
 				DF3502E32DB36BBF002C1269 /* ButtonSystem.swift in Sources */,
 				DF156B742DAD60E500918EE6 /* User.swift in Sources */,
 				DFA98D2D2DBB35AA00C22770 /* GroupHostViewController.swift in Sources */,
+				DF548D7F2DD88DF9005F0178 /* PostDetailViewController.swift in Sources */,
 				DF590B682DAB8D9F00956E54 /* FirebaseAuthManager.swift in Sources */,
 				DF590B6A2DAB926600956E54 /* FirebaseError.swift in Sources */,
 				DF8603512DB00CFF008ADB69 /* UserDefaultsManager.swift in Sources */,
@@ -659,7 +663,7 @@
 				DF5F3E942D95C47700245C20 /* SceneDelegate.swift in Sources */,
 				DFF1CBE02DBAAEC800722B04 /* GroupEnterViewController.swift in Sources */,
 				DFDC82692DBD49D9003C597D /* GroupRepositoryProtocol.swift in Sources */,
-				DF2B5C962DD852FB0091B5F4 /* PostDetailViewController.swift in Sources */,
+				DF2B5C962DD852FB0091B5F4 /* PostCommentViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

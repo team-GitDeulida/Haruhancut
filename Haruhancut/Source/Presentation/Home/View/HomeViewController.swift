@@ -117,20 +117,28 @@ final class HomeViewController: UIViewController {
             })
             .disposed(by: disposeBag)
         
-        // 포스트 터치 바인딩(댓글창)
+        // 포스트 터치 바인딩
         collectionView.rx.modelSelected(Post.self)
             .observe(on: MainScheduler.instance)
-            .bind(onNext: { post in
-                // let commentList = Array(post.comments.values) // Dictionary → Array
-                // let detailVC = PostDetailViewController(comments: commentList)
-                let detailVC = PostDetailViewController(homeViewModel: self.homeViewModel, post: post)
-                detailVC.modalPresentationStyle = .pageSheet
-                self.present(detailVC, animated: true)
+            .bind(onNext: { [weak self] post in
+                guard let self = self else { return }
+                self.startPostDetail(post: post)
                 print("✅ 셀 선택됨: \(post.postId)")
             })
             .disposed(by: disposeBag)
         
+        // 포스트 터치 바인딩(댓글창)
+//        collectionView.rx.modelSelected(Post.self)
+//            .observe(on: MainScheduler.instance)
+//            .bind(onNext: { post in
+//                let detailVC = PostCommentViewController(homeViewModel: self.homeViewModel, post: post)
+//                detailVC.modalPresentationStyle = .pageSheet
+//                self.present(detailVC, animated: true)
+//                print("✅ 셀 선택됨: \(post.postId)")
+//            })
+//            .disposed(by: disposeBag)
         
+
     }
     
     private func makeUI() {
@@ -199,6 +207,10 @@ final class HomeViewController: UIViewController {
     /// 카메라 화면 이동
     @objc private func startCamera() {
         coordinator?.startCamera()
+    }
+    
+    private func startPostDetail(post: Post) {
+        coordinator?.startPostDetail(post: post)
     }
 }
 

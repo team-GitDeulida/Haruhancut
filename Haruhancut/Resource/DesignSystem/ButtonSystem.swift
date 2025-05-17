@@ -92,13 +92,12 @@ final class HCNextButton: UIButton {
 /// 그룹 버튼
 final class HCGroupButton: UIButton {
     
-    
     init(topText: String, bottomText: String, rightImage: String) {
         super.init(frame: .zero)
         self.mainLabel.text = topText
         self.subLabel.text = bottomText
         rightImageView.image = UIImage(systemName: rightImage)
-        setupUI()
+        configure()
     }
     
     required init?(coder: NSCoder) {
@@ -125,7 +124,13 @@ final class HCGroupButton: UIButton {
     private let rightImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.tintColor = .white
+        // 이미지 비율을 유지한 채, View 영역 안에 맞춤
         imageView.contentMode = .scaleAspectFit
+        /*
+         가로 방향에서 자신이 최대한 줄어들고 싶다고 우선순위를 줌
+         [UILabel][UIImageView]  ← 이런 구조일 때
+         label은 최대한 넓게, imageView는 아이콘만큼만 표시됨
+        */
         imageView.setContentHuggingPriority(.required, for: .horizontal)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -155,7 +160,7 @@ final class HCGroupButton: UIButton {
         return hstack
     }()
     
-    private func setupUI() {
+    private func configure() {
         var config = UIButton.Configuration.plain()
         config.baseBackgroundColor = .Gray500
         config.background.backgroundColor = .Gray500
@@ -179,6 +184,75 @@ final class HCGroupButton: UIButton {
             hStack.centerYAnchor.constraint(equalTo: self.centerYAnchor)
         ])
     }
+}
+
+/// 댓글 버튼
+final class HCCommentButton: UIButton {
+    
+    private let leftImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.tintColor = .white
+        iv.contentMode = .scaleAspectFit
+        // 나는 최대한 작고 싶어 라는 우선순위 설정
+        iv.setContentHuggingPriority(.required, for: .horizontal)
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        return iv
+    }()
+    
+    private lazy var countLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.hcFont(.semiBold, size: 15)
+        label.textColor = .mainWhite
+        label.backgroundColor = .clear
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private lazy var hStack: UIStackView = {
+        let hstack = UIStackView(arrangedSubviews: [leftImageView, countLabel])
+        hstack.axis = .horizontal
+        hstack.spacing = 10
+        hstack.alignment = .center
+        hstack.isUserInteractionEnabled = false
+        hstack.translatesAutoresizingMaskIntoConstraints = false
+        return hstack
+    }()
+    
+    init(image: UIImage, count: Int) {
+        super.init(frame: .zero)
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.leftImageView.image = image
+        self.countLabel.text = String(count)
+        makeUI()
+        setupConstraints()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func makeUI() {
+        self.backgroundColor = .darkGray
+        self.layer.cornerRadius = 15
+        self.clipsToBounds = true
+    }
+    
+    private func setupConstraints() {
+        self.addSubview(hStack)
+        NSLayoutConstraint.activate([
+
+            // 위치
+            hStack.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            hStack.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            
+            // 크기
+            hStack.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10)
+        ])
+    }
+}
+
+#Preview {
+    PostDetailViewController(homeViewModel: HomeViewModel(loginUsecase: StubLoginUsecase(), groupUsecase: StubGroupUsecase(), userRelay: .init(value: User.empty(loginPlatform: .kakao))), post: .samplePosts[0])
 }
 
 /*

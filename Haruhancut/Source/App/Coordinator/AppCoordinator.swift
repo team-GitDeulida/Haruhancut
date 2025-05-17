@@ -204,6 +204,12 @@ final class HomeCoordinator: Coordinator {
         navigationController.pushViewController(cameraViewController, animated: true)
     }
     
+    func startPostDetail(post: Post) {
+        let postDetailViewController = PostDetailViewController(homeViewModel: homeViewModel, post: post)
+        postDetailViewController.coordinator = self
+        navigationController.pushViewController(postDetailViewController, animated: true)
+    }
+    
     func showLogin() {
         finishFlow() // 현재 흐름 종료(자신을 부모에서 제거
         if let appCoordinator = parentCoordinator as? AppCoordinator {
