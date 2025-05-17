@@ -10,6 +10,9 @@ import RxSwift
 
 final class PostCommentViewController: UIViewController {
     
+    // 키보드 가림 해결을 위한 bottom constraint속성
+    private var chatTextViewBottomConstraint: NSLayoutConstraint?
+    
     private let homeViewModel: HomeViewModel
     private let post: Post
     private let disposeBag = DisposeBag()
@@ -31,6 +34,12 @@ final class PostCommentViewController: UIViewController {
         return tableView
     }()
     
+    private lazy var chatTextView: CommentTextView = {
+        let textView = CommentTextView()
+        textView.isScrollEnabled = false // 초기 스크롤 불가능(4줄 이상부터 가능)
+        return textView
+    }()
+    
     init(homeViewModel: HomeViewModel, post: Post) {
         self.homeViewModel = homeViewModel
         self.post = post
@@ -49,6 +58,9 @@ final class PostCommentViewController: UIViewController {
         configureTableView()
         configureUI()
         bindViewModel()
+        
+        chatTextView.delegate = self
+        registerForKeyboardNotifications()
     }
     
     private func configureTableView() {
@@ -58,7 +70,7 @@ final class PostCommentViewController: UIViewController {
     private func configureUI() {
         
         // MARK: - 테이블뷰 관련
-        [headerLabel, tableView].forEach {
+        [headerLabel, tableView, chatTextView].forEach {
             view.addSubview($0)
         }
         
@@ -71,7 +83,23 @@ final class PostCommentViewController: UIViewController {
             tableView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 16),
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            tableView.bottomAnchor.constraint(equalTo: chatTextView.topAnchor)
+        ])
+        
+        let test = (chatTextView.font?.lineHeight ?? 16) + chatTextView.textContainerInset.top + chatTextView.textContainerInset.bottom
+        
+        chatTextViewBottomConstraint = chatTextView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
+        chatTextViewBottomConstraint?.isActive = true
+        
+        NSLayoutConstraint.activate([
+            // 위치
+            // chatTextView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
+            chatTextView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            // 크기
+            chatTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
+            chatTextView.heightAnchor.constraint(equalToConstant: test)
+            // chatTextView.heightAnchor.constraint(equalToConstant: 31.6)
         ])
     }
     
@@ -123,11 +151,9 @@ final class PostCommentViewController: UIViewController {
     }
 }
 
-
-
 extension PostCommentViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        post.comments.count
+        comments.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -158,3 +184,64 @@ extension ReuseIdentifiable {
 }
 
 extension UITableViewCell: ReuseIdentifiable {}
+
+#Preview {
+    PostCommentViewController(homeViewModel: HomeViewModel(loginUsecase: StubLoginUsecase(), groupUsecase: StubGroupUsecase(), userRelay: .init(value: User.empty(loginPlatform: .kakao))), post: .samplePosts[0])
+}
+
+extension PostCommentViewController: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        let size = CGSize(width: view.frame.width, height: .infinity)
+        let estimatedSize = textView.sizeThatFits(size)
+        
+        // estimatedSize
+        // 1줄일 때 31.6
+        // 2줄일 때 47.3
+        // 3줄일 때 62.6
+        
+        if estimatedSize.height > 65 {
+                textView.isScrollEnabled = true
+                return
+        } else {
+            textView.isScrollEnabled = false
+
+            // 레이아웃 중 height 수정
+            textView.constraints.forEach { constraint in
+                if constraint.firstAttribute == .height {
+                    constraint.constant = estimatedSize.height
+                }
+            }
+        }
+    }
+}
+
+// MARK: - 키보드 알림
+extension PostCommentViewController {
+    private func registerForKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillShow),
+                                               name: UIResponder.keyboardWillShowNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillHide),
+                                               name: UIResponder.keyboardWillHideNotification,
+                                               object: nil)
+    }
+    
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+        let bottomInset = keyboardFrame.height - view.safeAreaInsets.bottom
+        chatTextViewBottomConstraint?.constant = -bottomInset - 10
+        
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        chatTextViewBottomConstraint?.constant = -10
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
+    }
+}

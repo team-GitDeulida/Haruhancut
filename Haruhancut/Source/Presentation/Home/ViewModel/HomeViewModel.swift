@@ -98,7 +98,6 @@ final class HomeViewModel {
             .disposed(by: disposeBag)
     }
     
-    
     /// 서버의 데이터를 실시간으로 관찰
     /// - Parameter groupId: 그룹 Id
     private func observeGroupRealtime(groupId: String) {
@@ -124,4 +123,5 @@ final class HomeViewModel {
     }
 
 }
+
 

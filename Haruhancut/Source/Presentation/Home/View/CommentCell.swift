@@ -43,7 +43,7 @@ final class CommentCell: UITableViewCell {
         let stack = UIStackView(arrangedSubviews: [profileImageView, vStack])
         stack.axis = .horizontal
         stack.spacing = 12
-        stack.alignment = .leading
+        stack.alignment = .center
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()

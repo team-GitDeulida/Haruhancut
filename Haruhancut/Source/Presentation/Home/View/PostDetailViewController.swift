@@ -33,7 +33,7 @@ final class PostDetailViewController: UIViewController {
         imageView.kf.setImage(with: url)
     }
     
-    // MARK: - UI Comoinent
+    // MARK: - UI Component
     // 이미지 뷰: 셀의 배경 이미지를 보여줌
     private lazy var imageView: UIImageView = {
         let iv = UIImageView()
@@ -98,6 +98,19 @@ final class PostDetailViewController: UIViewController {
     }
 }
 
+
+
+//#Preview {
+//    PostDetailViewController(homeViewModel: HomeViewModel(loginUsecase: StubLoginUsecase(), groupUsecase: StubGroupUsecase(), userRelay: .init(value: User.empty(loginPlatform: .kakao))), post: .samplePosts[0])
+//}
+
+
 #Preview {
-    PostDetailViewController(homeViewModel: HomeViewModel(loginUsecase: StubLoginUsecase(), groupUsecase: StubGroupUsecase(), userRelay: .init(value: User.empty(loginPlatform: .kakao))), post: .samplePosts[0])
+    let stub = HomeViewModel(
+        loginUsecase: StubLoginUsecase(),
+        groupUsecase: StubGroupUsecase(),
+        userRelay: .init(value: User.empty(loginPlatform: .kakao))
+    )
+    stub.posts.accept(Post.samplePosts) // ✅ 댓글 포함된 샘플 데이터 주입
+    return PostDetailViewController(homeViewModel: stub, post: Post.samplePosts[0])
 }
