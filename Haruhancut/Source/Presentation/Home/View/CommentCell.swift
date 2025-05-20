@@ -30,8 +30,17 @@ final class CommentCell: UITableViewCell {
         return iv
     }()
     
+    private lazy var nicknameTimeHStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [nicknameLabel, timeLabel])
+        stack.axis = .horizontal
+        stack.spacing = 12
+        stack.alignment = .center
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
+    
     private lazy var vStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [nicknameLabel, contentLabel])
+        let stack = UIStackView(arrangedSubviews: [nicknameTimeHStack, contentLabel])
         stack.axis = .vertical
         stack.spacing = 4
         stack.alignment = .leading
@@ -50,6 +59,12 @@ final class CommentCell: UITableViewCell {
     
     private lazy var nicknameLabel: HCLabel = {
         let label = HCLabel(type: .commentAuther(text: "닉네임1"))
+        return label
+    }()
+    
+    private lazy var timeLabel: HCLabel = {
+        let label = HCLabel(type: .commentContent(text: "1분 전"))
+        label.textColor = .gray
         return label
     }()
     
@@ -75,13 +90,15 @@ final class CommentCell: UITableViewCell {
             hStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),
             hStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
             hStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-            hStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
+            hStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
     }
     
+    // 셀에 표시할 내용 정의
     func configure(comment: Comment) {
-        nicknameLabel.text = comment.nickname
-        contentLabel.text = comment.text
+        nicknameLabel.text = comment.nickname                    // 작성자
+        contentLabel.text = comment.text                         // 댓글 내용
+        timeLabel.text = comment.createdAt.toRelativeString()    // "몇분 전", "몇시간 전" 표시
     }
 }
 
@@ -114,3 +131,9 @@ struct CommentCell_PreviewProvider_Previews: PreviewProvider {
     }
 }
 #endif
+
+#Preview {
+    let previewPost = Post.samplePosts[1]
+    let stubVM = StubHomeViewModel(previewPost: previewPost)
+    PostCommentViewController(homeViewModel: stubVM, post: previewPost)
+}

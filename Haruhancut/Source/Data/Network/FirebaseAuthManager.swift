@@ -175,45 +175,18 @@ extension FirebaseAuthManager {
         }
     }
 
-
-    func fetchUserInfo_보류() -> Observable<User?> {
-        return Observable.create { observer in
-            guard let uid = Auth.auth().currentUser?.uid else {
-                print("🔸 로그인된 유저 없음")
-                observer.onNext(nil)
-                observer.onCompleted()
-                return Disposables.create()
-            }
-
-            let userRef = self.databaseRef.child("users").child(uid)
-            
-            userRef.observeSingleEvent(of: .value) { snapshot in
-                guard let value = snapshot.value else {
-                    observer.onNext(nil)
-                    observer.onCompleted()
-                    return
-                }
-                
-                do {
-                    let data = try JSONSerialization.data(withJSONObject: value, options: [])
-                    let dto = try JSONDecoder().decode(UserDTO.self, from: data)
-                    let user = dto.toModel()
-                    observer.onNext(user)
-                } catch {
-                    print("❌ 유저 디코딩 실패: \(error.localizedDescription)")
-                    observer.onNext(nil)
-                }
-                observer.onCompleted()
-            }
-            
-            return Disposables.create()
-        }
-    }
 }
 
 // MARK: - 제네릭 함수
 extension FirebaseAuthManager {
     
+    /// Firebase Realtime Database의 해당 경로에 값을 저장합니다.
+    /// - 해당 경로에 데이터가 존재하지 않으면 **새로 추가**
+    /// - 해당 경로에 데이터가 존재하면 **기존 데이터를 덮어쓰기(Overwrite)**
+    ///
+    /// 예: path = "groups/{groupId}/postsByDate/{date}/{postId}/comments/{commentId}"
+    /// - 이미 같은 commentId가 있으면, 해당 댓글을 새로 덮어씀 (기존 내용 삭제 후 새로 저장)
+    ///
     /// Create or Overwrite
     /// - Parameters:
     ///   - path: 경로
@@ -241,7 +214,27 @@ extension FirebaseAuthManager {
         }
     }
     
-    /// Read
+    
+    /// Delete
+    /// - Parameter path: 삭제할 Firebase realtime 데이터 경로
+    /// - Returns: 삭제 성공 여부 방출하는 Observable<Bool>
+    func deleteValue(path: String) -> Observable<Bool> {
+        return Observable.create { observer in
+            self.databaseRef.child(path).removeValue { error, _ in
+                if let error = error {
+                    print("❌ deleteValue 실패: \(error.localizedDescription)")
+                    observer.onNext(false)
+                } else {
+                    print("✅ deleteValue 성공: \(path)")
+                    observer.onNext(true)
+                }
+                observer.onCompleted()
+            }
+            return Disposables.create()
+        }
+    }
+    
+    /// Read - 1회 요청
     /// - Parameters:
     ///   - path: 경로
     ///   - type: 값
@@ -254,7 +247,7 @@ extension FirebaseAuthManager {
                     return
                 }
                 print("🔥 observeValue snapshot.value = \(value)")
-
+                
                 do {
                     let data = try JSONSerialization.data(withJSONObject: value, options: [])
                     let decoded = try JSONDecoder().decode(T.self, from: data)
@@ -267,27 +260,31 @@ extension FirebaseAuthManager {
             return Disposables.create()
         }
     }
+
     
-    /// Create or Overwrite
+    /// Firebase Realtime Database의 해당 경로에 있는 데이터를 일부 필드만 병합 업데이트합니다.
+    /// - 기존 데이터는 유지하면서, 전달한 값의 필드만 갱신됩니다.
+    ///
+    /// 예: 댓글에 'text'만 수정할 때 유용
+    ///
     /// - Parameters:
-    ///   - path: 경로
-    ///   - value: 값
-    /// - Returns: Observable<Bool>
-    func setValue_save<T: Encodable>(path: String, value: T) -> Observable<Bool> {
+    ///   - path: 업데이트할 Firebase 경로
+    ///   - value: 업데이트할 일부 필드를 가진 값 (Encodable → Dictionary로 변환됨)
+    /// - Returns: 업데이트 성공 여부를 방출하는 Observable<Bool>
+    func updateValue<T: Encodable>(path: String, value: T) -> Observable<Bool> {
         return Observable.create { observer in
-            
             guard let dict = value.toDictionary() else {
                 observer.onNext(false)
                 observer.onCompleted()
                 return Disposables.create()
             }
             
-            
-            self.databaseRef.child(path).setValue(dict) { error, _ in
+            self.databaseRef.child(path).updateChildValues(dict) { error, _ in
                 if let error = error {
-                    print("🔥 setValue 실패: \(error.localizedDescription)")
+                    print("❌ updateValue 실패: \(error.localizedDescription)")
                     observer.onNext(false)
                 } else {
+                    print("✅ updateValue 성공: \(path)")
                     observer.onNext(true)
                 }
                 observer.onCompleted()
@@ -297,39 +294,8 @@ extension FirebaseAuthManager {
         }
     }
     
-    /// Read
-    /// - Parameters:
-    ///   - path: 경로
-    ///   - type: 값
-    /// - Returns: Observable<T>
-    func observeValue_save<T: Decodable>(path: String, type: T.Type) -> Observable<T> {
-        return Observable.create { observer in
-            self.databaseRef.child(path).observeSingleEvent(of: .value) { snapshot in
-                guard let value = snapshot.value else {
-                    observer.onError(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "값이 존재하지 않음"]))
-                    return
-                }
-                
-                /*
-                 guard let dict = value.toDictionary() else {
-                 observer.onNext(false)
-                 observer.onCompleted()
-                 return Disposables.create()
-                 }
-                 */
-                
-                do {
-                    let data = try JSONSerialization.data(withJSONObject: value, options: [])
-                    let decoded = try JSONDecoder().decode(T.self, from: data)
-                    observer.onNext(decoded)
-                } catch {
-                    observer.onError(error)
-                }
-                observer.onCompleted()
-            }
-            return Disposables.create()
-        }
-    }
+   
+
 }
 
 // MARK: - 그룹 관련
@@ -421,7 +387,7 @@ extension FirebaseAuthManager {
 // MARK: - 실시간 스냅샷 관련
 extension FirebaseAuthManager {
     
-    
+    /// 실시간 스냅샷 감지
     /// Firebase Realtime Database에서 특정 경로(path)의 데이터를 **실시간으로 관찰**합니다.
     /// 해당 경로의 데이터가 변경될 때마다 최신 데이터를 가져와 스트림으로 방출합니다.
     /// - Parameters:
@@ -452,3 +418,114 @@ extension FirebaseAuthManager {
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+func fetchUserInfo_보류() -> Observable<User?> {
+    return Observable.create { observer in
+        guard let uid = Auth.auth().currentUser?.uid else {
+            print("🔸 로그인된 유저 없음")
+            observer.onNext(nil)
+            observer.onCompleted()
+            return Disposables.create()
+        }
+
+        let userRef = self.databaseRef.child("users").child(uid)
+        
+        userRef.observeSingleEvent(of: .value) { snapshot in
+            guard let value = snapshot.value else {
+                observer.onNext(nil)
+                observer.onCompleted()
+                return
+            }
+            
+            do {
+                let data = try JSONSerialization.data(withJSONObject: value, options: [])
+                let dto = try JSONDecoder().decode(UserDTO.self, from: data)
+                let user = dto.toModel()
+                observer.onNext(user)
+            } catch {
+                print("❌ 유저 디코딩 실패: \(error.localizedDescription)")
+                observer.onNext(nil)
+            }
+            observer.onCompleted()
+        }
+        
+        return Disposables.create()
+    }
+}
+
+
+/// Create or Overwrite
+/// - Parameters:
+///   - path: 경로
+///   - value: 값
+/// - Returns: Observable<Bool>
+func setValue_save<T: Encodable>(path: String, value: T) -> Observable<Bool> {
+    return Observable.create { observer in
+        
+        guard let dict = value.toDictionary() else {
+            observer.onNext(false)
+            observer.onCompleted()
+            return Disposables.create()
+        }
+        
+        
+        self.databaseRef.child(path).setValue(dict) { error, _ in
+            if let error = error {
+                print("🔥 setValue 실패: \(error.localizedDescription)")
+                observer.onNext(false)
+            } else {
+                observer.onNext(true)
+            }
+            observer.onCompleted()
+        }
+        
+        return Disposables.create()
+    }
+}
+
+/// Read
+/// - Parameters:
+///   - path: 경로
+///   - type: 값
+/// - Returns: Observable<T>
+func observeValue_save<T: Decodable>(path: String, type: T.Type) -> Observable<T> {
+    return Observable.create { observer in
+        self.databaseRef.child(path).observeSingleEvent(of: .value) { snapshot in
+            guard let value = snapshot.value else {
+                observer.onError(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "값이 존재하지 않음"]))
+                return
+            }
+            
+            /*
+             guard let dict = value.toDictionary() else {
+             observer.onNext(false)
+             observer.onCompleted()
+             return Disposables.create()
+             }
+             */
+            
+            do {
+                let data = try JSONSerialization.data(withJSONObject: value, options: [])
+                let decoded = try JSONDecoder().decode(T.self, from: data)
+                observer.onNext(decoded)
+            } catch {
+                observer.onError(error)
+            }
+            observer.onCompleted()
+        }
+        return Disposables.create()
+    }
+}
+*/

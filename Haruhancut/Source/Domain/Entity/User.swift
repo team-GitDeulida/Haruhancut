@@ -122,7 +122,7 @@ struct Post: Encodable {
     let imageURL: String
     let createdAt: Date
     let likeCount: Int
-    let comments: [String: Comment]
+    var comments: [String: Comment]
 }
 
 extension Post {

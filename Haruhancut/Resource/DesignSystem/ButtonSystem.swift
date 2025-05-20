@@ -231,6 +231,10 @@ final class HCCommentButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func setCount(_ count: Int) {
+        countLabel.text = "\(count)"
+    }
+    
     private func makeUI() {
         self.backgroundColor = .darkGray
         self.layer.cornerRadius = 15

@@ -12,7 +12,7 @@ import RxSwift
 final class PostDetailViewController: UIViewController {
     
     weak var coordinator: HomeCoordinator?
-    private let post: Post
+    private var post: Post
     
     private let homeViewModel: HomeViewModel
     private let disposeBag = DisposeBag()
@@ -45,7 +45,7 @@ final class PostDetailViewController: UIViewController {
     }()
     
     private lazy var commentButton: HCCommentButton = {
-        let button = HCCommentButton(image: UIImage(systemName: "message")!, count: post.comments.count)
+        let button = HCCommentButton(image: UIImage(systemName: "message")!, count: 0)
         return button
     }()
     
@@ -86,6 +86,7 @@ final class PostDetailViewController: UIViewController {
     
     // MARK: - Bind
     private func bindViewModel() {
+        // 버튼을 누르면 네비게이션 present 화면을 띄운다
         commentButton.rx.tap
             .asDriver()
             .drive(onNext: { [weak self] in
@@ -95,15 +96,26 @@ final class PostDetailViewController: UIViewController {
                 self.present(commentVC, animated: true)
             })
             .disposed(by: disposeBag)
+        
+        // 게시물 업데이트 감지 후 댓글 수 반영 및 이미지 갱신
+        homeViewModel.posts
+            // 1. viewModel의 posts중 post와 동일한 postId를 가진 게시물 찾기
+            .compactMap { posts in
+                posts.first(where: { $0.postId == self.post.postId })
+            }
+            // 2. 댓글 수 변경시만 downstream으로 이벤트 방출
+            .distinctUntilChanged({ $0.comments.count == $1.comments.count })
+            // 3. UI 업데이트이므로 Driver로 변환(메인스레드 보장)
+            .asDriver(onErrorDriveWith: .empty())
+            // 4. 최신 post로 갱신 및 UI 업데이트
+            .drive(onNext: { [weak self] updatedPost in
+                self?.post = updatedPost
+                self?.configure(with: updatedPost)
+                self?.commentButton.setCount(updatedPost.comments.count)
+            })
+            .disposed(by: disposeBag)
     }
 }
-
-
-
-//#Preview {
-//    PostDetailViewController(homeViewModel: HomeViewModel(loginUsecase: StubLoginUsecase(), groupUsecase: StubGroupUsecase(), userRelay: .init(value: User.empty(loginPlatform: .kakao))), post: .samplePosts[0])
-//}
-
 
 #Preview {
     let stub = HomeViewModel(

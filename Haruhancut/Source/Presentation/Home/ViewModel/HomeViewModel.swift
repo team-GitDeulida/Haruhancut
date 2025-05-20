@@ -9,7 +9,18 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-final class HomeViewModel {
+protocol HomeViewModelType {
+    var posts: BehaviorRelay<[Post]> { get }
+    var user: BehaviorRelay<User?> { get }
+    var group: BehaviorRelay<HCGroup?> { get }
+    
+    func transform() -> HomeViewModel.Output
+    func addComment(post: Post, text: String)
+    func deleteComment(post: Post, commentId: String)
+}
+
+
+final class HomeViewModel: HomeViewModelType {
     
     private let disposeBag = DisposeBag()
     private let loginUsecase: LoginUsecaseProtocol
@@ -61,7 +72,70 @@ final class HomeViewModel {
         return Output(posts: todayPosts, groupName: groupName)
     }
     
-    func fetchDefaultGroup() {
+    
+    /// 댓글 추가 함수
+    /// - Parameters:
+    ///   - post: 댓글을 작성할 게시물
+    ///   - text: 댓글 텍스트
+    func addComment(post: Post, text: String) {
+        // 유저 정보 없으면 리턴
+        guard let user = user.value else { return }
+        guard let groupId = group.value?.groupId else { return }
+        
+        let commentId = UUID().uuidString
+        let newComment = Comment(
+            commentId: commentId,
+            userId: user.uid,
+            nickname: user.nickname,
+            profileImageURL: user.profileImageURL,
+            text: text,
+            createdAt: Date()
+        )
+        
+        // 경로: groups/{groupId}/postsByDate/{날짜}/{postId}/comments/{commentId}
+        let dateKey = post.createdAt.toDateKey()
+        let path = "groups/\(groupId)/postsByDate/\(dateKey)/\(post.postId)/comments/\(commentId)"
+        let commentDTO = newComment.toDTO()
+
+        FirebaseAuthManager.shared.setValue(path: path, value: commentDTO)
+            .subscribe(onNext: { success in
+                if success {
+                    print("✅ 댓글 저장 성공")
+                    // ❌ posts.accept(newPosts) 는 하지 않음
+                    // 🔁 실시간 스냅샷이 알아서 posts를 갱신함
+                } else {
+                    print("❌ 댓글 저장 실패")
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+
+    /// 댓글 삭제 함수
+    /// - Parameters:
+    ///   - post: 댓글이 포함된 게시물
+    ///   - commentId: 삭제할 댓글 Id
+    func deleteComment(post: Post, commentId: String) {
+        guard let groupId = group.value?.groupId else { return }
+        
+        // 게시글 작성된 날짜를 키로 변환 (예: "2025-05-20")
+        let dateKey = post.createdAt.toDateKey()
+        
+        // 삭제할 댓글의 경로 구성
+        let path = "groups/\(groupId)/postsByDate/\(dateKey)/\(post.postId)/comments/\(commentId)"
+        
+        FirebaseAuthManager.shared.deleteValue(path: path)
+            .subscribe(onNext: { success in
+                if success {
+                    print("✅ 댓글 삭제 성공")
+
+                } else {
+                    print("❌ 댓글 삭제 실패")
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func fetchDefaultGroup() {
         if let cachedGroup = UserDefaultsManager.shared.loadGroup() {
             print("✅ homeVM - 캐시에서 불러온 그룹: \(cachedGroup)")
             self.group.accept(cachedGroup)
@@ -122,6 +196,57 @@ final class HomeViewModel {
             .disposed(by: disposeBag)
     }
 
+}
+
+final class StubHomeViewModel: HomeViewModelType {
+    
+    let posts: BehaviorRelay<[Post]>
+    let user: BehaviorRelay<User?>
+    let group: BehaviorRelay<HCGroup?>
+
+    init(previewPost: Post) {
+        self.posts = BehaviorRelay(value: [previewPost])
+        self.user = BehaviorRelay(value: User.empty(loginPlatform: .kakao))
+        self.group = BehaviorRelay(value: nil)
+    }
+
+    func transform() -> HomeViewModel.Output {
+        return HomeViewModel.Output(
+            posts: posts.asDriver(onErrorJustReturn: []),
+            groupName: group.map { $0?.groupName ?? "그룹 없음" }.asDriver(onErrorJustReturn: "그룹 없음")
+        )
+    }
+    
+    func addComment(post: Post, text: String) {
+        // 유저 정보 없으면 아무것도 안하고 리턴
+        guard let user = user.value else { return }
+        
+        // 현재 posts 배열 복사
+        var newPosts = posts.value
+        
+        // 댓글을 달 대상 post의 인덱스 찾기
+        guard let index = newPosts.firstIndex(where: { $0.postId == post.postId }) else { return }
+        
+        // 새로운 댓글 생성
+        let commentId = UUID().uuidString
+        let newComment = Comment(
+            commentId: commentId,
+            userId: user.uid,
+            nickname: user.nickname,
+            profileImageURL: user.profileImageURL,
+            text: text,
+            createdAt: Date()
+        )
+        
+        // 게시물에 댓글 추가
+        newPosts[index].comments[commentId] = newComment
+        
+        posts.accept(newPosts)
+    }
+    
+    func deleteComment(post: Post, commentId: String) {
+        ()
+    }
 }
 
 

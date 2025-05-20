@@ -4,6 +4,7 @@
 //
 //  Created by 김동현 on 4/16/25.
 //
+// 상대적인 시간 구하기 https://minwoostory.tistory.com/117
 
 import Foundation
 
@@ -17,6 +18,23 @@ extension Date {
         formatter.timeZone = TimeZone(identifier: "Asia/Seoul")
         formatter.dateFormat = "yyyy년 MM월 dd일"
         return formatter.string(from: self)
+    }
+    
+    /// Date -> String 포매팅
+    /// - Returns: String
+    func toDateKey() -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.timeZone = TimeZone(identifier: "Asia/Seoul")
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter.string(from: self)
+    }
+    
+    func toRelativeString() -> String {
+        let relativeFormatter = RelativeDateTimeFormatter()
+        relativeFormatter.locale = Locale(identifier: "ko_KR")
+        relativeFormatter.unitsStyle = .short // → "5분 전", "2시간 전", "3일 전"
+        return relativeFormatter.localizedString(for: self, relativeTo: Date())
     }
     
     // MARK: - static 함수 -> 날짜를 만들 때

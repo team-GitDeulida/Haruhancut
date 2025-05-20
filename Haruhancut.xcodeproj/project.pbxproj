@@ -10,6 +10,7 @@
 		DF0C249D2DACF65F00022AB0 /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0C249C2DACF65F00022AB0 /* UIViewController+.swift */; };
 		DF156B742DAD60E500918EE6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF156B732DAD60E500918EE6 /* User.swift */; };
 		DF156B762DAD610B00918EE6 /* UserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF156B752DAD610B00918EE6 /* UserDTO.swift */; };
+		DF1577722DDC4B7100BEE272 /* ChattingViewSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF1577712DDC4B7100BEE272 /* ChattingViewSystem.swift */; };
 		DF218C7C2DD8E7D1000B0A61 /* TextViewSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF218C7B2DD8E7D1000B0A61 /* TextViewSystem.swift */; };
 		DF2AE60A2DB218A7007779D9 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2AE6082DB218A7007779D9 /* HomeViewController.swift */; };
 		DF2AE60E2DB218C6007779D9 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2AE60C2DB218C6007779D9 /* HomeViewModel.swift */; };
@@ -87,6 +88,7 @@
 		DF0C249C2DACF65F00022AB0 /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
 		DF156B732DAD60E500918EE6 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		DF156B752DAD610B00918EE6 /* UserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDTO.swift; sourceTree = "<group>"; };
+		DF1577712DDC4B7100BEE272 /* ChattingViewSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChattingViewSystem.swift; sourceTree = "<group>"; };
 		DF218C7B2DD8E7D1000B0A61 /* TextViewSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewSystem.swift; sourceTree = "<group>"; };
 		DF2AE6082DB218A7007779D9 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		DF2AE60C2DB218C6007779D9 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
@@ -257,6 +259,7 @@
 				DF35040D2DB388B8002C1269 /* TextFieldSystem.swift */,
 				DF218C7B2DD8E7D1000B0A61 /* TextViewSystem.swift */,
 				DF35040F2DB39892002C1269 /* LabelSystem.swift */,
+				DF1577712DDC4B7100BEE272 /* ChattingViewSystem.swift */,
 			);
 			path = DesignSystem;
 			sourceTree = "<group>";
@@ -666,6 +669,7 @@
 				DF0C249D2DACF65F00022AB0 /* UIViewController+.swift in Sources */,
 				DF5F3E942D95C47700245C20 /* SceneDelegate.swift in Sources */,
 				DFF1CBE02DBAAEC800722B04 /* GroupEnterViewController.swift in Sources */,
+				DF1577722DDC4B7100BEE272 /* ChattingViewSystem.swift in Sources */,
 				DFDC82692DBD49D9003C597D /* GroupRepositoryProtocol.swift in Sources */,
 				DF2B5C962DD852FB0091B5F4 /* PostCommentViewController.swift in Sources */,
 			);
@@ -695,7 +699,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 30;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LGX4B4WC66;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -735,7 +739,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 30;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LGX4B4WC66;
 				GENERATE_INFOPLIST_FILE = YES;

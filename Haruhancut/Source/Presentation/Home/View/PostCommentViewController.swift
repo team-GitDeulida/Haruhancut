@@ -13,10 +13,10 @@ final class PostCommentViewController: UIViewController {
     // 키보드 가림 해결을 위한 bottom constraint속성
     private var chatTextViewBottomConstraint: NSLayoutConstraint?
     
-    private let homeViewModel: HomeViewModel
+    private let homeViewModel: HomeViewModelType
     private let post: Post
     private let disposeBag = DisposeBag()
-    private var comments: [(commentId: String, comment: Comment)] = []
+    private var comments: [(commentId: String, comment: Comment)] = [] // 튜플
 
     // MARK: - UI Component
     
@@ -34,17 +34,17 @@ final class PostCommentViewController: UIViewController {
         return tableView
     }()
     
-    private lazy var chatTextView: CommentTextView = {
-        let textView = CommentTextView()
-        textView.isScrollEnabled = false // 초기 스크롤 불가능(4줄 이상부터 가능)
-        return textView
+    private lazy var chattingView: ChattingView = {
+        let chatView = ChattingView()
+        chatView.sendButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
+        return chatView
     }()
     
-    init(homeViewModel: HomeViewModel, post: Post) {
+    init(homeViewModel: HomeViewModelType, post: Post) {
         self.homeViewModel = homeViewModel
         self.post = post
         super.init(nibName: nil, bundle: nil)
-        print(post)
+        // print(post)
     }
     
     required init?(coder: NSCoder) {
@@ -56,23 +56,26 @@ final class PostCommentViewController: UIViewController {
         view.backgroundColor = .Gray700
         
         configureTableView()
-        configureUI()
+        makeUI()
+        constraints()
         bindViewModel()
-        
-        chatTextView.delegate = self
         registerForKeyboardNotifications()
     }
     
     private func configureTableView() {
         self.tableView.dataSource = self
+        self.tableView.delegate = self
     }
     
-    private func configureUI() {
+    private func makeUI() {
         
-        // MARK: - 테이블뷰 관련
-        [headerLabel, tableView, chatTextView].forEach {
+        [headerLabel, tableView, chattingView].forEach {
             view.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
         }
+    }
+    
+    private func constraints() {
         
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
@@ -83,23 +86,15 @@ final class PostCommentViewController: UIViewController {
             tableView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 16),
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: chatTextView.topAnchor)
+            tableView.bottomAnchor.constraint(equalTo: chattingView.topAnchor)
         ])
         
-        let test = (chatTextView.font?.lineHeight ?? 16) + chatTextView.textContainerInset.top + chatTextView.textContainerInset.bottom
-        
-        chatTextViewBottomConstraint = chatTextView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
+        chatTextViewBottomConstraint = chattingView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
         chatTextViewBottomConstraint?.isActive = true
-        
+
         NSLayoutConstraint.activate([
-            // 위치
-            // chatTextView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
-            chatTextView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
-            // 크기
-            chatTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
-            chatTextView.heightAnchor.constraint(equalToConstant: test)
-            // chatTextView.heightAnchor.constraint(equalToConstant: 31.6)
+            chattingView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            chattingView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
         ])
     }
     
@@ -149,6 +144,15 @@ final class PostCommentViewController: UIViewController {
         
         modalPresentationStyle = .pageSheet
     }
+    
+    @objc private func sendButtonTapped() {
+        let text = chattingView.text
+        guard !text.isEmpty else { return }
+        homeViewModel.addComment(post: post, text: text)
+        
+        // 입력창 초기화
+        chattingView.clearInput()
+    }
 }
 
 extension PostCommentViewController: UITableViewDataSource {
@@ -171,49 +175,37 @@ extension PostCommentViewController: UITableViewDataSource {
     }
 }
 
-protocol ReuseIdentifiable {
-    // 프로토콜에서 로직을 정의할 수 없어서 가져올 수 있도록 설정
-    static var reuseIdentifier: String { get }
-}
+extension PostCommentViewController: UITableViewDelegate {
+    // 스와이프 액션 처리
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let comment = comments[indexPath.row]
+        
+        // 본인 댓글이 아닐 경우 삭제 금지
+        guard comment.comment.userId == homeViewModel.user.value?.uid else {
+            return nil
+        }
+        
+        // 삭제 액션 정의
+        let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { [weak self] (_, _, completionHandler) in
+            guard let self = self else { return }
+            
+            // ViewModel 통해 댓글 삭제 요청
+            self.homeViewModel.deleteComment(post: self.post, commentId: comment.comment.commentId)
+            
+            // UI에서 즉시 삭제 (스냅샷 옵저버가 갱신해주기 때문에 생략해도 됨)
+            self.comments.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            
+            completionHandler(true)
+        }
 
-extension ReuseIdentifiable {
-    // 로직에 대한 정의는 Extension에서 간능
-    static var reuseIdentifier: String {
-        return String(describing: Self.self)
+        let config = UISwipeActionsConfiguration(actions: [deleteAction])
+        config.performsFirstActionWithFullSwipe = true // 풀 스와이프 허용 여부
+        return config
     }
 }
 
 extension UITableViewCell: ReuseIdentifiable {}
-
-#Preview {
-    PostCommentViewController(homeViewModel: HomeViewModel(loginUsecase: StubLoginUsecase(), groupUsecase: StubGroupUsecase(), userRelay: .init(value: User.empty(loginPlatform: .kakao))), post: .samplePosts[0])
-}
-
-extension PostCommentViewController: UITextViewDelegate {
-    func textViewDidChange(_ textView: UITextView) {
-        let size = CGSize(width: view.frame.width, height: .infinity)
-        let estimatedSize = textView.sizeThatFits(size)
-        
-        // estimatedSize
-        // 1줄일 때 31.6
-        // 2줄일 때 47.3
-        // 3줄일 때 62.6
-        
-        if estimatedSize.height > 65 {
-                textView.isScrollEnabled = true
-                return
-        } else {
-            textView.isScrollEnabled = false
-
-            // 레이아웃 중 height 수정
-            textView.constraints.forEach { constraint in
-                if constraint.firstAttribute == .height {
-                    constraint.constant = estimatedSize.height
-                }
-            }
-        }
-    }
-}
 
 // MARK: - 키보드 알림
 extension PostCommentViewController {
@@ -243,5 +235,23 @@ extension PostCommentViewController {
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
         }
+    }
+}
+
+#Preview {
+    let previewPost = Post.samplePosts[1]
+    let stubVM = StubHomeViewModel(previewPost: previewPost)
+    PostCommentViewController(homeViewModel: stubVM, post: previewPost)
+}
+
+protocol ReuseIdentifiable {
+    // 프로토콜에서 로직을 정의할 수 없어서 가져올 수 있도록 설정
+    static var reuseIdentifier: String { get }
+}
+
+extension ReuseIdentifiable {
+    // 로직에 대한 정의는 Extension에서 간능
+    static var reuseIdentifier: String {
+        return String(describing: Self.self)
     }
 }
