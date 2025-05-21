@@ -93,6 +93,7 @@ struct HCGroup: Encodable {
     let groupName: String
     let createdAt: Date
     let hostUserId: String
+    let inviteCode: String
     var members: [String]
     // var posts: [Post]
     var postsByDate: [String: [Post]]
@@ -105,7 +106,8 @@ extension HCGroup {
         return HCGroup(groupId: "testGroupId",
                  groupName: "테스트 가족바",
                  createdAt: .koreanDate(year: 2025, month: 5, day: 1),
-                 hostUserId: "index",
+                       hostUserId: "index",
+                       inviteCode: "1234",
                  members: [
                      "123"
                  ],
@@ -220,6 +222,7 @@ extension HCGroup {
             groupName: groupName,
             createdAt: formatter.string(from: createdAt),
             hostUserId: hostUserId,
+            inviteCode: inviteCode,
             members: members,
             //members: members.map { $0.toDTO() },
             postsByDate: postsDTO
@@ -312,6 +315,7 @@ struct HCGroupDTO: Codable {
     let groupName: String?
     let createdAt: String?
     let hostUserId: String?
+    let inviteCode: String?
     let members: [String]?
     var postsByDate: [String: [String: PostDTO]]? // postId가 key인 딕셔너리
 }
@@ -325,7 +329,8 @@ extension HCGroupDTO {
             let groupName = groupName,
             let createdAtStr = createdAt,
             let createdAt = formatter.date(from: createdAtStr),
-            let hostUserId = hostUserId
+            let hostUserId = hostUserId,
+            let inviteCode = inviteCode
         else {
             return nil
         }
@@ -346,6 +351,7 @@ extension HCGroupDTO {
             groupName: groupName,
             createdAt: createdAt,
             hostUserId: hostUserId,
+            inviteCode: inviteCode,
             members: memberIds,
             postsByDate: postsByDate
         )

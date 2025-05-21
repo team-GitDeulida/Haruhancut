@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             RxKakaoSDK.initSDK(appKey: nativeAppKey, loggingEnable: false)
         }
  
-        // 의존성 주입
+        // 의존성 주입ㅇ
         registerDependencies()
         
         return true

@@ -93,12 +93,37 @@ final class GroupEnterViewController: UIViewController {
                 self.view.endEditing(true)
             })
             .disposed(by: disposeBag)
+        
+        // 초대 코드 입력 후 완료 버튼 클릭
+        let input = GroupViewModel.GroupEnterInput(
+            inviteCodeText: textField.rx.text.orEmpty.asObservable(),
+            endButtonTapped: endButton.rx.tap.asObservable())
+        
+        let output = groupViewModel.transformEnter(input: input)
+        output.enterResult
+            .drive(onNext: { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .success:
+                    self.coordinator?.startHome()
+                case .failure:
+                    self.showErrorAlert(message: "초대 코드가 유효하지 않습니다.")
+                }
+            })
+            .disposed(by: disposeBag)
     }
     
     // MARK: 외부 터치 시 키보드 내리기
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         view.endEditing(true)
+    }
+    
+    // MARK: - Alert
+    private func showErrorAlert(message: String) {
+        let alert = UIAlertController(title: "입장 실패", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default))
+        present(alert, animated: true)
     }
 }
 

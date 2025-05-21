@@ -16,7 +16,7 @@ final class GroupRepository: GroupRepositoryProtocol {
         self.firebaseAuthManager = firebaseAuthManager
     }
     
-    func createGroup(groupName: String) -> Observable<Result<String, GroupError>> {
+    func createGroup(groupName: String) -> Observable<Result<(groupId: String, inviteCode: String), GroupError>> {
         firebaseAuthManager.createGroup(groupName: groupName)
     }
     
@@ -26,5 +26,9 @@ final class GroupRepository: GroupRepositoryProtocol {
     
     func fetchGroup(groupId: String) -> Observable<Result<HCGroup, GroupError>> {
         firebaseAuthManager.fetchGroup(groupId: groupId)
+    }
+    
+    func joinGroup(inviteCode: String) -> RxSwift.Observable<Result<HCGroup, GroupError>> {
+        firebaseAuthManager.joinGroup(inviteCode: inviteCode)
     }
 }

@@ -55,7 +55,10 @@ final class GroupViewModel {
                 return groupUsecase.createGroup(groupName: groupName)
                     .flatMapLatest { result -> Observable<Result<String, GroupError>> in
                         switch result {
-                        case .success(let groupId):
+                        case .success(let groupInfo):
+                            let groupId = groupInfo.groupId
+                            let inviteCode = groupInfo.inviteCode
+                            
                             /// 그룹 만들기 성공 -> 유저 업데이트 시도
                             return self.groupUsecase.updateUserGroupId(groupId: groupId)
                                 .map { updateResult in
@@ -72,7 +75,9 @@ final class GroupViewModel {
                                                 groupId: groupId,
                                                 groupName: groupName,
                                                 createdAt: Date(),
-                                                hostUserId: currentUser.uid, members: [],
+                                                hostUserId: currentUser.uid,
+                                                inviteCode: inviteCode,
+                                                members: [],
                                                 postsByDate: [:])
 //                                            self.loginViewModel.group.accept(group)
                                             self.homeViewModel.group.accept(group)
@@ -99,5 +104,46 @@ final class GroupViewModel {
             .asDriver(onErrorJustReturn: false) // 에러 발생 시에도 false를 대신 방출
         
         return GroupHostOutput(hostResult: hostResult, isGroupnameVaild: isGroupnameVaild)
+    }
+}
+
+extension GroupViewModel {
+    
+    struct GroupEnterInput {
+        let inviteCodeText: Observable<String>
+        let endButtonTapped: Observable<Void>
+    }
+
+    struct GroupEnterOutput {
+        let enterResult: Driver<Result<Void, GroupError>>
+    }
+    
+    func transformEnter(input: GroupEnterInput) -> GroupEnterOutput {
+        let result = input.endButtonTapped
+            .withLatestFrom(input.inviteCodeText)
+            .flatMapLatest { [weak self] inviteCode -> Observable<Result<Void, GroupError>> in
+                guard let self = self else {
+                    return .just(.failure(.fetchGroupError))
+                }
+                return self.groupUsecase.joinGroup(inviteCode: inviteCode)
+                    .map { joinResult in
+                        switch joinResult {
+                        case .success(let group):
+                            if var user = self.loginViewModel.user.value {
+                                user.groupId = group.groupId
+                                self.loginViewModel.user.accept(user)
+                                UserDefaultsManager.shared.saveUser(user)
+                            }
+                            self.homeViewModel.group.accept(group)
+                            UserDefaultsManager.shared.saveGroup(group)
+                            return .success(())
+                        case .failure(let error):
+                            return .failure(error)
+                        }
+                    }
+            }
+            .asDriver(onErrorJustReturn: .failure(.fetchGroupError))
+        
+        return GroupEnterOutput(enterResult: result)
     }
 }

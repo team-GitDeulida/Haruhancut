@@ -145,7 +145,6 @@ final class GroupViewController: UIViewController {
             }
             .disposed(by: disposeBag)
     }
-
 }
 
 #Preview {
