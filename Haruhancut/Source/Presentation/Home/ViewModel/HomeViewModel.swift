@@ -83,6 +83,9 @@ final class HomeViewModel: HomeViewModelType {
     
     /// 포스트 추가 함수
     func uploadPost(image: UIImage) -> Observable<Bool> {
+        // 앨범에 사진 저장
+        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+        
         guard let user = user.value,
               let groupId = group.value?.groupId else {
             print("❌ 유저 또는 그룹 정보 없음")

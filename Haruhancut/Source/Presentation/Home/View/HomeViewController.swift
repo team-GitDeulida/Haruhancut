@@ -232,6 +232,12 @@ extension HomeViewController {
               indexPath.item < homeViewModel.posts.value.count else { return }
 
         let post = homeViewModel.posts.value[indexPath.item]
+        
+        // 다른 사람 포스트면 삭제 불가
+        guard post.userId == homeViewModel.user.value?.uid else {
+            print("❌ 다른 사람의 게시물은 삭제할 수 없습니다.")
+            return
+        }
 
         // 삭제 알림 표시
         let alert = UIAlertController(title: "삭제 확인",

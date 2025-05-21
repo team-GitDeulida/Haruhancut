@@ -39,12 +39,23 @@ final class ImagePreviewViewController: UIViewController {
         btn.addTarget(self, action: #selector(closePreview), for: .touchUpInside)
         return btn
     }()
+    
+    private lazy var saveButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setTitle("저장", for: .normal)
+        btn.setTitleColor(.white, for: .normal)
+        btn.titleLabel?.font = .boldSystemFont(ofSize: 18)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.addTarget(self, action: #selector(savePreview), for: .touchUpInside)
+        return btn
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
         view.addSubview(imageView)
         view.addSubview(closeButton)
+        view.addSubview(saveButton)
 
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -52,13 +63,31 @@ final class ImagePreviewViewController: UIViewController {
             imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
+            // 닫기 버튼
             closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            
+            // 저장 버튼
+            saveButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20)
+            
         ])
     }
 
     @objc private func closePreview() {
         dismiss(animated: true)
+    }
+    
+    @objc private func savePreview() {
+        // 앨범에 사진 저장
+        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+        
+        // 저장 알림 표시
+        let alert = UIAlertController(title: "사진 저장",
+                                      message: "사진이 앨범에 저장되었습니다.",
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default))
+        present(alert, animated: true)
     }
 }
 
