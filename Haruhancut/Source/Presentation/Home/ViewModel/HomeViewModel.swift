@@ -29,6 +29,14 @@ final class HomeViewModel: HomeViewModelType {
     let user = BehaviorRelay<User?>(value: nil)
     let group = BehaviorRelay<HCGroup?>(value: nil)
     let posts = BehaviorRelay<[Post]>(value: [])
+
+    var didUserPostToday: Observable<Bool> {
+        return Observable.combineLatest(user, posts)
+            .map { user ,posts in
+                guard let uid = user?.uid else { return false }
+                return posts.contains { $0.isToday && $0.userId == uid }
+        }
+    }
     
     struct Output {
         let posts: Driver<[Post]>
@@ -74,7 +82,6 @@ final class HomeViewModel: HomeViewModelType {
     }
     
     /// 포스트 추가 함수
-    
     func uploadPost(image: UIImage) -> Observable<Bool> {
         guard let user = user.value,
               let groupId = group.value?.groupId else {
@@ -106,6 +113,32 @@ final class HomeViewModel: HomeViewModelType {
 
                 return FirebaseAuthManager.shared.setValue(path: dbPath, value: post.toDTO())
             }
+    }
+    
+    // 포스트 삭제 함수
+    func deletePost(_ post: Post) {
+        guard let groupId = group.value?.groupId else { return }
+
+        let dateKey = post.createdAt.toDateKey()
+        let dbPath = "groups/\(groupId)/postsByDate/\(dateKey)/\(post.postId)"
+        let storagePath = "groups/\(groupId)/images/\(post.postId).jpg"
+
+        // 1. DB에서 삭제
+        FirebaseAuthManager.shared.deleteValue(path: dbPath)
+            .flatMap { success -> Observable<Bool> in
+                guard success else { return .just(false) }
+                // 2. Storage에서도 삭제
+                return FirebaseStorageManager.shared.deleteImage(path: storagePath)
+            }
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { success in
+                if success {
+                    print("✅ 삭제 완료")
+                } else {
+                    print("❌ 삭제 실패")
+                }
+            })
+            .disposed(by: disposeBag)
     }
     
     /// 댓글 추가 함수

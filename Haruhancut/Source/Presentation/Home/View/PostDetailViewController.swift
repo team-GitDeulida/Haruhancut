@@ -41,6 +41,9 @@ final class PostDetailViewController: UIViewController {
         iv.clipsToBounds = true                     // 셀 밖 이미지 자르기
         iv.layer.cornerRadius = 15                  // 모서리 둥글게
         iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.isUserInteractionEnabled = true          // 터치 감지 가능하도록 설정
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapImage))
+        iv.addGestureRecognizer(tapGesture)
         return iv
     }()
     
@@ -114,6 +117,12 @@ final class PostDetailViewController: UIViewController {
                 self?.commentButton.setCount(updatedPost.comments.count)
             })
             .disposed(by: disposeBag)
+    }
+    
+    @objc private func didTapImage() {
+        let previewVC = ImagePreviewViewController(image: imageView.image!)
+        previewVC.modalPresentationStyle = .fullScreen
+        self.present(previewVC, animated: true)
     }
 }
 

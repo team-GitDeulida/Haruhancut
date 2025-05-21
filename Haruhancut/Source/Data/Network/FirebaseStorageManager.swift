@@ -54,4 +54,21 @@ extension FirebaseStorageManager {
             return Disposables.create()
         }
     }
+    
+    func deleteImage(path: String) -> Observable<Bool> {
+        return Observable.create { observer in
+            let ref = Storage.storage().reference().child(path)
+            ref.delete { error in
+                if let error = error {
+                    print("❌ 이미지 삭제 실패: \(error.localizedDescription)")
+                    observer.onNext(false)
+                } else {
+                    observer.onNext(true)
+                }
+                observer.onCompleted()
+            }
+            return Disposables.create()
+        }
+    }
 }
+

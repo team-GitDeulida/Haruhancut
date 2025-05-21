@@ -85,6 +85,7 @@ final class HomeViewController: UIViewController {
         makeUI()
         setupConstraints()
         bindViewModel()
+        setupLongPressGesture()
         print("✅ homeVC - \(homeViewModel.posts.value)")
     }
     
@@ -119,26 +120,28 @@ final class HomeViewController: UIViewController {
         
         // 포스트 터치 바인딩
         collectionView.rx.modelSelected(Post.self)
-            .observe(on: MainScheduler.instance)
-            .bind(onNext: { [weak self] post in
+            .asDriver()
+            .drive(onNext: { [weak self] post in
                 guard let self = self else { return }
                 self.startPostDetail(post: post)
-                print("✅ 셀 선택됨: \(post.postId)")
+                // print("✅ 셀 선택됨: \(post.postId)")
             })
             .disposed(by: disposeBag)
         
-        // 포스트 터치 바인딩(댓글창)
-//        collectionView.rx.modelSelected(Post.self)
-//            .observe(on: MainScheduler.instance)
-//            .bind(onNext: { post in
-//                let detailVC = PostCommentViewController(homeViewModel: self.homeViewModel, post: post)
-//                detailVC.modalPresentationStyle = .pageSheet
-//                self.present(detailVC, animated: true)
-//                print("✅ 셀 선택됨: \(post.postId)")
-//            })
-//            .disposed(by: disposeBag)
+        // 오늘 업로드 여부에 따라 카메라 버튼 활성회/비활성화
+        homeViewModel.didUserPostToday
+            .inverted() // 제일 하단 참고
+            .asDriver(onErrorJustReturn: false)
+            .drive(cameraBtn.rx.isEnabled)
+            .disposed(by: disposeBag)
         
-
+        
+        // 커메라 버튼 투명도 조절
+        homeViewModel.didUserPostToday
+            .map { $0 ? 0.3 : 1.0 } // ✅ Double 반환
+            .asDriver(onErrorJustReturn: 1.0)
+            .drive(cameraBtn.rx.alpha) // ✅ Double 바인딩이므로 inverted() 필요 없음
+            .disposed(by: disposeBag)
     }
     
     private func makeUI() {
@@ -214,6 +217,37 @@ final class HomeViewController: UIViewController {
     }
 }
 
+// 롱프레스 핸들러
+extension HomeViewController {
+    private func setupLongPressGesture() {
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+        collectionView.addGestureRecognizer(longPressGesture)
+    }
+
+    @objc private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
+        guard gesture.state == .began else { return } // 제스처가 시작될 때만 처리
+
+        let location = gesture.location(in: collectionView)
+        guard let indexPath = collectionView.indexPathForItem(at: location),
+              indexPath.item < homeViewModel.posts.value.count else { return }
+
+        let post = homeViewModel.posts.value[indexPath.item]
+
+        // 삭제 알림 표시
+        let alert = UIAlertController(title: "삭제 확인",
+                                      message: "이 사진을 삭제하시겠습니까?",
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        alert.addAction(UIAlertAction(title: "삭제", style: .destructive, handler: { [weak self] _ in
+            self?.homeViewModel.deletePost(post)
+        }))
+        present(alert, animated: true)
+    }
+    
+
+
+}
+
 extension UICollectionViewFlowLayout {
     /// 컬렉션 뷰 셀 크기를 자동으로 계산해주는 함수
     /// - Parameters:
@@ -233,4 +267,9 @@ extension UICollectionViewFlowLayout {
     HomeViewController(loginViewModel: LoginViewModel(loginUsecase: StubLoginUsecase()), homeViewModel: HomeViewModel(loginUsecase: StubLoginUsecase(), groupUsecase: StubGroupUsecase(), userRelay: .init(value: User.empty(loginPlatform: .kakao))))
 }
 
-
+// true → false, false → true로 바꾸는 RxSwift용 map 헬퍼 함수
+extension ObservableType where Element == Bool {
+    func inverted() -> Observable<Bool> {
+        return self.map { !$0 }
+    }
+}
