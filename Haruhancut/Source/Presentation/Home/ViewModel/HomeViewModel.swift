@@ -5,7 +5,7 @@
 //  Created by 김동현 on 4/18/25.
 //
 
-import Foundation
+import UIKit
 import RxSwift
 import RxCocoa
 
@@ -17,6 +17,7 @@ protocol HomeViewModelType {
     func transform() -> HomeViewModel.Output
     func addComment(post: Post, text: String)
     func deleteComment(post: Post, commentId: String)
+    func uploadPost(image: UIImage) -> Observable<Bool>
 }
 
 
@@ -72,6 +73,40 @@ final class HomeViewModel: HomeViewModelType {
         return Output(posts: todayPosts, groupName: groupName)
     }
     
+    /// 포스트 추가 함수
+    
+    func uploadPost(image: UIImage) -> Observable<Bool> {
+        guard let user = user.value,
+              let groupId = group.value?.groupId else {
+            print("❌ 유저 또는 그룹 정보 없음")
+            return .just(false)
+        }
+
+        let postId = UUID().uuidString
+        let dateKey = Date().toDateKey()
+        let storagePath = "groups/\(groupId)/images/\(postId).jpg"
+        let dbPath = "groups/\(groupId)/postsByDate/\(dateKey)/\(postId)"
+
+        return FirebaseStorageManager.shared.uploadImage(image: image, path: storagePath)
+            .flatMap { url -> Observable<Bool> in
+                guard let imageURL = url else {
+                    print("❌ URL 없음")
+                    return .just(false)
+                }
+
+                let post = Post(
+                    postId: postId,
+                    userId: user.uid,
+                    nickname: user.nickname,
+                    profileImageURL: user.profileImageURL,
+                    imageURL: imageURL.absoluteString,
+                    createdAt: Date(), likeCount: 0,
+                    comments: [:]
+                )
+
+                return FirebaseAuthManager.shared.setValue(path: dbPath, value: post.toDTO())
+            }
+    }
     
     /// 댓글 추가 함수
     /// - Parameters:
@@ -246,6 +281,10 @@ final class StubHomeViewModel: HomeViewModelType {
     
     func deleteComment(post: Post, commentId: String) {
         ()
+    }
+    
+    func uploadPost(image: UIImage) -> Observable<Bool> {
+        return .just(false)
     }
 }
 

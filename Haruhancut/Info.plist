@@ -62,5 +62,7 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>프로필 사진을 촬영하기 위해 카메라 접근이 필요합니다.</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>촬영한 사진을 앨범에 저장하기 위해 접근이 필요합니다.</string>
 </dict>
 </plist>

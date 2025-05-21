@@ -204,6 +204,17 @@ final class HomeCoordinator: Coordinator {
         navigationController.pushViewController(cameraViewController, animated: true)
     }
     
+    func navigateToUpload(image: UIImage) {
+        let uploadVC = ImageUploadViewController(image: image, homeViewModel: homeViewModel)
+        uploadVC.coordinator = self
+        navigationController.pushViewController(uploadVC, animated: true)
+    }
+    
+    func backToHome() {
+        // 쌓여있던 모든 화면 제거하고 루트인 homeVC로 이동
+        navigationController.popToRootViewController(animated: true)
+    }
+    
     func startPostDetail(post: Post) {
         let postDetailViewController = PostDetailViewController(homeViewModel: homeViewModel, post: post)
         postDetailViewController.coordinator = self
@@ -229,3 +240,30 @@ final class HomeCoordinator: Coordinator {
     }
     
 }
+
+//final class CameraCoordinator: Coordinator {
+//    
+//    var parentCoordinator: Coordinator?
+//    var childCoordinators: [Coordinator] = []
+//    let navigationController: UINavigationController
+//    private let homeViewModel:  HomeViewModel
+//    
+//    init(navigationController: UINavigationController, homeViewModel: HomeViewModel) {
+//        print("CameraCoordinator - 생성")
+//        self.navigationController = navigationController
+//        self.homeViewModel = homeViewModel
+//    }
+//    
+//    func start() {
+//        print("CameraCoordinator - start()")
+//        showCamera()
+//    }
+//    
+//    func showCamera() {
+//        
+//    }
+//    
+//    func finishFlow() {
+//        parentCoordinator?.childDidFinish(self)
+//    }
+//}
