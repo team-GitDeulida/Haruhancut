@@ -105,11 +105,8 @@ final class ImagePreviewViewController: UIViewController, UIScrollViewDelegate {
         UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
         
         // 저장 알림 표시
-        let alert = UIAlertController(title: "사진 저장",
-                                      message: "사진이 앨범에 저장되었습니다.",
-                                      preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "확인", style: .default))
-        present(alert, animated: true)
+        AlertManager.showAlert(on: self, title: "사진 저장", message: "사진이 앨범에 저장되었습니다.")
+
     }
     
     // 줌 대상 지정

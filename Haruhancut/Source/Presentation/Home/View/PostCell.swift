@@ -38,7 +38,7 @@ final class PostCell: UICollectionViewCell {
     }()
     
     private let timeLabel: HCLabel = {
-        let label = HCLabel(type: .custom(text: "1분전", font: .hcFont(.regular, size: 14), color: .placeholderText))
+        let label = HCLabel(type: .custom(text: "1분 전", font: .hcFont(.regular, size: 14), color: .placeholderText))
         return label
     }()
     
@@ -66,7 +66,7 @@ final class PostCell: UICollectionViewCell {
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             imageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            imageView.heightAnchor.constraint(equalTo: contentView.heightAnchor),
+            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, constant: 30), // 정사각형 + 30
         ])
         
         // 2. titleLabel은 imageView 내부 하단에 붙이기

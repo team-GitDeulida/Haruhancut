@@ -158,6 +158,14 @@
 		DFF576A62DB0D87B007BEADA /* AppleLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		DF736B612DDF05180059210B /* Core */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Core;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		DF6650692D88023400820F1A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -368,6 +376,7 @@
 		DF5F3E7F2D95BECF00245C20 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				DF736B612DDF05180059210B /* Core */,
 				DF5F3E7A2D95BECF00245C20 /* App */,
 				DF5F3E7D2D95BECF00245C20 /* Presentation */,
 				DF5F3E7C2D95BECF00245C20 /* Domain */,
@@ -550,6 +559,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				DF736B612DDF05180059210B /* Core */,
 			);
 			name = Haruhancut;
 			packageProductDependencies = (

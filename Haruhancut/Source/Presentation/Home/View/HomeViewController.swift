@@ -51,8 +51,8 @@ final class HomeViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = layout.calculateItemSize(columns: 2)
         layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
-        layout.minimumInteritemSpacing = 16
-        layout.minimumLineSpacing = 16
+        layout.minimumInteritemSpacing = 16      // 좌우 셀 간격
+        layout.minimumLineSpacing = 16 + 30      // 위아래 셀 간격 = 정사각형 높이 + 30
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(PostCell.self, forCellWithReuseIdentifier: PostCell.identifier)
@@ -239,20 +239,34 @@ extension HomeViewController {
             return
         }
 
-        // 삭제 알림 표시
-        let alert = UIAlertController(title: "삭제 확인",
-                                      message: "이 사진을 삭제하시겠습니까?",
-                                      preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
-        alert.addAction(UIAlertAction(title: "삭제", style: .destructive, handler: { [weak self] _ in
+        let cancel = UIAlertAction(title: "취소", style: .cancel)
+        let delete = UIAlertAction(title: "삭제", style: .destructive) { [weak self] _ in
             self?.homeViewModel.deletePost(post)
-        }))
-        present(alert, animated: true)
+        }
+        
+        // 삭제 알림 표시
+        AlertManager.showAlert(on: self, title: "삭제 확인", message: "이 사진을 삭제하시겠습니까?", actions: [delete, cancel])
     }
-    
-
 
 }
+
+//extension UICollectionViewFlowLayout {
+//    /// 컬렉션 뷰 셀 크기를 자동으로 계산해주는 함수
+//    /// - Parameters:
+//    ///   - columns: 한 행에 보여줄 셀 개수
+//    ///   - spacing: 셀 사이 간격 (기본값 16)
+//    ///   - inset: 좌우 마진 (기본값 16)
+//    /// - Returns: 계산된 셀 크기
+//    func calculateItemSize(columns: Int, spacing: CGFloat = 16, inset: CGFloat = 16) -> CGSize {
+//        let screenWidth = UIScreen.main.bounds.width
+//        let totalSpacing = spacing * CGFloat(columns - 1) + inset * 2
+//        let itemWidth = (screenWidth - totalSpacing) / CGFloat(columns)
+//        return CGSize(width: itemWidth, height: itemWidth) // 정사각형 셀
+//    }
+//}
+
+
+
 
 extension UICollectionViewFlowLayout {
     /// 컬렉션 뷰 셀 크기를 자동으로 계산해주는 함수
@@ -265,7 +279,10 @@ extension UICollectionViewFlowLayout {
         let screenWidth = UIScreen.main.bounds.width
         let totalSpacing = spacing * CGFloat(columns - 1) + inset * 2
         let itemWidth = (screenWidth - totalSpacing) / CGFloat(columns)
-        return CGSize(width: itemWidth, height: itemWidth) // 정사각형 셀
+        
+        let imageHeight = itemWidth
+        let labelHeight: CGFloat = 20 + 14 + 8 // nickname + spacing + bottom margin
+        return CGSize(width: itemWidth, height: imageHeight + labelHeight) // 정사각형 셀
     }
 }
 
@@ -279,3 +296,4 @@ extension ObservableType where Element == Bool {
         return self.map { !$0 }
     }
 }
+
