@@ -52,7 +52,7 @@ final class HomeViewController: UIViewController {
         layout.itemSize = layout.calculateItemSize(columns: 2)
         layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         layout.minimumInteritemSpacing = 16      // 좌우 셀 간격
-        layout.minimumLineSpacing = 16 + 30      // 위아래 셀 간격 = 정사각형 높이 + 30
+        layout.minimumLineSpacing = 16           // 위아래 셀 간격 = 정사각형 높이 + 30
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(PostCell.self, forCellWithReuseIdentifier: PostCell.identifier)
@@ -209,7 +209,23 @@ final class HomeViewController: UIViewController {
     
     /// 카메라 화면 이동
     @objc private func startCamera() {
-        coordinator?.startCamera()
+//        coordinator?.startCamera()
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+
+        // 📷 사진 촬영
+        alert.addAction(UIAlertAction(title: "카메라로 찍기", style: .default) { [weak self] _ in
+            self?.coordinator?.startCamera()
+        })
+
+        // 🖼️ 앨범에서 선택
+        alert.addAction(UIAlertAction(title: "앨범에서 선택", style: .default) { [weak self] _ in
+            self?.presentImagePicker(sourceType: .photoLibrary)
+        })
+
+        // ❌ 취소
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+
+        present(alert, animated: true)
     }
     
     private func startPostDetail(post: Post) {
@@ -294,6 +310,37 @@ extension UICollectionViewFlowLayout {
 extension ObservableType where Element == Bool {
     func inverted() -> Observable<Bool> {
         return self.map { !$0 }
+    }
+}
+
+// MARK: - 앨범 선택 관련
+extension HomeViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    private func presentImagePicker(sourceType: UIImagePickerController.SourceType) {
+        guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
+            print("❌ 해당 소스타입 사용 불가")
+            return
+        }
+
+        let picker = UIImagePickerController()
+        picker.sourceType = sourceType
+        picker.delegate = self
+        picker.allowsEditing = false
+        present(picker, animated: true)
+    }
+
+    // 이미지 선택 완료
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true)
+
+        if let image = info[.originalImage] as? UIImage {
+            // ✅ 기존 업로드 흐름과 동일하게 처리
+            coordinator?.navigateToUpload(image: image)
+        }
+    }
+
+    // 선택 취소
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true)
     }
 }
 
