@@ -10,5 +10,6 @@
 Haruhancut.app.dSYM.zip
 key/
 
-
+*.py
+*.json
 

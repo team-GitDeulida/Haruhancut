@@ -82,6 +82,8 @@
 		DFDC82672DBD4998003C597D /* GroupUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFDC82662DBD4998003C597D /* GroupUsecase.swift */; };
 		DFDC82692DBD49D9003C597D /* GroupRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFDC82682DBD49D9003C597D /* GroupRepositoryProtocol.swift */; };
 		DFDC826B2DBD4A12003C597D /* GroupRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFDC826A2DBD4A12003C597D /* GroupRepository.swift */; };
+		DFDDEABA2DDF5EA800408C27 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = DFDDEAB92DDF5EA800408C27 /* FirebaseMessaging */; };
+		DFDDEABD2DDF659400408C27 /* AlarmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFDDEABB2DDF659400408C27 /* AlarmManager.swift */; };
 		DFF1CBD82DBA8A5E00722B04 /* GroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFF1CBD62DBA8A5E00722B04 /* GroupViewModel.swift */; };
 		DFF1CBE02DBAAEC800722B04 /* GroupEnterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFF1CBDD2DBAAEC800722B04 /* GroupEnterViewController.swift */; };
 		DFF576A72DB0D87B007BEADA /* AppleLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFF576A62DB0D87B007BEADA /* AppleLoginManager.swift */; };
@@ -153,18 +155,11 @@
 		DFDC82662DBD4998003C597D /* GroupUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupUsecase.swift; sourceTree = "<group>"; };
 		DFDC82682DBD49D9003C597D /* GroupRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupRepositoryProtocol.swift; sourceTree = "<group>"; };
 		DFDC826A2DBD4A12003C597D /* GroupRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupRepository.swift; sourceTree = "<group>"; };
+		DFDDEABB2DDF659400408C27 /* AlarmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmManager.swift; sourceTree = "<group>"; };
 		DFF1CBD62DBA8A5E00722B04 /* GroupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewModel.swift; sourceTree = "<group>"; };
 		DFF1CBDD2DBAAEC800722B04 /* GroupEnterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupEnterViewController.swift; sourceTree = "<group>"; };
 		DFF576A62DB0D87B007BEADA /* AppleLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		DF736B612DDF05180059210B /* Core */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Core;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		DF6650692D88023400820F1A /* Frameworks */ = {
@@ -173,6 +168,7 @@
 			files = (
 				DFC142822DBB533000EC6063 /* RxKakaoSDKCommon in Frameworks */,
 				DFC142802DBB533000EC6063 /* RxKakaoSDKAuth in Frameworks */,
+				DFDDEABA2DDF5EA800408C27 /* FirebaseMessaging in Frameworks */,
 				DFC1427B2DBB530100EC6063 /* Lottie in Frameworks */,
 				DFC1428F2DBB538800EC6063 /* FirebaseFirestore in Frameworks */,
 				DFC142862DBB533000EC6063 /* RxKakaoSDKShare in Frameworks */,
@@ -376,7 +372,7 @@
 		DF5F3E7F2D95BECF00245C20 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				DF736B612DDF05180059210B /* Core */,
+				DFDDEABC2DDF659400408C27 /* Core */,
 				DF5F3E7A2D95BECF00245C20 /* App */,
 				DF5F3E7D2D95BECF00245C20 /* Presentation */,
 				DF5F3E7C2D95BECF00245C20 /* Domain */,
@@ -427,6 +423,7 @@
 			isa = PBXGroup;
 			children = (
 				DF5F3E5B2D95BE7000245C20 /* Haruhancut */,
+				DFDDEAB82DDF5EA800408C27 /* Frameworks */,
 				DF66506D2D88023400820F1A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -528,6 +525,21 @@
 			path = Entity;
 			sourceTree = "<group>";
 		};
+		DFDDEAB82DDF5EA800408C27 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DFDDEABC2DDF659400408C27 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				DFDDEABB2DDF659400408C27 /* AlarmManager.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
 		DFF1CBD72DBA8A5E00722B04 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -560,9 +572,6 @@
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				DF736B612DDF05180059210B /* Core */,
-			);
 			name = Haruhancut;
 			packageProductDependencies = (
 				DFC1427A2DBB530100EC6063 /* Lottie */,
@@ -578,6 +587,7 @@
 				DFC142902DBB538800EC6063 /* FirebaseStorage */,
 				DFD269702DBB559D00F90C12 /* ScaleKit */,
 				DFD096D42DC651E500DE909C /* Kingfisher */,
+				DFDDEAB92DDF5EA800408C27 /* FirebaseMessaging */,
 			);
 			productName = Haruhancut;
 			productReference = DF66506C2D88023400820F1A /* Haruhancut.app */;
@@ -695,6 +705,7 @@
 				DF4962C92DACEF140001437B /* TextField+.swift in Sources */,
 				DF2AE60E2DB218C6007779D9 /* HomeViewModel.swift in Sources */,
 				DF156B762DAD610B00918EE6 /* UserDTO.swift in Sources */,
+				DFDDEABD2DDF659400408C27 /* AlarmManager.swift in Sources */,
 				DFD096D22DC6485400DE909C /* PostCell.swift in Sources */,
 				DFB71C152DB62F7900FE8490 /* AppCoordinator.swift in Sources */,
 				DF5F3E932D95C47700245C20 /* AppDelegate.swift in Sources */,
@@ -731,12 +742,15 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 35;
+				CURRENT_PROJECT_VERSION = 36;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LGX4B4WC66;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Haruhancut/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "하루한컷";
+				INFOPLIST_KEY_NSCameraUsageDescription = "프로필 사진을 촬영하기 위해 카메라 접근이 필요합니다.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "촬영한 사진을 앨범에 저장하기 위해 접근이 필요합니다.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "앨범에서 사진을 선택하기 위해 접근이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
@@ -751,7 +765,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.indextrown.Haruhancut;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.indextrown.Haruhancut";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.indextrown.Haruhancut 1747921920";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -772,12 +786,15 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 35;
+				CURRENT_PROJECT_VERSION = 36;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LGX4B4WC66;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Haruhancut/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "하루한컷";
+				INFOPLIST_KEY_NSCameraUsageDescription = "프로필 사진을 촬영하기 위해 카메라 접근이 필요합니다.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "촬영한 사진을 앨범에 저장하기 위해 접근이 필요합니다.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "앨범에서 사진을 선택하기 위해 접근이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
@@ -792,7 +809,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.indextrown.Haruhancut;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.indextrown.Haruhancut";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.indextrown.Haruhancut 1747921920";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1055,6 +1072,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = DFD2696F2DBB559D00F90C12 /* XCRemoteSwiftPackageReference "ScaleKit" */;
 			productName = ScaleKit;
+		};
+		DFDDEAB92DDF5EA800408C27 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DFC142892DBB538800EC6063 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
