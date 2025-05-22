@@ -77,7 +77,7 @@ final class GroupViewModel {
                                                 createdAt: Date(),
                                                 hostUserId: currentUser.uid,
                                                 inviteCode: inviteCode,
-                                                members: [],
+                                                members: [:],
                                                 postsByDate: [:])
 //                                            self.loginViewModel.group.accept(group)
                                             self.homeViewModel.group.accept(group)

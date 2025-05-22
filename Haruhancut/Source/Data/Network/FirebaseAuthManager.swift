@@ -311,6 +311,7 @@ extension FirebaseAuthManager {
         }
         
         let inviteCode = self.generateInviteCode()
+        let joinedAt = Date().toISO8601String()
         
         let groupData = HCGroup(
             groupId: newGroupRef.key ?? "",
@@ -318,7 +319,7 @@ extension FirebaseAuthManager {
             createdAt: Date(),
             hostUserId: currentUserId,
             inviteCode: inviteCode,
-            members: [currentUserId],
+            members: [currentUserId: joinedAt],
             postsByDate: [:]
         )
         
@@ -426,6 +427,74 @@ extension FirebaseAuthManager {
         return observeValue(path: "groups", type: [String: HCGroupDTO].self)
             .flatMap { groupDict -> Observable<Result<HCGroup, GroupError>> in
                 let groups = groupDict.compactMapValues { $0.toModel() }
+                
+                guard let matched = groups.values.first(where: { $0.inviteCode == inviteCode }) else {
+                    print("❌ 초대코드로 일치하는 그룹 없음")
+                    return Observable.just(.failure(.fetchGroupError))
+                }
+                
+                guard let currentUID = Auth.auth().currentUser?.uid else {
+                    return Observable.just(.failure(.makeHostError))
+                }
+                
+                let groupId = matched.groupId
+                let membersPath = "groups/\(groupId)/members"
+                let groupPath = "groups/\(groupId)"
+                
+                // ✅ [uid: joinedAt] 형태로 불러오기
+                return self.observeValue(path: membersPath, type: [String: String].self)
+                    .catchAndReturn([:]) // 멤버가 없을 수도 있으므로 안전하게
+                    .flatMap { existingMembers in
+                        var newMembers = existingMembers
+                        let joinedAt = Date().toISO8601String()
+                        
+                        newMembers[currentUID] = joinedAt
+                        
+                        // ✅ members 업데이트
+                        let membersDict: [String: Any] = ["members": newMembers]
+                        
+                        return Observable.create { observer in
+                            self.databaseRef.child(groupPath).updateChildValues(membersDict) { error, _ in
+                                if let error = error {
+                                    print("❌ members 업데이트 실패: \(error.localizedDescription)")
+                                    observer.onNext(false)
+                                } else {
+                                    print("✅ members 업데이트 성공")
+                                    observer.onNext(true)
+                                }
+                                observer.onCompleted()
+                            }
+                            return Disposables.create()
+                        }
+                    }
+                    .flatMap { success in
+                        if success {
+                            return self.updateUserGroupId(groupId: groupId)
+                                .map { updateResult in
+                                    switch updateResult {
+                                    case .success:
+                                        return Result<HCGroup, GroupError>.success(matched)
+                                    case .failure:
+                                        return Result<HCGroup, GroupError>.failure(.makeHostError)
+                                    }
+                                }
+                        } else {
+                            return .just(.failure(.makeHostError))
+                        }
+                    }
+            }
+            .catch { error in
+                print("❌ 그룹 조회 실패: \(error)")
+                return Observable.just(.failure(.fetchGroupError))
+            }
+    }
+
+    
+    /*
+    func joinGroup(inviteCode: String) -> Observable<Result<HCGroup, GroupError>> {
+        return observeValue(path: "groups", type: [String: HCGroupDTO].self)
+            .flatMap { groupDict -> Observable<Result<HCGroup, GroupError>> in
+                let groups = groupDict.compactMapValues { $0.toModel() }
                 guard let matched = groups.values.first(where: { $0.inviteCode == inviteCode }) else {
                     print("❌ 초대코드로 일치하는 그룹 없음")
                     return Observable.just(.failure(.fetchGroupError))
@@ -485,6 +554,7 @@ extension FirebaseAuthManager {
                 return Observable.just(.failure(.fetchGroupError))
             }
     }
+     */
 
 
 }

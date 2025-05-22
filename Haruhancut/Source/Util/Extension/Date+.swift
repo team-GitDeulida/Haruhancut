@@ -37,6 +37,12 @@ extension Date {
         return relativeFormatter.localizedString(for: self, relativeTo: Date())
     }
     
+    func toISO8601String() -> String {
+        let formatter = ISO8601DateFormatter()
+        formatter.timeZone = TimeZone(identifier: "Asia/Seoul")
+        return formatter.string(from: self)
+    }
+
     // MARK: - static 함수 -> 날짜를 만들 때
     /// 한국 시간 기준 특정 날짜 생성 (00:00:00)
     /// - Parameters:

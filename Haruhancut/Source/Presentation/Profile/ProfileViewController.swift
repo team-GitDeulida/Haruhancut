@@ -14,7 +14,17 @@ final class ProfileViewController: UIViewController {
     
     weak var coordinator: HomeCoordinator?
 
-    private let viewModel = ProfileViewModel()
+    private let profileViewModel = ProfileViewModel()
+    private let homeViewModel: HomeViewModelType
+    
+    init(homeViewModel: HomeViewModelType) {
+        self.homeViewModel = homeViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - UI Component
     private lazy var logoutBtn: UIButton = {
@@ -62,6 +72,8 @@ final class ProfileViewController: UIViewController {
             try Auth.auth().signOut()
             print("로그아웃 성공")
             coordinator?.showLogin()
+            homeViewModel.stopObservingGroup()
+            
             
         } catch let signOutError as NSError {
             print("로그아웃 실패: %@", signOutError)
@@ -70,5 +82,5 @@ final class ProfileViewController: UIViewController {
 }
 
 #Preview {
-    ProfileViewController()
+    ProfileViewController(homeViewModel: StubHomeViewModel(previewPost: .samplePosts[0]))
 }

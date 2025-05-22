@@ -94,7 +94,7 @@ struct HCGroup: Encodable {
     let createdAt: Date
     let hostUserId: String
     let inviteCode: String
-    var members: [String]
+    var members: [String: String] // [uid: joinedAt]
     // var posts: [Post]
     var postsByDate: [String: [Post]]
 }
@@ -109,7 +109,7 @@ extension HCGroup {
                        hostUserId: "index",
                        inviteCode: "1234",
                  members: [
-                     "123"
+                    "123": "1"
                  ],
                  postsByDate: grouped)
         
@@ -316,7 +316,7 @@ struct HCGroupDTO: Codable {
     let createdAt: String?
     let hostUserId: String?
     let inviteCode: String?
-    let members: [String]?
+    let members: [String: String]?
     var postsByDate: [String: [String: PostDTO]]? // postId가 key인 딕셔너리
 }
 
@@ -336,7 +336,10 @@ extension HCGroupDTO {
         }
         
         // let members = self.members?.compactMap { $0.toModel() } ?? []
-        let memberIds = members ?? []
+        // let memberIds = members ?? []
+        // let memberIds = members?.compactMap { $0 } ?? []
+        let memberDict = members ?? [:]
+        
         
         var postsByDate: [String: [Post]] = [:]
         postsByDate = postsByDate.merging(
@@ -352,7 +355,7 @@ extension HCGroupDTO {
             createdAt: createdAt,
             hostUserId: hostUserId,
             inviteCode: inviteCode,
-            members: memberIds,
+            members: memberDict,
             postsByDate: postsByDate
         )
     }

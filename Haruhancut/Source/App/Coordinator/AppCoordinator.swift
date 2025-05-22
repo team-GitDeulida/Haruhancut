@@ -44,6 +44,27 @@ final class AppCoordinator: Coordinator {
         print("AppCoordinator - 생성")
         self.navigationController = navigationController
         self.isLoggedIn = isLoggedIn
+        
+        // MARK: - 알림 등록
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(handleForceLogout),
+                                               name: .userForceLoggedOut,
+                                               object: nil)
+    }
+    
+    @objc private func handleForceLogout() {
+        print("서버에서 예기치 않게 유저가 삭제되었습니다. 로그아웃 후 로그인 플로우 재시작합니다.")
+        
+        // childCoordinator 정리
+        childCoordinators.forEach { $0.parentCoordinator = nil }
+        childCoordinators.removeAll()
+        
+        // 루트 화면에 애니메이션으로 로그인 흐름 다시 시작
+        UIView.transition(with: navigationController.view,
+                          duration: 0.4,
+                          options: .transitionFlipFromLeft) {
+            self.startLoginFlowCoordinator()
+        }
     }
     
     /// protocol
@@ -193,7 +214,7 @@ final class HomeCoordinator: Coordinator {
     }
     
     func startProfile() {
-        let profileViewController = ProfileViewController()
+        let profileViewController = ProfileViewController(homeViewModel: homeViewModel)
         profileViewController.coordinator = self
         navigationController.pushViewController(profileViewController, animated: true)
     }

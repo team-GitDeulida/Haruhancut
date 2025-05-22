@@ -40,8 +40,8 @@ final class LoginViewModel {
             print("✅ loginVM - 캐시에서 불러온 유저: \(cachedUser)")
             self.user.accept(cachedUser)
             
-        // ✅ 2. 서버에서 유저 불러오기
-        fetchUserInfo()
+            // ✅ 2. 서버에서 유저 불러오기
+            fetchUserInfo()
         }
     }
     
@@ -160,7 +160,13 @@ final class LoginViewModel {
                     self.user.accept(user)
                     UserDefaultsManager.shared.saveUser(user)
                 } else {
-                    print("❌ 사용자 정보 없음")
+                    print("❌ 사용자 정보 없음 캐시 삭제 진행")
+                    self.user.accept(nil)
+                    UserDefaultsManager.shared.removeUser()
+                    UserDefaultsManager.shared.removeGroup()
+                    
+                    // 강제 로그아웃 유도
+                    NotificationCenter.default.post(name: .userForceLoggedOut, object: nil)
                 }
             })
             .disposed(by: disposeBag)
@@ -256,4 +262,9 @@ extension Result {
     func mapToVoid() -> Result<Void, Failure> {
         map { _ in () }
     }
+}
+
+// MARK: - 강제 로그아웃
+extension Notification.Name {
+    static let userForceLoggedOut = Notification.Name("userForceLoggedOut")
 }
