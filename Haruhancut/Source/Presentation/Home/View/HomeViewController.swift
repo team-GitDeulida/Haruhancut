@@ -124,6 +124,8 @@ final class HomeViewController: UIViewController {
                 // 사진 추가하기 -> 오늘의 사진 추가 완료
                 if !posts.isEmpty {
                     self.bubbleView.text = "오늘 사진 추가 완료"
+                    self.bubbleView.alpha = 0.6
+                   
                 } else {
                     self.bubbleView.text = "사진 추가하기"
                 }

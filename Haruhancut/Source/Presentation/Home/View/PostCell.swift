@@ -26,7 +26,7 @@ final class PostCell: UICollectionViewCell {
         label.font = UIFont.boldSystemFont(ofSize: 14)
         label.textAlignment = .center
         label.backgroundColor = UIColor.black.withAlphaComponent(0.3) // 반투명 배경
-        label.textColor = .white
+        label.textColor = .mainWhite
         label.layer.cornerRadius = 8
         label.clipsToBounds = true
         return label
@@ -38,7 +38,7 @@ final class PostCell: UICollectionViewCell {
     }()
     
     private let timeLabel: HCLabel = {
-        let label = HCLabel(type: .custom(text: "1분 전", font: .hcFont(.regular, size: 14), color: .placeholderText))
+        let label = HCLabel(type: .custom(text: "1분 전", font: .hcFont(.regular, size: 14), color: .Gray300))
         return label
     }()
     
