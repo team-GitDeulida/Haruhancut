@@ -142,6 +142,12 @@ final class LoginFlowCoordinator: Coordinator {
         navigationController.setViewControllers([birthdaySettingViewController], animated: true)
     }
     
+    func showProfileSetting() {
+        let showProfileSettingViewController = ProfileSettingViewController(loginViewModel: loginViewModel)
+        showProfileSettingViewController.coordinator = self
+        navigationController.setViewControllers([showProfileSettingViewController], animated: true)
+    }
+    
     func showHome() {
         finishFlow() // 현재 흐름 종료(자신을 부모에서 제거
         if let appCoordinator = parentCoordinator as? AppCoordinator {

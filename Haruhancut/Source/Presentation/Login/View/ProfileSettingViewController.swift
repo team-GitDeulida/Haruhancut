@@ -105,13 +105,13 @@ final class ProfileSettingViewController: UIViewController {
     }()
     
     private func bindViewModel() {
-        let input = LoginViewModel.BirthdayInput(birthdayDate: datePicker.rx.date.asObservable(),
-                                                 nextBtnTapped: nextButton.rx.tap.asObservable())
+        let input = LoginViewModel.ProfileInput(nextBtnTapped: nextButton.rx.tap.asObservable())
         let output = loginViewModel.transform(input: input)
         bindViewModelOutput(output: output)
     }
     
-    private func bindViewModelOutput(output: LoginViewModel.BirthdayOutput) {
+    private func bindViewModelOutput(output: LoginViewModel.ProfileOutput) {
+
         output.signUpResult
             .drive(onNext: { [weak self] result in
                 guard let self = self else { return }

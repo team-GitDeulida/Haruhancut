@@ -115,14 +115,11 @@ final class BirthdaySettingViewController: UIViewController {
     }
     
     private func bindViewModelOutput(output: LoginViewModel.BirthdayOutput) {
-        output.signUpResult
-            .drive(onNext: { [weak self] result in
+        output.moveToProfile
+            .drive(onNext: { [weak self] in
                 guard let self = self else { return }
-                switch result {
-                case .success:
-                    coordinator?.showHome()
-                case .failure(let error):
-                    print("❌ [VC] 회원가입 실패: \(error)")
+                DispatchQueue.main.async() {
+                    self.coordinator?.showProfileSetting()
                 }
             }).disposed(by: disposeBag)
     }

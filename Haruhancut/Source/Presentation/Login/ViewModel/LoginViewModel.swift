@@ -189,9 +189,10 @@ final class LoginViewModel {
         let nextBtnTapped = input.nextBtnTapped
             .withLatestFrom(input.nicknameText)
             .do(onNext: { [weak self] nickname in
-                if var currentUser = self?.user.value {
+                guard let self = self else { return }
+                if var currentUser = self.user.value {
                     currentUser.nickname = nickname
-                    self?.user.accept(currentUser)
+                    self.user.accept(currentUser)
                 }
             })
             .map { _ in } /// Observable<Void>
@@ -215,28 +216,47 @@ final class LoginViewModel {
     }
     
     struct BirthdayOutput {
-        let signUpResult: Driver<Result<Void, LoginError>>
+        let moveToProfile: Driver<Void>
     }
     
     func transform(input: BirthdayInput) -> BirthdayOutput {
+        let nextBtnTapped = input.nextBtnTapped
+            .withLatestFrom(input.birthdayDate)
+            .do(onNext: { [weak self] birthdayDate in
+                guard let self = self else { return }
+                if var currentUser = self.user.value {
+                    currentUser.birthdayDate = birthdayDate
+                    self.user.accept(currentUser)
+                }
+            })
+            .map { _ in } /// Observable<Void>
+            .asDriver(onErrorDriveWith: .empty())
+        
+        return BirthdayOutput(moveToProfile: nextBtnTapped)
+    }
+    
+    // MARK: - ProfileSettingViewController
+    struct ProfileInput {
+        let nextBtnTapped: Observable<Void>
+    }
+    
+    struct ProfileOutput {
+        let signUpResult: Driver<Result<Void, LoginError>>
+    }
+    
+    func transform(input: ProfileInput) -> ProfileOutput {
         let signUpResult = signUpResultRelay
             .asDriver(onErrorJustReturn: .failure(.signUpError))
         
-        // 생일 다음 버튼
+        // 완료 -> 회원가입 진행
         input.nextBtnTapped
-            .withLatestFrom(input.birthdayDate)
-            .bind(onNext: { [weak self] birthdayDate in
-                if var currentUser = self?.user.value {
-                    currentUser.birthdayDate = birthdayDate
-                    self?.user.accept(currentUser)
-                    
-                    if let user = self?.user.value {
-                        self?.registerUser(user: user)
-                    }
+            .bind(onNext: { [weak self] in
+                guard let self = self else { return }
+                if let user = self.user.value {
+                    self.registerUser(user: user)
                 }
             }).disposed(by: disposeBag)
-        
-        return BirthdayOutput(signUpResult: signUpResult)
+        return ProfileOutput(signUpResult: signUpResult)
     }
     
     private func registerUser(user: User) {
