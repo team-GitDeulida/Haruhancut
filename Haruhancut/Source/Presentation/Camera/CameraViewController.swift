@@ -447,7 +447,7 @@ extension CameraViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
 
 
         assert(Thread.isMainThread, "❌ UI 변경은 반드시 메인 스레드에서 수행해야 합니다")
-        coordinator?.navigateToUpload(image: image)
+        coordinator?.navigateToUpload(image: image, cameraType: .camera)
     }
     
     func captureOutput(_ output: AVCaptureOutput,

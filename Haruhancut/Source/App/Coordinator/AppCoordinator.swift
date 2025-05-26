@@ -225,7 +225,14 @@ final class HomeCoordinator: Coordinator {
         navigationController.pushViewController(cameraViewController, animated: true)
     }
     
-    func navigateToUpload(image: UIImage) {
+    func navigateToUpload(image: UIImage, cameraType: CameraType) {
+        
+        if cameraType == .camera {
+            homeViewModel.cameraType = .camera
+        } else {
+            homeViewModel.cameraType = .gallary
+        }
+        
         let uploadVC = ImageUploadViewController(image: image, homeViewModel: homeViewModel)
         uploadVC.coordinator = self
         navigationController.pushViewController(uploadVC, animated: true)

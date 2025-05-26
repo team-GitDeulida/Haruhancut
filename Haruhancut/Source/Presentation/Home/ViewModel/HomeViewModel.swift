@@ -9,10 +9,16 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+enum CameraType {
+    case camera
+    case gallary
+}
+
 protocol HomeViewModelType {
     var posts: BehaviorRelay<[Post]> { get }
     var user: BehaviorRelay<User?> { get }
     var group: BehaviorRelay<HCGroup?> { get }
+    var cameraType: CameraType { get }
     
     func transform() -> HomeViewModel.Output
     func addComment(post: Post, text: String)
@@ -30,6 +36,7 @@ final class HomeViewModel: HomeViewModelType {
     let user = BehaviorRelay<User?>(value: nil)
     let group = BehaviorRelay<HCGroup?>(value: nil)
     let posts = BehaviorRelay<[Post]>(value: [])
+    var cameraType: CameraType
     
     // 스냅샷 구독
     private var groupSnapshotDisposable: Disposable?
@@ -47,9 +54,10 @@ final class HomeViewModel: HomeViewModelType {
         let groupName: Driver<String>
     }
     
-    init(loginUsecase: LoginUsecaseProtocol, groupUsecase: GroupUsecaseProtocol, userRelay: BehaviorRelay<User?>) {
+    init(loginUsecase: LoginUsecaseProtocol, groupUsecase: GroupUsecaseProtocol, userRelay: BehaviorRelay<User?>, cameraType: CameraType = .camera) {
         self.loginUsecase = loginUsecase
         self.groupUsecase = groupUsecase
+        self.cameraType = cameraType
         
         // MARK: - 알림 구독
         NotificationCenter.default.addObserver(
@@ -108,10 +116,14 @@ final class HomeViewModel: HomeViewModelType {
         return Output(posts: todayPosts, groupName: groupName)
     }
     
+
+    
     /// 포스트 추가 함수
     func uploadPost(image: UIImage) -> Observable<Bool> {
-        // 앨범에 사진 저장
-        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+        
+        if cameraType == .camera {
+            UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+        }
         
         guard let user = user.value,
               let groupId = group.value?.groupId else {
@@ -304,15 +316,16 @@ final class HomeViewModel: HomeViewModelType {
 }
 
 final class StubHomeViewModel: HomeViewModelType {
-    
+    var cameraType: CameraType
     let posts: BehaviorRelay<[Post]>
     let user: BehaviorRelay<User?>
     let group: BehaviorRelay<HCGroup?>
 
-    init(previewPost: Post) {
+    init(previewPost: Post, cameraType: CameraType = .camera) {
         self.posts = BehaviorRelay(value: [previewPost])
         self.user = BehaviorRelay(value: User.empty(loginPlatform: .kakao))
         self.group = BehaviorRelay(value: nil)
+        self.cameraType = cameraType
     }
 
     func transform() -> HomeViewModel.Output {

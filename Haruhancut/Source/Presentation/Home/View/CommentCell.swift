@@ -134,6 +134,6 @@ struct CommentCell_PreviewProvider_Previews: PreviewProvider {
 
 #Preview {
     let previewPost = Post.samplePosts[1]
-    let stubVM = StubHomeViewModel(previewPost: previewPost)
+    let stubVM = StubHomeViewModel(previewPost: previewPost, cameraType: .camera)
     PostCommentViewController(homeViewModel: stubVM, post: previewPost)
 }

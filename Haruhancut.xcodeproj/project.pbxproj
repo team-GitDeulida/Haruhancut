@@ -55,6 +55,7 @@
 		DF5F3E8F2D95C47400245C20 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF5F3E8C2D95C47400245C20 /* LaunchScreen.storyboard */; };
 		DF5F3E932D95C47700245C20 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF5F3E902D95C47700245C20 /* AppDelegate.swift */; };
 		DF5F3E942D95C47700245C20 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF5F3E912D95C47700245C20 /* SceneDelegate.swift */; };
+		DF661DEE2DE4342E0028688F /* ViewSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF661DED2DE4342E0028688F /* ViewSystem.swift */; };
 		DF8603512DB00CFF008ADB69 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8603502DB00CFF008ADB69 /* UserDefaultsManager.swift */; };
 		DF947FC82DBE304E00D1E2FD /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF947FC52DBE304E00D1E2FD /* ProfileViewController.swift */; };
 		DF947FC92DBE304E00D1E2FD /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF947FC62DBE304E00D1E2FD /* ProfileViewModel.swift */; };
@@ -139,6 +140,7 @@
 		DF5F3E8B2D95C47400245C20 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DF5F3E902D95C47700245C20 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DF5F3E912D95C47700245C20 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		DF661DED2DE4342E0028688F /* ViewSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSystem.swift; sourceTree = "<group>"; };
 		DF66506C2D88023400820F1A /* Haruhancut.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Haruhancut.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF8603502DB00CFF008ADB69 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		DF947FC52DBE304E00D1E2FD /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -279,6 +281,7 @@
 				DF218C7B2DD8E7D1000B0A61 /* TextViewSystem.swift */,
 				DF35040F2DB39892002C1269 /* LabelSystem.swift */,
 				DF1577712DDC4B7100BEE272 /* ChattingViewSystem.swift */,
+				DF661DED2DE4342E0028688F /* ViewSystem.swift */,
 			);
 			path = DesignSystem;
 			sourceTree = "<group>";
@@ -707,6 +710,7 @@
 				DF156B762DAD610B00918EE6 /* UserDTO.swift in Sources */,
 				DFDDEABD2DDF659400408C27 /* AlarmManager.swift in Sources */,
 				DFD096D22DC6485400DE909C /* PostCell.swift in Sources */,
+				DF661DEE2DE4342E0028688F /* ViewSystem.swift in Sources */,
 				DFB71C152DB62F7900FE8490 /* AppCoordinator.swift in Sources */,
 				DF5F3E932D95C47700245C20 /* AppDelegate.swift in Sources */,
 				DF0C249D2DACF65F00022AB0 /* UIViewController+.swift in Sources */,
@@ -740,11 +744,9 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Haruhancut/Haruhancut.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 36;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LGX4B4WC66;
+				DEVELOPMENT_TEAM = LGX4B4WC66;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Haruhancut/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "하루한컷";
@@ -765,7 +767,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.indextrown.Haruhancut;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.indextrown.Haruhancut 1747921920";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -784,11 +785,9 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Haruhancut/Haruhancut.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 36;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LGX4B4WC66;
+				DEVELOPMENT_TEAM = LGX4B4WC66;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Haruhancut/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "하루한컷";
@@ -809,7 +808,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.indextrown.Haruhancut;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.indextrown.Haruhancut 1747921920";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;

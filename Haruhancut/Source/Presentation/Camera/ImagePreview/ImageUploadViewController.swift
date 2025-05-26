@@ -108,5 +108,5 @@ final class ImageUploadViewController: UIViewController {
 }
 
 #Preview {
-    ImageUploadViewController(image: UIImage(), homeViewModel: StubHomeViewModel(previewPost: .samplePosts[0]))
+    ImageUploadViewController(image: UIImage(), homeViewModel: StubHomeViewModel(previewPost: .samplePosts[0], cameraType: .camera))
 }

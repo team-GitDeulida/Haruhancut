@@ -37,16 +37,6 @@ final class HomeViewController: UIViewController {
         return label
     }()
     
-    private lazy var cameraBtn: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(systemName: "button.programmable"), for: .normal)
-        button.tintColor = .mainWhite
-        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 70.scaled), forImageIn: .normal)
-        button.imageView?.contentMode = .scaleAspectFit
-        button.addTarget(self, action: #selector(startCamera), for: .touchUpInside)
-        return button
-    }()
-    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = layout.calculateItemSize(columns: 2)
@@ -60,10 +50,22 @@ final class HomeViewController: UIViewController {
         return collectionView
     }()
     
+    private let bubbleView = BubbleView(text: "")
+    
+    private lazy var cameraBtn: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "button.programmable"), for: .normal)
+        button.tintColor = .mainWhite
+        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 70.scaled), forImageIn: .normal)
+        button.imageView?.contentMode = .scaleAspectFit
+        button.addTarget(self, action: #selector(startCamera), for: .touchUpInside)
+        return button
+    }()
+    
     private lazy var emptyLabel: UILabel = {
         let label = UILabel()
-        label.text = "오늘의 하루를 추가해보세요"
-        label.font = UIFont.hcFont(.medium, size: 16.scaled)
+        label.text = "당신의 하루가 가족의 따뜻한 기억이 됩니다.\n사진 한 장을 남겨주세요."
+        label.font = UIFont.hcFont(.medium, size: 20.scaled)
         label.textColor = .mainWhite
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -75,6 +77,7 @@ final class HomeViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // TODO: - LoginVM 필요없으면 지우자
     init(loginViewModel: LoginViewModel, homeViewModel: HomeViewModel) {
         self.homeViewModel = homeViewModel
         super.init(nibName: nil, bundle: nil)
@@ -110,11 +113,21 @@ final class HomeViewController: UIViewController {
             }
             .disposed(by: disposeBag)
         
-        // 포스트가 비었을 때
+        // 포스트가 비었을 때 emptyLabel 보이게 동작
         homeViewModel.transform().posts
             .drive(onNext: { [weak self] posts in
                 guard let self = self else { return }
+                
+                // 문구 보이게 하기
                 self.emptyLabel.isHidden = !posts.isEmpty
+                
+                // 사진 추가하기 -> 오늘의 사진 추가 완료
+                if !posts.isEmpty {
+                    self.bubbleView.text = "오늘 사진 추가 완료"
+                } else {
+                    self.bubbleView.text = "사진 추가하기"
+                }
+                
             })
             .disposed(by: disposeBag)
         
@@ -135,7 +148,6 @@ final class HomeViewController: UIViewController {
             .drive(cameraBtn.rx.isEnabled)
             .disposed(by: disposeBag)
         
-        
         // 커메라 버튼 투명도 조절
         homeViewModel.didUserPostToday
             .map { $0 ? 0.3 : 1.0 } // ✅ Double 반환
@@ -149,7 +161,7 @@ final class HomeViewController: UIViewController {
         view.backgroundColor = .background
 
         /// setupUI
-        [collectionView, cameraBtn, emptyLabel].forEach {
+        [collectionView, cameraBtn, emptyLabel, bubbleView].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -170,6 +182,13 @@ final class HomeViewController: UIViewController {
             cameraBtn.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
         ])
         
+        // 말풍선
+        NSLayoutConstraint.activate([
+            bubbleView.bottomAnchor.constraint(equalTo: cameraBtn.topAnchor, constant: -10),
+            bubbleView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+        ])
+        
+        // 멘트
         NSLayoutConstraint.activate([
             emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
@@ -303,7 +322,9 @@ extension UICollectionViewFlowLayout {
 }
 
 #Preview {
-    HomeViewController(loginViewModel: LoginViewModel(loginUsecase: StubLoginUsecase()), homeViewModel: HomeViewModel(loginUsecase: StubLoginUsecase(), groupUsecase: StubGroupUsecase(), userRelay: .init(value: User.empty(loginPlatform: .kakao))))
+    HomeViewController(
+        loginViewModel: LoginViewModel(loginUsecase: StubLoginUsecase()),
+        homeViewModel: HomeViewModel(loginUsecase: StubLoginUsecase(), groupUsecase: StubGroupUsecase(), userRelay: .init(value: User.empty(loginPlatform: .kakao))))
 }
 
 // true → false, false → true로 바꾸는 RxSwift용 map 헬퍼 함수
@@ -334,7 +355,7 @@ extension HomeViewController: UIImagePickerControllerDelegate, UINavigationContr
 
         if let image = info[.originalImage] as? UIImage {
             // ✅ 기존 업로드 흐름과 동일하게 처리
-            coordinator?.navigateToUpload(image: image)
+            coordinator?.navigateToUpload(image: image, cameraType: .gallary)
         }
     }
 
@@ -344,3 +365,64 @@ extension HomeViewController: UIImagePickerControllerDelegate, UINavigationContr
     }
 }
 
+
+
+class TooltipBubbleView: UIView {
+    private let cornerRadius: CGFloat = 20
+    private let tipWidth: CGFloat = 20
+    private let tipHeight: CGFloat = 10
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = .clear // 배경은 투명하게
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // ✅ 여기서 실제 말풍선 모양을 그림
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        
+        let path = UIBezierPath()
+        let width = rect.width
+        let height = rect.height - tipHeight // 말풍선 본체 높이
+
+        // 시작점: 왼쪽 위 모서리
+        path.move(to: CGPoint(x: cornerRadius, y: 0))
+
+        // 상단 라인
+        path.addLine(to: CGPoint(x: width - cornerRadius, y: 0))
+        path.addQuadCurve(to: CGPoint(x: width, y: cornerRadius),
+                          controlPoint: CGPoint(x: width, y: 0))
+
+        // 우측 라인
+        path.addLine(to: CGPoint(x: width, y: height - cornerRadius))
+        path.addQuadCurve(to: CGPoint(x: width - cornerRadius, y: height),
+                          controlPoint: CGPoint(x: width, y: height))
+
+        // ✅ 아래쪽 중앙에 tip 삼각형 추가
+        let tipStartX = (width - tipWidth) / 2
+        path.addLine(to: CGPoint(x: tipStartX + tipWidth, y: height))
+        path.addLine(to: CGPoint(x: width / 2, y: height + tipHeight))
+        path.addLine(to: CGPoint(x: tipStartX, y: height))
+
+        // 좌측 라인
+        path.addLine(to: CGPoint(x: cornerRadius, y: height))
+        path.addQuadCurve(to: CGPoint(x: 0, y: height - cornerRadius),
+                          controlPoint: CGPoint(x: 0, y: height))
+
+        path.addLine(to: CGPoint(x: 0, y: cornerRadius))
+        path.addQuadCurve(to: CGPoint(x: cornerRadius, y: 0),
+                          controlPoint: CGPoint(x: 0, y: 0))
+
+        // ✅ 색상 채우기
+        let shapeLayer = CAShapeLayer()
+        shapeLayer.path = path.cgPath
+        shapeLayer.fillColor = UIColor.gray.cgColor
+
+        layer.sublayers?.removeAll(where: { $0 is CAShapeLayer })
+        layer.insertSublayer(shapeLayer, at: 0)
+    }
+}

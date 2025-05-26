@@ -82,5 +82,5 @@ final class ProfileViewController: UIViewController {
 }
 
 #Preview {
-    ProfileViewController(homeViewModel: StubHomeViewModel(previewPost: .samplePosts[0]))
+    ProfileViewController(homeViewModel: StubHomeViewModel(previewPost: .samplePosts[0], cameraType: .camera))
 }
