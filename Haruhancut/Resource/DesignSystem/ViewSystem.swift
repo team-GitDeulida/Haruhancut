@@ -100,51 +100,81 @@ final class BubbleView: UIView {
 }
 
 final class ProfileImageView: UIView {
-    
+
     private let imageView = UIImageView()
     private let cameraButton = UIButton(type: .system)
-    
+
+    // 제약 그룹
+    private var iconSizeConstraints: [NSLayoutConstraint] = []
+    private var fullSizeConstraints: [NSLayoutConstraint] = []
+
     // 외부에서 이벤트 감지할 수 있도록 공개
     var onCameraTapped: (() -> Void)?
-    
+
     init(size: CGFloat = 100, iconSize: CGFloat = 50) {
         super.init(frame: .zero)
-        
+
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .Gray500
         layer.cornerRadius = size / 2
-//        clipsToBounds = true
-        
+        clipsToBounds = false // 이미지뷰만 잘리도록
+
         setupImageView(iconSize: iconSize)
         setupCameraButton()
-        
-        // 사이즈 제약
+
         NSLayoutConstraint.activate([
             widthAnchor.constraint(equalToConstant: size),
             heightAnchor.constraint(equalTo: widthAnchor)
         ])
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        imageView.layer.cornerRadius = bounds.width / 2
+    }
+
+    func setImage(_ image: UIImage) {
+        imageView.image = image
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+
+        // 기존 작은 제약 해제
+        NSLayoutConstraint.deactivate(iconSizeConstraints)
+
+        // 전체 꽉 채우는 제약 적용 (한 번만 생성)
+        if fullSizeConstraints.isEmpty {
+            fullSizeConstraints = [
+                imageView.topAnchor.constraint(equalTo: topAnchor),
+                imageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+                imageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+                imageView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            ]
+        }
+        NSLayoutConstraint.activate(fullSizeConstraints)
+    }
+
     private func setupImageView(iconSize: CGFloat) {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(systemName: "person.fill")
         imageView.tintColor = .gray
         imageView.contentMode = .scaleAspectFit
-        
+        imageView.clipsToBounds = true
+
         addSubview(imageView)
-        
-        NSLayoutConstraint.activate([
+
+        iconSizeConstraints = [
             imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
             imageView.centerYAnchor.constraint(equalTo: centerYAnchor),
             imageView.widthAnchor.constraint(equalToConstant: iconSize),
             imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor)
-        ])
+        ]
+        NSLayoutConstraint.activate(iconSizeConstraints)
     }
-    
+
     private func setupCameraButton() {
         cameraButton.translatesAutoresizingMaskIntoConstraints = false
         let config = UIImage.SymbolConfiguration(pointSize: 16, weight: .bold)
@@ -154,19 +184,19 @@ final class ProfileImageView: UIView {
         cameraButton.backgroundColor = .mainBlack
         cameraButton.layer.cornerRadius = 16
         cameraButton.clipsToBounds = true
-        
+
         addSubview(cameraButton)
-        
+
         NSLayoutConstraint.activate([
             cameraButton.widthAnchor.constraint(equalToConstant: 32),
             cameraButton.heightAnchor.constraint(equalTo: cameraButton.widthAnchor),
             cameraButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 6),
             cameraButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 6)
         ])
-        
+
         cameraButton.addTarget(self, action: #selector(cameraTapped), for: .touchUpInside)
     }
-    
+
     @objc private func cameraTapped() {
         onCameraTapped?()
     }

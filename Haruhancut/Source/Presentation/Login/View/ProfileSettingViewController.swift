@@ -13,8 +13,8 @@ final class ProfileSettingViewController: UIViewController {
     weak var coordinator: LoginFlowCoordinator?
     
     private let disposeBag = DisposeBag()
-    
     private let loginViewModel: LoginViewModel
+    private var selectedImage: UIImage?
     
     private lazy var mainLabel: UILabel = HCLabel(type: .main(text: "\(loginViewModel.user.value?.nickname ?? "닉네임") 님의 프로필을 설정해 주세요"))
     
@@ -36,6 +36,10 @@ final class ProfileSettingViewController: UIViewController {
     
     private lazy var profileImageView: ProfileImageView = {
         let imageView = ProfileImageView(size: 100, iconSize: 60)
+        imageView.onCameraTapped = { [weak self] in
+            guard let self = self else { return }
+            self.presentImagePicker(sourceType: .photoLibrary)
+        }
         return imageView
     }()
     
@@ -76,10 +80,8 @@ final class ProfileSettingViewController: UIViewController {
         view.addSubview(profileImageView)
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            profileImageView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
+            profileImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             profileImageView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-//            profileImageView.widthAnchor.constraint(equalToConstant: 100),
-//            profileImageView.heightAnchor.constraint(equalTo: profileImageView.widthAnchor)
         ])
         
         
@@ -95,17 +97,8 @@ final class ProfileSettingViewController: UIViewController {
         ])
     }
     
-    private let datePicker: UIDatePicker = {
-        let picker = UIDatePicker()
-        picker.datePickerMode = .date
-        picker.preferredDatePickerStyle = .wheels
-        picker.locale = Locale(identifier: "ko-KR")
-        picker.timeZone = TimeZone(identifier: "Asia/Seoul")
-        return picker
-    }()
-    
     private func bindViewModel() {
-        let input = LoginViewModel.ProfileInput(nextBtnTapped: nextButton.rx.tap.asObservable())
+        let input = LoginViewModel.ProfileInput(nextBtnTapped: nextButton.rx.tap.asObservable(), selectedImage: nextButton.rx.tap.map { [weak self] in self?.selectedImage } ) // 버튼 탭 시점 기준 최신 이미지
         let output = loginViewModel.transform(input: input)
         bindViewModelOutput(output: output)
     }
@@ -122,6 +115,38 @@ final class ProfileSettingViewController: UIViewController {
                     print("❌ [VC] 회원가입 실패: \(error)")
                 }
             }).disposed(by: disposeBag)
+    }
+}
+
+// MARK: - 앨범 선택 관련
+extension ProfileSettingViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    private func presentImagePicker(sourceType: UIImagePickerController.SourceType) {
+        guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
+            print("❌ 해당 소스타입 사용 불가")
+            return
+        }
+
+        let picker = UIImagePickerController()
+        picker.sourceType = sourceType
+        picker.delegate = self
+        picker.allowsEditing = false
+        present(picker, animated: true)
+    }
+
+    // 이미지 선택 완료
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true)
+
+        if let image = info[.originalImage] as? UIImage {
+            // 이미지 설정
+            self.profileImageView.setImage(image)
+            self.selectedImage = image
+        }
+    }
+
+    // 선택 취소
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true)
     }
 }
 

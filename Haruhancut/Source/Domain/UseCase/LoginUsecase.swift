@@ -7,6 +7,7 @@
 
 import Foundation
 import RxSwift
+import UIKit
 
 protocol LoginUsecaseProtocol {
     func loginWIthKakao() -> Observable<Result<String, LoginError>>
@@ -14,6 +15,8 @@ protocol LoginUsecaseProtocol {
     func authenticateUser(prividerID: String, idToken: String, rawNonce: String?) -> Observable<Result<Void, LoginError>>
     func registerUserToRealtimeDatabase(user: User) -> Observable<Result<User, LoginError>>
     func fetchUserInfo() -> Observable<User?>
+    func updateUser(_ user: User) -> Observable<Result<Void, LoginError>>
+    func uploadImage(user: User, image: UIImage) -> Observable<Result<URL, LoginError>>
 }
 
 final class LoginUsecase: LoginUsecaseProtocol {
@@ -56,6 +59,17 @@ final class LoginUsecase: LoginUsecaseProtocol {
     func fetchUserInfo() -> Observable<User?> {
         return repository.fetchUserInfo()
     }
+    
+    /// 유저 업데이트
+    /// - Parameter user: 유저
+    /// - Returns: 성공유무
+    func updateUser(_ user: User) -> Observable<Result<Void, LoginError>> {
+        return repository.updateUser(user)
+    }
+    
+    func uploadImage(user: User, image: UIImage) -> Observable<Result<URL, LoginError>> {
+        return repository.uploadImage(user: user, image: image)
+    }
 }
 
 final class StubLoginUsecase: LoginUsecaseProtocol {
@@ -90,5 +104,13 @@ final class StubLoginUsecase: LoginUsecaseProtocol {
                 nickname: "관리자",
                 birthdayDate: .now, gender: .male,
                 isPushEnabled: true))
+    }
+    
+    func updateUser(_ user: User) -> RxSwift.Observable<Result<Void, LoginError>> {
+        return .empty()
+    }
+    
+    func uploadImage(user: User, image: UIImage) -> Observable<Result<URL, LoginError>> {
+        return .empty()
     }
 }

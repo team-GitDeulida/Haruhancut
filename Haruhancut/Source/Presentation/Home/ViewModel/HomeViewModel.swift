@@ -116,8 +116,6 @@ final class HomeViewModel: HomeViewModelType {
         return Output(posts: todayPosts, groupName: groupName)
     }
     
-
-    
     /// 포스트 추가 함수
     func uploadPost(image: UIImage) -> Observable<Bool> {
         

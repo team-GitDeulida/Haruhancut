@@ -9,21 +9,25 @@ import Foundation
 import RxSwift
 import FirebaseAuth
 import FirebaseDatabase
+import UIKit
 
 final class LoginRepository: LoginRepositoryProtocol {
     
     private let kakaoLoginManager: KakaoLoginManagerProtocol
     private let appleLoginManager: AppleLoginManagerProtocol
     private let firebaseAuthManager: FirebaseAuthManagerProtocol
+    private let firebaseStorageManager: FirebaseStorageManagerProtocol
     
     init(
         kakaoLoginManager: KakaoLoginManagerProtocol,
         appleLoginManager: AppleLoginManagerProtocol,
-        firebaseAuthManager: FirebaseAuthManagerProtocol
+        firebaseAuthManager: FirebaseAuthManagerProtocol,
+        firebaseStorageManager: FirebaseStorageManagerProtocol
     ) {
         self.kakaoLoginManager = kakaoLoginManager
         self.firebaseAuthManager = firebaseAuthManager
         self.appleLoginManager = appleLoginManager
+        self.firebaseStorageManager = firebaseStorageManager
     }
     
     func loginWithKakao() -> Observable<Result<String, LoginError>> {
@@ -44,5 +48,34 @@ final class LoginRepository: LoginRepositoryProtocol {
     
     func fetchUserInfo() -> Observable<User?> {
         return firebaseAuthManager.fetchUserInfo()
+    }
+    
+    func updateUser(_ user: User) -> Observable<Result<Void, LoginError>> {
+        let path = "users/\(user.uid)"
+        let dto = user.toDTO()
+        
+        return firebaseAuthManager.updateValue(path: path, value: dto)
+            .map { success -> Result<Void, LoginError> in
+                if success {
+                    UserDefaultsManager.shared.saveUser(user)
+                    return .success(())
+                } else {
+                    return .failure(.signUpError)
+                }
+            }
+    }
+    
+
+    func uploadImage(user: User, image: UIImage) -> Observable<Result<URL, LoginError>> {
+        let path = "users/\(user.uid)/profile.jpg"
+        
+        return firebaseStorageManager.uploadImage(image: image, path: path)
+            .map { url in
+                if let url = url {
+                    return .success(url)
+                } else {
+                    return .failure(.signUpError)
+                }
+            }
     }
 }

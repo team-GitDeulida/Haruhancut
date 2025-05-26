@@ -441,10 +441,6 @@ extension CameraViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
             print("현재 프레임 없음")
             return
         }
-        
-//        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
-//        print("✅ 무음 사진 저장 완료")
-
 
         assert(Thread.isMainThread, "❌ UI 변경은 반드시 메인 스레드에서 수행해야 합니다")
         coordinator?.navigateToUpload(image: image, cameraType: .camera)

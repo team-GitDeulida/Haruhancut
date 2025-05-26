@@ -16,6 +16,7 @@ import KakaoSDKUser
 import RxKakaoSDKUser
 import RxKakaoSDKAuth
 import KakaoSDKAuth
+import UIKit
 
 final class LoginViewModel {
     private let loginUsecase: LoginUsecaseProtocol
@@ -238,6 +239,7 @@ final class LoginViewModel {
     // MARK: - ProfileSettingViewController
     struct ProfileInput {
         let nextBtnTapped: Observable<Void>
+        let selectedImage: Observable<UIImage?>
     }
     
     struct ProfileOutput {
@@ -245,21 +247,58 @@ final class LoginViewModel {
     }
     
     func transform(input: ProfileInput) -> ProfileOutput {
+        
         let signUpResult = signUpResultRelay
             .asDriver(onErrorJustReturn: .failure(.signUpError))
         
-        // 완료 -> 회원가입 진행
+        // A.withLatestFrom(B)
+        // A가 이벤트를 발생시킬 때, B의 가장 최근 값을 가져온다
         input.nextBtnTapped
-            .bind(onNext: { [weak self] in
-                guard let self = self else { return }
-                if let user = self.user.value {
-                    self.registerUser(user: user)
+            .withLatestFrom(input.selectedImage)
+            .flatMapLatest { [weak self] image -> Observable<Result<Void, LoginError>> in
+                
+                guard let self = self,
+                      let currentUser = self.user.value else {
+                    return Observable.just(.failure(.signUpError))
                 }
-            }).disposed(by: disposeBag)
+                
+                // 회원가입 진행
+                return self.registerUser(user: currentUser)
+                    .flatMap { result -> Observable<Result<Void, LoginError>> in
+                        switch result {
+                        case .success:
+                            guard let user = self.user.value else {
+                                return Observable.just(.failure(.signUpError))
+                            }
+                            // 이미지가 있다변 업로드 -> user 업데이트
+                            if let image = image {
+                                return self.loginUsecase
+                                    .uploadImage(user: user, image: image)
+                                    .flatMap { result -> Observable<Result<Void, LoginError>> in
+                                        switch result {
+                                        case .success(let url):
+                                            var updatedUser = user
+                                            updatedUser.profileImageURL = url.absoluteString
+                                            return self.updateUser(user: updatedUser)
+                                        case .failure(let error):
+                                            return .just(.failure(error))
+                                        }
+                                    }
+                            } else {
+                                return Observable.just(.success(()))
+                            }
+                        case .failure(let error):
+                            return Observable.just(.failure(error))
+                        }
+                    }
+                
+            }
+            .bind(to: signUpResultRelay)
+            .disposed(by: disposeBag)
         return ProfileOutput(signUpResult: signUpResult)
     }
     
-    private func registerUser(user: User) {
+    private func registerUser(user: User) -> Observable<Result<Void, LoginError>> {
         loginUsecase
             .registerUserToRealtimeDatabase(user: user)
             .map { [weak self] result -> Result<Void, LoginError> in
@@ -269,8 +308,11 @@ final class LoginViewModel {
                 }
                 return result.mapToVoid()
             }
-            .bind(to: signUpResultRelay)
-            .disposed(by: disposeBag)
+    }
+    
+    private func updateUser(user: User) -> Observable<Result<Void, LoginError>> {
+        UserDefaultsManager.shared.saveUser(user)
+        return loginUsecase.updateUser(user)
     }
 }
 

@@ -11,7 +11,12 @@ import RxSwift
 
 // https://cloud.google.com/storage/pricing?hl=ko
 
-final class FirebaseStorageManager {
+protocol FirebaseStorageManagerProtocol {
+    func uploadImage(image: UIImage, path: String) -> Observable<URL?>
+    func deleteImage(path: String) -> Observable<Bool>
+}
+
+final class FirebaseStorageManager: FirebaseStorageManagerProtocol {
     static let shared = FirebaseStorageManager()
     private init() {}
 }
