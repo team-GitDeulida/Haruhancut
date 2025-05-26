@@ -25,6 +25,7 @@ protocol HomeViewModelType {
     func deleteComment(post: Post, commentId: String)
     func uploadPost(image: UIImage) -> Observable<Bool>
     func stopObservingGroup()
+    func uploadProfileImage(_ image: UIImage) -> Observable<URL?>
 }
 
 
@@ -305,6 +306,17 @@ final class HomeViewModel: HomeViewModelType {
             })
     }
     
+    func uploadProfileImage(_ image: UIImage) -> Observable<URL?> {
+        guard let user = user.value else {
+            return .just(nil)
+        }
+
+        let path = "users/\(user.uid)/profile.jpg"
+
+        return FirebaseStorageManager.shared.uploadImage(image: image, path: path)
+    }
+
+    
     /// 스냅샷 종료
     @objc func stopObservingGroup() {
         groupSnapshotDisposable?.dispose()
@@ -370,6 +382,16 @@ final class StubHomeViewModel: HomeViewModelType {
     
     func stopObservingGroup() {
         print("스냅샷 종료")
+    }
+    
+    func uploadProfileImage(_ image: UIImage) -> Observable<URL?> {
+        guard let user = user.value else {
+            return .just(nil)
+        }
+
+        let path = "users/\(user.uid)/profile.jpg"
+
+        return FirebaseStorageManager.shared.uploadImage(image: image, path: path)
     }
 }
 

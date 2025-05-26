@@ -28,21 +28,58 @@ final class ProfileViewController: UIViewController {
     }
     
     // MARK: - UI Component
-    private lazy var profileImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 10
-        imageView.clipsToBounds = true
-        imageView.backgroundColor = .Gray500
+//    private lazy var profileImageView: UIImageView = {
+//        let imageView = UIImageView()
+//        imageView.contentMode = .scaleAspectFill
+//        imageView.layer.cornerRadius = 10
+//        imageView.clipsToBounds = true
+//        imageView.backgroundColor = .Gray500
+//        
+//        if let urlString = homeViewModel.user.value?.profileImageURL,
+//           let url = URL(string: urlString) {
+//            imageView.kf.setImage(with: url)
+//        } else {
+//            imageView.image = UIImage(systemName: "person.fill")
+//            imageView.tintColor = .gray
+//        }
+//        
+//        return imageView
+//    }()
+
+    private lazy var profileImageView: ProfileImageView = {
+        let imageView = ProfileImageView(size: 100, iconSize: 60)
         
         if let urlString = homeViewModel.user.value?.profileImageURL,
            let url = URL(string: urlString) {
-            imageView.kf.setImage(with: url)
+            
+            imageView.setImage(with: url)
+            
+//            KingfisherManager.shared.retrieveImage(with: url) { [weak self] result in
+//                switch result {
+//                case .success(let value):
+//                    Task { @MainActor [weak self] in
+//                        guard let self else { return }
+//                        self.homeViewModel.uploadProfileImage(value.image)
+//                            .observe(on: MainScheduler.instance)
+//                            .subscribe(onNext: { success in
+//                                print(success != nil ? "✅ 프로필 업로드 성공" : "❌ 업로드 실패")
+//                            })
+//                            .disposed(by: self.disposeBag)
+//                    }
+//                case .failure(let error):
+//                    print("❌ 이미지 다운로드 실패: \(error)")
+//                }
+//            }
         } else {
-            imageView.image = UIImage(systemName: "person.fill")
+            imageView.setImage(UIImage(systemName: "person.fill")!)
             imageView.tintColor = .gray
         }
+
         
+        imageView.onCameraTapped = { [weak self] in
+            guard let self = self else { return }
+            self.presentImagePicker(sourceType: .photoLibrary)
+        }
         return imageView
     }()
     
@@ -96,11 +133,6 @@ final class ProfileViewController: UIViewController {
         }
         
         NSLayoutConstraint.activate([
-            profileImageView.widthAnchor.constraint(equalToConstant: 60),
-            profileImageView.heightAnchor.constraint(equalTo: profileImageView.widthAnchor)
-        ])
-        
-        NSLayoutConstraint.activate([
             hStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),
             hStack.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             hStack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)
@@ -133,6 +165,45 @@ final class ProfileViewController: UIViewController {
     }
 }
 
+extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    private func presentImagePicker(sourceType: UIImagePickerController.SourceType) {
+        guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
+            print("❌ 해당 소스타입 사용 불가")
+            return
+        }
+
+        let picker = UIImagePickerController()
+        picker.sourceType = sourceType
+        picker.delegate = self
+        picker.allowsEditing = false
+        present(picker, animated: true)
+    }
+
+    // 이미지 선택 완료
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true)
+
+        if let image = info[.originalImage] as? UIImage {
+            // 이미지 설정
+            self.profileImageView.setImage(image)
+            //self.selectedImage = image
+        }
+    }
+
+    // 선택 취소
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true)
+    }
+}
+
+#Preview {
+    ProfileSettingViewController(
+        loginViewModel: LoginViewModel(loginUsecase: StubLoginUsecase()))
+}
+
+
+
 #Preview {
     ProfileViewController(homeViewModel: StubHomeViewModel(previewPost: .samplePosts[0], cameraType: .camera))
 }
+

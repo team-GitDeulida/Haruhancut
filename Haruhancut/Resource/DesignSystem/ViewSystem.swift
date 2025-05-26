@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class BubbleView: UIView {
     
@@ -162,7 +163,7 @@ final class ProfileImageView: UIView {
         imageView.image = UIImage(systemName: "person.fill")
         imageView.tintColor = .gray
         imageView.contentMode = .scaleAspectFit
-        imageView.clipsToBounds = true
+//        imageView.clipsToBounds = true
 
         addSubview(imageView)
 
@@ -199,6 +200,32 @@ final class ProfileImageView: UIView {
 
     @objc private func cameraTapped() {
         onCameraTapped?()
+    }
+}
+
+extension ProfileImageView {
+    func setImage(with url: URL) {
+        imageView.kf.setImage(with: url, placeholder: UIImage(systemName: "person.fill")) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success:
+                self.imageView.contentMode = .scaleAspectFill
+                self.imageView.clipsToBounds = true
+                NSLayoutConstraint.deactivate(self.iconSizeConstraints)
+
+                if self.fullSizeConstraints.isEmpty {
+                    self.fullSizeConstraints = [
+                        self.imageView.topAnchor.constraint(equalTo: self.topAnchor),
+                        self.imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+                        self.imageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+                        self.imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+                    ]
+                }
+                NSLayoutConstraint.activate(self.fullSizeConstraints)
+            case .failure(let error):
+                print("❌ 이미지 로딩 실패: \(error.localizedDescription)")
+            }
+        }
     }
 }
 
