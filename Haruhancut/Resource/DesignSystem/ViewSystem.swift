@@ -99,6 +99,80 @@ final class BubbleView: UIView {
     }
 }
 
+final class ProfileImageView: UIView {
+    
+    private let imageView = UIImageView()
+    private let cameraButton = UIButton(type: .system)
+    
+    // 외부에서 이벤트 감지할 수 있도록 공개
+    var onCameraTapped: (() -> Void)?
+    
+    init(size: CGFloat = 100, iconSize: CGFloat = 50) {
+        super.init(frame: .zero)
+        
+        translatesAutoresizingMaskIntoConstraints = false
+        backgroundColor = .Gray500
+        layer.cornerRadius = size / 2
+//        clipsToBounds = true
+        
+        setupImageView(iconSize: iconSize)
+        setupCameraButton()
+        
+        // 사이즈 제약
+        NSLayoutConstraint.activate([
+            widthAnchor.constraint(equalToConstant: size),
+            heightAnchor.constraint(equalTo: widthAnchor)
+        ])
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupImageView(iconSize: CGFloat) {
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.image = UIImage(systemName: "person.fill")
+        imageView.tintColor = .gray
+        imageView.contentMode = .scaleAspectFit
+        
+        addSubview(imageView)
+        
+        NSLayoutConstraint.activate([
+            imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            imageView.widthAnchor.constraint(equalToConstant: iconSize),
+            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor)
+        ])
+    }
+    
+    private func setupCameraButton() {
+        cameraButton.translatesAutoresizingMaskIntoConstraints = false
+        let config = UIImage.SymbolConfiguration(pointSize: 16, weight: .bold)
+        let cameraImage = UIImage(systemName: "camera.circle.fill", withConfiguration: config)
+        cameraButton.setImage(cameraImage, for: .normal)
+        cameraButton.tintColor = .white
+        cameraButton.backgroundColor = .mainBlack
+        cameraButton.layer.cornerRadius = 16
+        cameraButton.clipsToBounds = true
+        
+        addSubview(cameraButton)
+        
+        NSLayoutConstraint.activate([
+            cameraButton.widthAnchor.constraint(equalToConstant: 32),
+            cameraButton.heightAnchor.constraint(equalTo: cameraButton.widthAnchor),
+            cameraButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 6),
+            cameraButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 6)
+        ])
+        
+        cameraButton.addTarget(self, action: #selector(cameraTapped), for: .touchUpInside)
+    }
+    
+    @objc private func cameraTapped() {
+        onCameraTapped?()
+    }
+}
+
+
 #Preview {
     HomeViewController(
         loginViewModel: LoginViewModel(loginUsecase: StubLoginUsecase()),

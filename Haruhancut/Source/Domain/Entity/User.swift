@@ -55,7 +55,7 @@ extension User {
             uid: "",
             registerDate: Date(),                 // 현재 시간
             loginPlatform: loginPlatform,
-            nickname: "",                         // 아직 입력 안 됨
+            nickname: "관리자",                         // 아직 입력 안 됨
             profileImageURL: nil,
             birthdayDate: Date.distantPast,       // 의미 없는 과거 값
             gender: .other,                       // 기본값 (비공개)

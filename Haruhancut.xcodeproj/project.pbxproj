@@ -56,6 +56,7 @@
 		DF5F3E932D95C47700245C20 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF5F3E902D95C47700245C20 /* AppDelegate.swift */; };
 		DF5F3E942D95C47700245C20 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF5F3E912D95C47700245C20 /* SceneDelegate.swift */; };
 		DF661DEE2DE4342E0028688F /* ViewSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF661DED2DE4342E0028688F /* ViewSystem.swift */; };
+		DF661DF02DE44DB90028688F /* ProfileSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF661DEF2DE44DB90028688F /* ProfileSettingViewController.swift */; };
 		DF8603512DB00CFF008ADB69 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8603502DB00CFF008ADB69 /* UserDefaultsManager.swift */; };
 		DF947FC82DBE304E00D1E2FD /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF947FC52DBE304E00D1E2FD /* ProfileViewController.swift */; };
 		DF947FC92DBE304E00D1E2FD /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF947FC62DBE304E00D1E2FD /* ProfileViewModel.swift */; };
@@ -141,6 +142,7 @@
 		DF5F3E902D95C47700245C20 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DF5F3E912D95C47700245C20 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		DF661DED2DE4342E0028688F /* ViewSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSystem.swift; sourceTree = "<group>"; };
+		DF661DEF2DE44DB90028688F /* ProfileSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingViewController.swift; sourceTree = "<group>"; };
 		DF66506C2D88023400820F1A /* Haruhancut.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Haruhancut.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF8603502DB00CFF008ADB69 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		DF947FC52DBE304E00D1E2FD /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -290,8 +292,9 @@
 			isa = PBXGroup;
 			children = (
 				DF4B5B9C2DAEBACE00A7ADD7 /* LoginViewController.swift */,
-				DF4B5B9B2DAEBACE00A7ADD7 /* BirthdaySettingViewController.swift */,
 				DF4B5B9D2DAEBACE00A7ADD7 /* NicknameSettingViewController.swift */,
+				DF4B5B9B2DAEBACE00A7ADD7 /* BirthdaySettingViewController.swift */,
+				DF661DEF2DE44DB90028688F /* ProfileSettingViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -715,6 +718,7 @@
 				DF5F3E932D95C47700245C20 /* AppDelegate.swift in Sources */,
 				DF0C249D2DACF65F00022AB0 /* UIViewController+.swift in Sources */,
 				DF5F3E942D95C47700245C20 /* SceneDelegate.swift in Sources */,
+				DF661DF02DE44DB90028688F /* ProfileSettingViewController.swift in Sources */,
 				DFF1CBE02DBAAEC800722B04 /* GroupEnterViewController.swift in Sources */,
 				DF1577722DDC4B7100BEE272 /* ChattingViewSystem.swift in Sources */,
 				DFDC82692DBD49D9003C597D /* GroupRepositoryProtocol.swift in Sources */,
