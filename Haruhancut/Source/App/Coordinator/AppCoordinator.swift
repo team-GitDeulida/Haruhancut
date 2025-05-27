@@ -7,6 +7,7 @@
 
 import UIKit
 import RxSwift
+import RxRelay
 
 protocol Coordinator: AnyObject {
     var parentCoordinator: Coordinator? { get set }
@@ -169,13 +170,25 @@ final class HomeCoordinator: Coordinator {
     private let loginViewModel: LoginViewModel
     private let homeViewModel:  HomeViewModel
     private var groupViewModel: GroupViewModel?
-
+    private let profileViewModel: ProfileViewModel
+    
+    // MARK: - 최초로 사용되는 순간에 딱 한 번만 초기화
+//    private lazy var profileViewModel: ProfileViewModel = {
+//        let sharedUserRelay = loginViewModel.user.compactMapToNonOptional()
+//        return ProfileViewModel(loginUsecase: DIContainer.shared.resolve(LoginUsecase.self), userRelay: sharedUserRelay)
+//    }()
     
     init(navigationController: UINavigationController, loginViewModel: LoginViewModel, homeViewModel: HomeViewModel) {
         print("HomeCoordinator - 생성")
         self.navigationController = navigationController
         self.loginViewModel = loginViewModel
         self.homeViewModel = homeViewModel
+        
+        let userRelay = BehaviorRelay(value: loginViewModel.user.value!)
+        self.profileViewModel = ProfileViewModel(
+            loginUsecase: DIContainer.shared.resolve(LoginUsecase.self),
+            userRelay: userRelay
+        )
     }
     
     func start() {
@@ -220,7 +233,8 @@ final class HomeCoordinator: Coordinator {
     }
     
     func startProfile() {
-        let profileViewController = ProfileViewController(homeViewModel: homeViewModel)
+        
+        let profileViewController = ProfileViewController(profileViewModel: profileViewModel, homeViewModel: homeViewModel, loginViewModel: loginViewModel)
         profileViewController.coordinator = self
         navigationController.pushViewController(profileViewController, animated: true)
     }

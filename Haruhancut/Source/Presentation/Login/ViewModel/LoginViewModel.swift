@@ -18,10 +18,15 @@ import RxKakaoSDKAuth
 import KakaoSDKAuth
 import UIKit
 
-final class LoginViewModel {
+protocol LoginViewModelType {
+    
+}
+
+final class LoginViewModel: LoginViewModelType {
     private let loginUsecase: LoginUsecaseProtocol
     private let disposeBag = DisposeBag()
     private(set) var token: String?
+    
     
     // 이벤트를 방출하는 내부 트리거
     private let signUpResultRelay = PublishRelay<Result<Void, LoginError>>()
@@ -316,11 +321,11 @@ final class LoginViewModel {
     }
 }
 
-final class StubLoginViewModel {
+final class StubLoginViewModel: LoginViewModelType {
     
 }
 
-extension Result {
+public extension Result {
     func mapToVoid() -> Result<Void, Failure> {
         map { _ in () }
     }

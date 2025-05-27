@@ -15,11 +15,14 @@ final class ProfileViewController: UIViewController {
     
     weak var coordinator: HomeCoordinator?
 
-    private let profileViewModel = ProfileViewModel()
+    private let profileViewModel: ProfileViewModelType
     private let homeViewModel: HomeViewModelType
+    private let loginViewModel: LoginViewModelType
     
-    init(homeViewModel: HomeViewModelType) {
+    init(profileViewModel: ProfileViewModelType, homeViewModel: HomeViewModelType, loginViewModel: LoginViewModelType) {
+        self.profileViewModel = profileViewModel
         self.homeViewModel = homeViewModel
+        self.loginViewModel = loginViewModel 
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -28,52 +31,20 @@ final class ProfileViewController: UIViewController {
     }
     
     // MARK: - UI Component
-//    private lazy var profileImageView: UIImageView = {
-//        let imageView = UIImageView()
-//        imageView.contentMode = .scaleAspectFill
-//        imageView.layer.cornerRadius = 10
-//        imageView.clipsToBounds = true
-//        imageView.backgroundColor = .Gray500
-//        
-//        if let urlString = homeViewModel.user.value?.profileImageURL,
-//           let url = URL(string: urlString) {
-//            imageView.kf.setImage(with: url)
-//        } else {
-//            imageView.image = UIImage(systemName: "person.fill")
-//            imageView.tintColor = .gray
-//        }
-//        
-//        return imageView
-//    }()
-
     private lazy var profileImageView: ProfileImageView = {
         let imageView = ProfileImageView(size: 100, iconSize: 60)
-        
+            
+        /*
+        MARK: - bindUser()로 대체
         if let urlString = homeViewModel.user.value?.profileImageURL,
            let url = URL(string: urlString) {
             
             imageView.setImage(with: url)
-            
-//            KingfisherManager.shared.retrieveImage(with: url) { [weak self] result in
-//                switch result {
-//                case .success(let value):
-//                    Task { @MainActor [weak self] in
-//                        guard let self else { return }
-//                        self.homeViewModel.uploadProfileImage(value.image)
-//                            .observe(on: MainScheduler.instance)
-//                            .subscribe(onNext: { success in
-//                                print(success != nil ? "✅ 프로필 업로드 성공" : "❌ 업로드 실패")
-//                            })
-//                            .disposed(by: self.disposeBag)
-//                    }
-//                case .failure(let error):
-//                    print("❌ 이미지 다운로드 실패: \(error)")
-//                }
-//            }
         } else {
             imageView.setImage(UIImage(systemName: "person.fill")!)
             imageView.tintColor = .gray
         }
+         */
 
         
         imageView.onCameraTapped = { [weak self] in
@@ -121,6 +92,23 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         makeUI()
+        bindUser()
+    }
+    
+    // MARK: - Bind
+    /// ProfileViewController에서 homeViewModel.user를 RX로 관할하여, 프로필 이미지가 변경될 때마다 자동으로 UI를 업데이트 한다
+    private func bindUser() {
+        homeViewModel.user
+            .compactMap { $0?.profileImageURL }
+            .distinctUntilChanged()
+            .bind(onNext: { [weak self] urlString in
+                guard let self = self else { return }
+                guard let url = URL(string: urlString) else { return }
+                
+                // MARK: - 비동기 kf 이미지 설정
+                self.profileImageView.setImage(with: url)
+            })
+            .disposed(by: disposeBag)
     }
     
     // MARK: - UI Setting
@@ -182,11 +170,28 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
     // 이미지 선택 완료
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true)
+        
 
         if let image = info[.originalImage] as? UIImage {
-            // 이미지 설정
+            
+            // MARK: - 새 이미지 바로 반영 (사용자 경험 향상)
             self.profileImageView.setImage(image)
-            //self.selectedImage = image
+            
+            // MARK: - 이미지 비동기 업로드
+            profileViewModel.uploadImage(image: image)
+                .bind(onNext: { [weak self] success in
+                    guard let self = self else { return }
+                    
+                    if success {
+                        if let profileViewModel = self.profileViewModel as? ProfileViewModel {
+                            let updatedUser = profileViewModel.userRelay.value
+                            self.homeViewModel.user.accept(updatedUser)
+                        }
+                    } else {
+                        print("❌ 프로필 이미지 업로드 실패")
+                    }
+                }).disposed(by: disposeBag)
+            
         }
     }
 
@@ -204,6 +209,6 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
 
 
 #Preview {
-    ProfileViewController(homeViewModel: StubHomeViewModel(previewPost: .samplePosts[0], cameraType: .camera))
+    ProfileViewController(profileViewModel: StubProfileViewModel(), homeViewModel: StubHomeViewModel(previewPost: .samplePosts[0], cameraType: .camera), loginViewModel: StubLoginViewModel())
 }
 

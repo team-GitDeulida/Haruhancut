@@ -138,26 +138,6 @@ final class ProfileImageView: UIView {
         imageView.layer.cornerRadius = bounds.width / 2
     }
 
-    func setImage(_ image: UIImage) {
-        imageView.image = image
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-
-        // 기존 작은 제약 해제
-        NSLayoutConstraint.deactivate(iconSizeConstraints)
-
-        // 전체 꽉 채우는 제약 적용 (한 번만 생성)
-        if fullSizeConstraints.isEmpty {
-            fullSizeConstraints = [
-                imageView.topAnchor.constraint(equalTo: topAnchor),
-                imageView.leadingAnchor.constraint(equalTo: leadingAnchor),
-                imageView.trailingAnchor.constraint(equalTo: trailingAnchor),
-                imageView.bottomAnchor.constraint(equalTo: bottomAnchor)
-            ]
-        }
-        NSLayoutConstraint.activate(fullSizeConstraints)
-    }
-
     private func setupImageView(iconSize: CGFloat) {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(systemName: "person.fill")
@@ -204,8 +184,36 @@ final class ProfileImageView: UIView {
 }
 
 extension ProfileImageView {
+    
+    // MARK: - 유저가 사진 선택 후 바로 반영
+    func setImage(_ image: UIImage) {
+        imageView.image = image
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+
+        // 기존 작은 제약 해제
+        NSLayoutConstraint.deactivate(iconSizeConstraints)
+
+        // 전체 꽉 채우는 제약 적용 (한 번만 생성)
+        if fullSizeConstraints.isEmpty {
+            fullSizeConstraints = [
+                imageView.topAnchor.constraint(equalTo: topAnchor),
+                imageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+                imageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+                imageView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            ]
+        }
+        NSLayoutConstraint.activate(fullSizeConstraints)
+    }
+    
+    // MARK: - 서버에서 URL 갱신되면, 비동기 로딩
     func setImage(with url: URL) {
-        imageView.kf.setImage(with: url, placeholder: UIImage(systemName: "person.fill")) { [weak self] result in
+        imageView.kf.setImage(
+            with: url,
+            placeholder: imageView.image // ✅ 현재 이미지 유지
+            //placeholder: UIImage(systemName: "person.fill")
+            
+        ) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success:

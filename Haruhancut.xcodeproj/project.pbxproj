@@ -11,6 +11,7 @@
 		DF055ADC2DDDA1A900D7CB56 /* ImageUploadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF055ADB2DDDA1A900D7CB56 /* ImageUploadViewController.swift */; };
 		DF055ADE2DDDB07B00D7CB56 /* FirebaseStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF055ADD2DDDB07B00D7CB56 /* FirebaseStorageManager.swift */; };
 		DF0C249D2DACF65F00022AB0 /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0C249C2DACF65F00022AB0 /* UIViewController+.swift */; };
+		DF0E47E12DE58FD2009569C6 /* Rx+.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0E47E02DE58FD2009569C6 /* Rx+.swift */; };
 		DF156B742DAD60E500918EE6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF156B732DAD60E500918EE6 /* User.swift */; };
 		DF156B762DAD610B00918EE6 /* UserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF156B752DAD610B00918EE6 /* UserDTO.swift */; };
 		DF1577722DDC4B7100BEE272 /* ChattingViewSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF1577712DDC4B7100BEE272 /* ChattingViewSystem.swift */; };
@@ -96,6 +97,7 @@
 		DF055ADB2DDDA1A900D7CB56 /* ImageUploadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUploadViewController.swift; sourceTree = "<group>"; };
 		DF055ADD2DDDB07B00D7CB56 /* FirebaseStorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorageManager.swift; sourceTree = "<group>"; };
 		DF0C249C2DACF65F00022AB0 /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
+		DF0E47E02DE58FD2009569C6 /* Rx+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Rx+.swift"; sourceTree = "<group>"; };
 		DF156B732DAD60E500918EE6 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		DF156B752DAD610B00918EE6 /* UserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDTO.swift; sourceTree = "<group>"; };
 		DF1577712DDC4B7100BEE272 /* ChattingViewSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChattingViewSystem.swift; sourceTree = "<group>"; };
@@ -402,6 +404,7 @@
 				DFA5BE2D2DAF94A900CAD5D3 /* Date+.swift */,
 				DF4962C82DACEF140001437B /* TextField+.swift */,
 				DF0C249C2DACF65F00022AB0 /* UIViewController+.swift */,
+				DF0E47E02DE58FD2009569C6 /* Rx+.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -689,6 +692,7 @@
 				DF055ADC2DDDA1A900D7CB56 /* ImageUploadViewController.swift in Sources */,
 				DF5F3E5E2D95BE7000245C20 /* ViewController.swift in Sources */,
 				DF3CBB4F2DA814F100AD5788 /* LoginUsecase.swift in Sources */,
+				DF0E47E12DE58FD2009569C6 /* Rx+.swift in Sources */,
 				DF2AE60A2DB218A7007779D9 /* HomeViewController.swift in Sources */,
 				DF4962C12DACD6840001437B /* FontSystem.swift in Sources */,
 				DF3502E32DB36BBF002C1269 /* ButtonSystem.swift in Sources */,
@@ -748,9 +752,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Haruhancut/Haruhancut.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 36;
-				DEVELOPMENT_TEAM = LGX4B4WC66;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 37;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LGX4B4WC66;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Haruhancut/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "하루한컷";
@@ -771,6 +777,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.indextrown.Haruhancut;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.indextrown.Haruhancut";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -789,9 +796,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Haruhancut/Haruhancut.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 36;
-				DEVELOPMENT_TEAM = LGX4B4WC66;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 37;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LGX4B4WC66;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Haruhancut/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "하루한컷";
@@ -812,6 +821,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.indextrown.Haruhancut;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.indextrown.Haruhancut";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
