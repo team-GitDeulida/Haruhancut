@@ -204,7 +204,6 @@ final class HomeCoordinator: Coordinator {
     
     func startGroup() {
         groupViewModel = GroupViewModel(loginViewModel: loginViewModel, groupUsecase: DIContainer.shared.resolve(GroupUsecase.self), homeViewModel: homeViewModel)
-        // groupViewModel = GroupViewModel(userId: loginViewModel.user.value?.uid ?? "", groupUsecase: DIContainer.shared.resolve(GroupUsecase.self), loginViewModel: loginViewModel)
         guard let groupViewModel = groupViewModel else { return }
         let vc = GroupViewController(groupViewModel: groupViewModel)
         vc.coordinator = self
@@ -237,6 +236,12 @@ final class HomeCoordinator: Coordinator {
         let profileViewController = ProfileViewController(profileViewModel: profileViewModel, homeViewModel: homeViewModel, loginViewModel: loginViewModel)
         profileViewController.coordinator = self
         navigationController.pushViewController(profileViewController, animated: true)
+    }
+    
+    func startMembers() {
+        let membersViewController = MembersViewController(homeViewModel: homeViewModel)
+        membersViewController.coordinator = self
+        navigationController.pushViewController(membersViewController, animated: true)
     }
     
     func startCamera() {

@@ -12,6 +12,11 @@
 		DF055ADE2DDDB07B00D7CB56 /* FirebaseStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF055ADD2DDDB07B00D7CB56 /* FirebaseStorageManager.swift */; };
 		DF0C249D2DACF65F00022AB0 /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0C249C2DACF65F00022AB0 /* UIViewController+.swift */; };
 		DF0E47E12DE58FD2009569C6 /* Rx+.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0E47E02DE58FD2009569C6 /* Rx+.swift */; };
+		DF0E47E82DE5A622009569C6 /* CommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0E47E32DE5A622009569C6 /* CommentCell.swift */; };
+		DF0E47E92DE5A622009569C6 /* PostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0E47E42DE5A622009569C6 /* PostCell.swift */; };
+		DF0E47EA2DE5A622009569C6 /* PostCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0E47E52DE5A622009569C6 /* PostCommentViewController.swift */; };
+		DF0E47EB2DE5A622009569C6 /* PostDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0E47E62DE5A622009569C6 /* PostDetailViewController.swift */; };
+		DF0E47F12DE5A774009569C6 /* MembersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0E47F02DE5A774009569C6 /* MembersViewController.swift */; };
 		DF156B742DAD60E500918EE6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF156B732DAD60E500918EE6 /* User.swift */; };
 		DF156B762DAD610B00918EE6 /* UserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF156B752DAD610B00918EE6 /* UserDTO.swift */; };
 		DF1577722DDC4B7100BEE272 /* ChattingViewSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF1577712DDC4B7100BEE272 /* ChattingViewSystem.swift */; };
@@ -19,7 +24,6 @@
 		DF2AE60A2DB218A7007779D9 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2AE6082DB218A7007779D9 /* HomeViewController.swift */; };
 		DF2AE60E2DB218C6007779D9 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2AE60C2DB218C6007779D9 /* HomeViewModel.swift */; };
 		DF2AE6172DB218FD007779D9 /* GroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2AE6162DB218FD007779D9 /* GroupViewController.swift */; };
-		DF2B5C962DD852FB0091B5F4 /* PostCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2B5C952DD852FB0091B5F4 /* PostCommentViewController.swift */; };
 		DF3502E32DB36BBF002C1269 /* ButtonSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3502E22DB36BBF002C1269 /* ButtonSystem.swift */; };
 		DF35040E2DB388B8002C1269 /* TextFieldSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF35040D2DB388B8002C1269 /* TextFieldSystem.swift */; };
 		DF3504102DB39892002C1269 /* LabelSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF35040F2DB39892002C1269 /* LabelSystem.swift */; };
@@ -46,8 +50,6 @@
 		DF4B5BA12DAEBACE00A7ADD7 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4B5B9C2DAEBACE00A7ADD7 /* LoginViewController.swift */; };
 		DF4B5BA22DAEBACE00A7ADD7 /* NicknameSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4B5B9D2DAEBACE00A7ADD7 /* NicknameSettingViewController.swift */; };
 		DF4B5BA62DAEBAD300A7ADD7 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4B5BA42DAEBAD300A7ADD7 /* LoginViewModel.swift */; };
-		DF548D7D2DD872BA005F0178 /* CommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF548D7C2DD872BA005F0178 /* CommentCell.swift */; };
-		DF548D7F2DD88DF9005F0178 /* PostDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF548D7E2DD88DF9005F0178 /* PostDetailViewController.swift */; };
 		DF590B662DAB843F00956E54 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DF590B652DAB843F00956E54 /* GoogleService-Info.plist */; };
 		DF590B682DAB8D9F00956E54 /* FirebaseAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF590B672DAB8D9F00956E54 /* FirebaseAuthManager.swift */; };
 		DF590B6A2DAB926600956E54 /* FirebaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF590B692DAB926600956E54 /* FirebaseError.swift */; };
@@ -78,7 +80,6 @@
 		DFC1428D2DBB538800EC6063 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = DFC1428C2DBB538800EC6063 /* FirebaseDatabase */; };
 		DFC1428F2DBB538800EC6063 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = DFC1428E2DBB538800EC6063 /* FirebaseFirestore */; };
 		DFC142912DBB538800EC6063 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = DFC142902DBB538800EC6063 /* FirebaseStorage */; };
-		DFD096D22DC6485400DE909C /* PostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD096D12DC6485400DE909C /* PostCell.swift */; };
 		DFD096D52DC651E500DE909C /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = DFD096D42DC651E500DE909C /* Kingfisher */; };
 		DFD269712DBB559D00F90C12 /* ScaleKit in Frameworks */ = {isa = PBXBuildFile; productRef = DFD269702DBB559D00F90C12 /* ScaleKit */; };
 		DFD757AA2D9C2A74008C82DF /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD757A92D9C2A74008C82DF /* DIContainer.swift */; };
@@ -98,6 +99,11 @@
 		DF055ADD2DDDB07B00D7CB56 /* FirebaseStorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorageManager.swift; sourceTree = "<group>"; };
 		DF0C249C2DACF65F00022AB0 /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
 		DF0E47E02DE58FD2009569C6 /* Rx+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Rx+.swift"; sourceTree = "<group>"; };
+		DF0E47E32DE5A622009569C6 /* CommentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentCell.swift; sourceTree = "<group>"; };
+		DF0E47E42DE5A622009569C6 /* PostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCell.swift; sourceTree = "<group>"; };
+		DF0E47E52DE5A622009569C6 /* PostCommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCommentViewController.swift; sourceTree = "<group>"; };
+		DF0E47E62DE5A622009569C6 /* PostDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailViewController.swift; sourceTree = "<group>"; };
+		DF0E47F02DE5A774009569C6 /* MembersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembersViewController.swift; sourceTree = "<group>"; };
 		DF156B732DAD60E500918EE6 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		DF156B752DAD610B00918EE6 /* UserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDTO.swift; sourceTree = "<group>"; };
 		DF1577712DDC4B7100BEE272 /* ChattingViewSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChattingViewSystem.swift; sourceTree = "<group>"; };
@@ -105,7 +111,6 @@
 		DF2AE6082DB218A7007779D9 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		DF2AE60C2DB218C6007779D9 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		DF2AE6162DB218FD007779D9 /* GroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewController.swift; sourceTree = "<group>"; };
-		DF2B5C952DD852FB0091B5F4 /* PostCommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCommentViewController.swift; sourceTree = "<group>"; };
 		DF3502E22DB36BBF002C1269 /* ButtonSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonSystem.swift; sourceTree = "<group>"; };
 		DF35040D2DB388B8002C1269 /* TextFieldSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldSystem.swift; sourceTree = "<group>"; };
 		DF35040F2DB39892002C1269 /* LabelSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelSystem.swift; sourceTree = "<group>"; };
@@ -132,8 +137,6 @@
 		DF4B5B9C2DAEBACE00A7ADD7 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		DF4B5B9D2DAEBACE00A7ADD7 /* NicknameSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameSettingViewController.swift; sourceTree = "<group>"; };
 		DF4B5BA42DAEBAD300A7ADD7 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
-		DF548D7C2DD872BA005F0178 /* CommentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentCell.swift; sourceTree = "<group>"; };
-		DF548D7E2DD88DF9005F0178 /* PostDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailViewController.swift; sourceTree = "<group>"; };
 		DF590B652DAB843F00956E54 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DF590B672DAB8D9F00956E54 /* FirebaseAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthManager.swift; sourceTree = "<group>"; };
 		DF590B692DAB926600956E54 /* FirebaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseError.swift; sourceTree = "<group>"; };
@@ -156,7 +159,6 @@
 		DFA5BE2D2DAF94A900CAD5D3 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		DFA98D2C2DBB35AA00C22770 /* GroupHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupHostViewController.swift; sourceTree = "<group>"; };
 		DFB71C142DB62F7900FE8490 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
-		DFD096D12DC6485400DE909C /* PostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCell.swift; sourceTree = "<group>"; };
 		DFD757A92D9C2A74008C82DF /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
 		DFDC82662DBD4998003C597D /* GroupUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupUsecase.swift; sourceTree = "<group>"; };
 		DFDC82682DBD49D9003C597D /* GroupRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupRepositoryProtocol.swift; sourceTree = "<group>"; };
@@ -201,14 +203,30 @@
 			path = ImagePreview;
 			sourceTree = "<group>";
 		};
+		DF0E47E72DE5A622009569C6 /* Post */ = {
+			isa = PBXGroup;
+			children = (
+				DF0E47E32DE5A622009569C6 /* CommentCell.swift */,
+				DF0E47E42DE5A622009569C6 /* PostCell.swift */,
+				DF0E47E52DE5A622009569C6 /* PostCommentViewController.swift */,
+				DF0E47E62DE5A622009569C6 /* PostDetailViewController.swift */,
+			);
+			path = Post;
+			sourceTree = "<group>";
+		};
+		DF0E47ED2DE5A6C4009569C6 /* Members */ = {
+			isa = PBXGroup;
+			children = (
+				DF0E47F02DE5A774009569C6 /* MembersViewController.swift */,
+			);
+			path = Members;
+			sourceTree = "<group>";
+		};
 		DF2AE6092DB218A7007779D9 /* View */ = {
 			isa = PBXGroup;
 			children = (
 				DF2AE6082DB218A7007779D9 /* HomeViewController.swift */,
-				DF548D7E2DD88DF9005F0178 /* PostDetailViewController.swift */,
-				DF2B5C952DD852FB0091B5F4 /* PostCommentViewController.swift */,
-				DFD096D12DC6485400DE909C /* PostCell.swift */,
-				DF548D7C2DD872BA005F0178 /* CommentCell.swift */,
+				DF0E47E72DE5A622009569C6 /* Post */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -358,12 +376,12 @@
 		DF5F3E7D2D95BECF00245C20 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				DF0E47ED2DE5A6C4009569C6 /* Members */,
+				DF6BBA182D972048002A344F /* Login */,
+				DF2AE6142DB218E4007779D9 /* Group */,
+				DF6BBA152D972046002A344F /* Home */,
 				DF947FCB2DBE309800D1E2FD /* Camera */,
 				DF947FC72DBE304E00D1E2FD /* Profile */,
-				DF2AE6142DB218E4007779D9 /* Group */,
-				DF6BBA2A2D972597002A344F /* SignUp */,
-				DF6BBA152D972046002A344F /* Home */,
-				DF6BBA182D972048002A344F /* Login */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -461,13 +479,6 @@
 				DF4B5BA52DAEBAD300A7ADD7 /* ViewModel */,
 			);
 			path = Login;
-			sourceTree = "<group>";
-		};
-		DF6BBA2A2D972597002A344F /* SignUp */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = SignUp;
 			sourceTree = "<group>";
 		};
 		DF947FC72DBE304E00D1E2FD /* Profile */ = {
@@ -675,8 +686,11 @@
 			files = (
 				DFA5BE2E2DAF94A900CAD5D3 /* Date+.swift in Sources */,
 				DFF576A72DB0D87B007BEADA /* AppleLoginManager.swift in Sources */,
+				DF0E47E82DE5A622009569C6 /* CommentCell.swift in Sources */,
+				DF0E47E92DE5A622009569C6 /* PostCell.swift in Sources */,
+				DF0E47EA2DE5A622009569C6 /* PostCommentViewController.swift in Sources */,
+				DF0E47EB2DE5A622009569C6 /* PostDetailViewController.swift in Sources */,
 				DF947FC82DBE304E00D1E2FD /* ProfileViewController.swift in Sources */,
-				DF548D7D2DD872BA005F0178 /* CommentCell.swift in Sources */,
 				DF947FC92DBE304E00D1E2FD /* ProfileViewModel.swift in Sources */,
 				DF4B5BA62DAEBAD300A7ADD7 /* LoginViewModel.swift in Sources */,
 				DF218C7C2DD8E7D1000B0A61 /* TextViewSystem.swift in Sources */,
@@ -699,7 +713,6 @@
 				DF055ADE2DDDB07B00D7CB56 /* FirebaseStorageManager.swift in Sources */,
 				DF156B742DAD60E500918EE6 /* User.swift in Sources */,
 				DFA98D2D2DBB35AA00C22770 /* GroupHostViewController.swift in Sources */,
-				DF548D7F2DD88DF9005F0178 /* PostDetailViewController.swift in Sources */,
 				DF590B682DAB8D9F00956E54 /* FirebaseAuthManager.swift in Sources */,
 				DF590B6A2DAB926600956E54 /* FirebaseError.swift in Sources */,
 				DF8603512DB00CFF008ADB69 /* UserDefaultsManager.swift in Sources */,
@@ -716,9 +729,9 @@
 				DF2AE60E2DB218C6007779D9 /* HomeViewModel.swift in Sources */,
 				DF156B762DAD610B00918EE6 /* UserDTO.swift in Sources */,
 				DFDDEABD2DDF659400408C27 /* AlarmManager.swift in Sources */,
-				DFD096D22DC6485400DE909C /* PostCell.swift in Sources */,
 				DF661DEE2DE4342E0028688F /* ViewSystem.swift in Sources */,
 				DFB71C152DB62F7900FE8490 /* AppCoordinator.swift in Sources */,
+				DF0E47F12DE5A774009569C6 /* MembersViewController.swift in Sources */,
 				DF5F3E932D95C47700245C20 /* AppDelegate.swift in Sources */,
 				DF0C249D2DACF65F00022AB0 /* UIViewController+.swift in Sources */,
 				DF5F3E942D95C47700245C20 /* SceneDelegate.swift in Sources */,
@@ -726,7 +739,6 @@
 				DFF1CBE02DBAAEC800722B04 /* GroupEnterViewController.swift in Sources */,
 				DF1577722DDC4B7100BEE272 /* ChattingViewSystem.swift in Sources */,
 				DFDC82692DBD49D9003C597D /* GroupRepositoryProtocol.swift in Sources */,
-				DF2B5C962DD852FB0091B5F4 /* PostCommentViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

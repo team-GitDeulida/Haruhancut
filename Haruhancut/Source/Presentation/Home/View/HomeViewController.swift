@@ -207,10 +207,17 @@ final class HomeViewController: UIViewController {
         titleLabel.sizeToFit() // 글자 길이에 맞게 label 크기 조정
         self.navigationItem.titleView = titleLabel
         
+        /// 좌측 네비게이션 버튼
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "person.3.fill"),
+            style: .plain,
+            target: self,
+            action: #selector(startMembers)
+        )
         
-        /// 네비게이션 버튼
+        /// 우측 네비게이션 버튼
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "person"),
+            image: UIImage(systemName: "person.fill"),
             style: .plain,
             target: self,
             action: #selector(startProfile)
@@ -226,6 +233,10 @@ final class HomeViewController: UIViewController {
     /// 프로필 화면 이동
     @objc private func startProfile() {
         coordinator?.startProfile()
+    }
+    
+    @objc private func startMembers() {
+        coordinator?.startMembers()
     }
     
     /// 카메라 화면 이동

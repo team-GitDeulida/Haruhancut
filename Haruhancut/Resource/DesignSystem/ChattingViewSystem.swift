@@ -126,7 +126,7 @@ final class ChattingView: BaseView {
         let button = UIButton(type: .system)
         button.setTitle("전송", for: .normal)
         button.setTitleColor(.mainBlack, for: .normal)
-        button.backgroundColor = UIColor.init(hex: "AAD1E7")
+        button.backgroundColor = .hcColor
         button.layer.cornerRadius = 15
         button.clipsToBounds = true
         return button

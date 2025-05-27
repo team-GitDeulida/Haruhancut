@@ -334,7 +334,7 @@ final class StubHomeViewModel: HomeViewModelType {
     init(previewPost: Post, cameraType: CameraType = .camera) {
         self.posts = BehaviorRelay(value: [previewPost])
         self.user = BehaviorRelay(value: User.empty(loginPlatform: .kakao))
-        self.group = BehaviorRelay(value: nil)
+        self.group = BehaviorRelay(value: HCGroup.sampleGroup)
         self.cameraType = cameraType
     }
 
