@@ -63,6 +63,20 @@ extension User {
             groupId: nil
         )
     }
+    
+    static func empty2(loginPlatform: LoginPlatform) -> User {
+        return User(
+            uid: "uid테스트",
+            registerDate: Date(),                 // 현재 시간
+            loginPlatform: loginPlatform,
+            nickname: "관리자",                     // 아직 입력 안 됨
+            profileImageURL: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Gatto_europeo4.jpg/500px-Gatto_europeo4.jpg",
+            birthdayDate: Date.distantPast,       // 의미 없는 과거 값
+            gender: .other,                       // 기본값 (비공개)
+            isPushEnabled: true,                  // 기본값
+            groupId: nil
+        )
+    }
 }
 
 extension User {

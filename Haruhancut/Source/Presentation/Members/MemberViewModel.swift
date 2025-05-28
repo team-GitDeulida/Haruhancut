@@ -9,7 +9,7 @@ import RxSwift
 import RxCocoa
 
 protocol MemberViewModelType {
-    var group: Driver<HCGroup> { get }
+    var group: Driver<HCGroup?> { get }
     var members: Driver<[User]> { get }
     func fetchMembers()
     func fetchUser(uid: String) -> Observable<User?>
@@ -18,14 +18,14 @@ protocol MemberViewModelType {
 final class MemberViewModel: MemberViewModelType {
     private let loginUsecase: LoginUsecaseProtocol
     
-    let groupRelay: BehaviorRelay<HCGroup>
-    var group: Driver<HCGroup> { groupRelay.asDriver() }
+    let groupRelay: BehaviorRelay<HCGroup?>
+    var group: Driver<HCGroup?> { groupRelay.asDriver(onErrorJustReturn: nil) }
     
     let membersRelay = BehaviorRelay<[User]>(value: [])
     var members: Driver<[User]> { membersRelay.asDriver() }
     private let disposeBag = DisposeBag()
     
-    init(loginUsecase: LoginUsecaseProtocol, groupRelay: BehaviorRelay<HCGroup>) {
+    init(loginUsecase: LoginUsecaseProtocol, groupRelay: BehaviorRelay<HCGroup?>) {
         self.loginUsecase = loginUsecase
         self.groupRelay = groupRelay
         self.fetchMembers()
@@ -37,6 +37,7 @@ final class MemberViewModel: MemberViewModelType {
             .asObservable()
             .flatMapLatest { [weak self] group -> Observable<[User]> in
                 guard let self = self else { return .just([])}
+                guard let group = group else { return .just([])}
                 let userFetchObservables = group.members.keys.map { self.fetchUser(uid: $0) }
                 return Observable.zip(userFetchObservables).map { $0.compactMap { $0 } }
             }
@@ -51,13 +52,13 @@ final class MemberViewModel: MemberViewModelType {
 
 final class StubMemberViewModel: MemberViewModelType {
     
-    let groupRelay: BehaviorRelay<HCGroup>
-    var group: Driver<HCGroup> { groupRelay.asDriver() }
+    let groupRelay: BehaviorRelay<HCGroup?>
+    var group: Driver<HCGroup?> { groupRelay.asDriver(onErrorJustReturn: nil) }
     
     var membersRelay = BehaviorRelay<[User]>(value: [])
     var members: Driver<[User]> { membersRelay.asDriver() }
     
-    init(groupRelay: BehaviorRelay<HCGroup>, membersRelay: BehaviorRelay<[User]>) {
+    init(groupRelay: BehaviorRelay<HCGroup?>, membersRelay: BehaviorRelay<[User]>) {
         self.groupRelay = groupRelay
         self.membersRelay = membersRelay
     }

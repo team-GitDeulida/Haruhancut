@@ -231,11 +231,15 @@ extension ProfileImageView {
     }
     
     // MARK: - 서버에서 URL 갱신되면, 비동기 로딩
-    func setImage(with url: URL) {
+    func setImage(with url: URL, forceRefresh: Bool = false) {
+        
+        let options: KingfisherOptionsInfo = forceRefresh ? [.forceRefresh] : []
+        
         imageView.kf.setImage(
             with: url,
             placeholder: imageView.image // ✅ 현재 이미지 유지
             //placeholder: UIImage(systemName: "person.fill")
+            ,options: options
             
         ) { [weak self] result in
             guard let self = self else { return }

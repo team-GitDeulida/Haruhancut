@@ -46,7 +46,7 @@ final class LoginViewModel: LoginViewModelType {
             print("✅ loginVM - 캐시에서 불러온 유저: \(cachedUser)")
             self.user.accept(cachedUser)
             
-            // ✅ 2. 서버에서 유저 불러오기
+            // ✅ 2. 서버에서 유저 불러오기w
             fetchUserInfo()
         }
     }

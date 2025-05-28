@@ -18,6 +18,7 @@ final class ProfileViewController: UIViewController {
     private let profileViewModel: ProfileViewModelType
     private let homeViewModel: HomeViewModelType
     private let loginViewModel: LoginViewModelType
+    private var loadingView: UIView?
     
     init(profileViewModel: ProfileViewModelType, homeViewModel: HomeViewModelType, loginViewModel: LoginViewModelType) {
         self.profileViewModel = profileViewModel
@@ -110,6 +111,8 @@ final class ProfileViewController: UIViewController {
                 
                 // MARK: - 비동기 kf 이미지 설정
                 self.profileImageView.setImage(with: url)
+
+                print("여기 동작함")
             })
             .disposed(by: disposeBag)
     }
@@ -167,27 +170,31 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true)
         
-
         if let image = info[.originalImage] as? UIImage {
             
             // MARK: - 새 이미지 바로 반영 (사용자 경험 향상)
             self.profileImageView.setImage(image)
+            self.setPopGestureEnabled(false)     // <-- 제스처 막기
+            self.showLoadingIndicator()
             
             // MARK: - 이미지 비동기 업로드
             profileViewModel.uploadImage(image: image)
                 .bind(onNext: { [weak self] success in
                     guard let self = self else { return }
-                    
+                    self.hideLoadingIndicator()
+                    self.setPopGestureEnabled(true)  // <-- 다시 허용
                     if success {
                         if let profileViewModel = self.profileViewModel as? ProfileViewModel {
                             let updatedUser = profileViewModel.userRelay.value
                             self.homeViewModel.user.accept(updatedUser)
+                            
+                            guard let groupId = homeViewModel.group.value?.groupId else { return }
+                            self.homeViewModel.fetchGroup(groupId: groupId)
                         }
                     } else {
                         print("❌ 프로필 이미지 업로드 실패")
                     }
                 }).disposed(by: disposeBag)
-            
         }
     }
 
@@ -195,6 +202,61 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true)
     }
+}
+
+extension ProfileViewController {
+    
+    // MARK: - 제스처 잠금/해제
+    private func setPopGestureEnabled(_ enabled: Bool) {
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = enabled
+    }
+
+    
+    private func showLoadingIndicator() {
+        guard let rootView = self.navigationController?.view ?? self.view else { return }
+        let loadingView = UIView()
+        loadingView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+        loadingView.isUserInteractionEnabled = true
+        loadingView.translatesAutoresizingMaskIntoConstraints = false
+
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.startAnimating()
+        loadingView.addSubview(indicator)
+
+        rootView.addSubview(loadingView)
+        self.loadingView = loadingView
+
+        NSLayoutConstraint.activate([
+            loadingView.topAnchor.constraint(equalTo: rootView.topAnchor),
+            loadingView.bottomAnchor.constraint(equalTo: rootView.bottomAnchor),
+            loadingView.leadingAnchor.constraint(equalTo: rootView.leadingAnchor),
+            loadingView.trailingAnchor.constraint(equalTo: rootView.trailingAnchor),
+
+            indicator.centerXAnchor.constraint(equalTo: loadingView.centerXAnchor),
+            indicator.centerYAnchor.constraint(equalTo: loadingView.centerYAnchor)
+        ])
+    }
+
+    
+    private func showLoadingIndicator_noNavi() {
+         let loadingView = UIView(frame: view.bounds)
+         loadingView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+         loadingView.isUserInteractionEnabled = true
+         
+         let indicator = UIActivityIndicatorView(style: .large)
+         indicator.center = loadingView.center
+         indicator.startAnimating()
+         
+         loadingView.addSubview(indicator)
+         view.addSubview(loadingView)
+         self.loadingView = loadingView
+     }
+     
+     private func hideLoadingIndicator() {
+         loadingView?.removeFromSuperview()
+         loadingView = nil
+     }
 }
 
 #Preview {

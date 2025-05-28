@@ -16,17 +16,20 @@ final class ProfileViewModel: ProfileViewModelType {
     private let loginUsecase: LoginUsecaseProtocol
     private let disposeBag = DisposeBag()
     
-    let userRelay: BehaviorRelay<User>
-    var user: Driver<User> { userRelay.asDriver() }
+    let userRelay: BehaviorRelay<User?>
+    var user: Driver<User?> { userRelay.asDriver(onErrorJustReturn: nil) }
     
-    init(loginUsecase: LoginUsecaseProtocol, userRelay: BehaviorRelay<User>) {
+    init(
+        loginUsecase: LoginUsecaseProtocol,
+         userRelay: BehaviorRelay<User?>
+    ) {
         self.loginUsecase = loginUsecase
         self.userRelay = userRelay
-        print(userRelay.value)
+        // print(userRelay.value)
     }
     
     func uploadImage(image: UIImage) -> Observable<Bool> {
-        let user = userRelay.value
+        guard let user = userRelay.value else { return .just(false)}
         return loginUsecase.uploadImage(user: user, image: image)
             .flatMap { result -> Observable<Bool> in
                 switch result {

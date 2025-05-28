@@ -175,9 +175,9 @@ final class HomeCoordinator: Coordinator {
     
     // MARK: - 최초로 사용되는 순간에 딱 한 번만 초기화
     private lazy var memberViewModel: MemberViewModel = {
-        let groupRelay = BehaviorRelay(value: homeViewModel.group.value!)
+        // let groupRelay = BehaviorRelay(value: homeViewModel.group.value!)
         return MemberViewModel(loginUsecase: DIContainer.shared.resolve(LoginUsecase.self),
-                               groupRelay: groupRelay)
+                               groupRelay: homeViewModel.group)
     }()
     
     init(navigationController: UINavigationController,
@@ -190,10 +190,10 @@ final class HomeCoordinator: Coordinator {
         self.homeViewModel = homeViewModel
         
         // ProfileVM
-        let userRelay = BehaviorRelay(value: loginViewModel.user.value!)
+        // let userRelay = BehaviorRelay(value: )
         self.profileViewModel = ProfileViewModel(
             loginUsecase: DIContainer.shared.resolve(LoginUsecase.self),
-            userRelay: userRelay
+            userRelay: loginViewModel.user
         )
     }
     
@@ -306,30 +306,3 @@ final class HomeCoordinator: Coordinator {
         parentCoordinator?.childDidFinish(self)
     }
 }
-
-//final class CameraCoordinator: Coordinator {
-//    
-//    var parentCoordinator: Coordinator?
-//    var childCoordinators: [Coordinator] = []
-//    let navigationController: UINavigationController
-//    private let homeViewModel:  HomeViewModel
-//    
-//    init(navigationController: UINavigationController, homeViewModel: HomeViewModel) {
-//        print("CameraCoordinator - 생성")
-//        self.navigationController = navigationController
-//        self.homeViewModel = homeViewModel
-//    }
-//    
-//    func start() {
-//        print("CameraCoordinator - start()")
-//        showCamera()
-//    }
-//    
-//    func showCamera() {
-//        
-//    }
-//    
-//    func finishFlow() {
-//        parentCoordinator?.childDidFinish(self)
-//    }
-//}

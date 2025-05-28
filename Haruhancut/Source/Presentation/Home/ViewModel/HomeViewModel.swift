@@ -26,6 +26,7 @@ protocol HomeViewModelType {
     func uploadPost(image: UIImage) -> Observable<Bool>
     func stopObservingGroup()
     func uploadProfileImage(_ image: UIImage) -> Observable<URL?>
+    func fetchGroup(groupId: String)
 }
 
 
@@ -41,6 +42,7 @@ final class HomeViewModel: HomeViewModelType {
     
     // 스냅샷 구독
     private var groupSnapshotDisposable: Disposable?
+    private var userSnapshotDisposable: Disposable?
 
     var didUserPostToday: Observable<Bool> {
         return Observable.combineLatest(user, posts)
@@ -78,6 +80,7 @@ final class HomeViewModel: HomeViewModelType {
         /// 캐시 그룹 불러오기
         fetchDefaultGroup()
         
+        /// 그룹 스냅샷
         user
             .compactMap { $0?.groupId }
             .distinctUntilChanged()
@@ -87,21 +90,15 @@ final class HomeViewModel: HomeViewModelType {
             })
             .disposed(by: disposeBag)
         
-        /*
-        MARK: - 이 방식을 사용하면 초기 실행 시점에만 groulId가 있을 경우만 작동한다. userRelay는 로그인 직후 비동기적으로 값이 들어오므로 init 시점에는 nil 가능성이 크다. 즉 groulId가 나중에 들어와도 반응을 하지 못한다
-        /// 서버에서 그룹 불러오기
-        if let groupId = user.value?.groupId {
-            // fetchGroup(groupId: groupId)
-            observeGroupRealtime(groupId: groupId)
-        } else {
-            print("그룹이 없음")
-        }
-         */
- 
-        
-        /// 임시 하드코딩
-        // posts.accept(Post.samplePosts)
-        // posts.accept(HCGroup.sampleGroup.postsByDate.flatMap { $0.value })
+        // 유저 스냅셧
+//        user
+//            .compactMap { $0?.uid }
+//            .distinctUntilChanged()
+//            .subscribe(onNext: { [weak self] uid in
+//                guard let self = self else { return }
+//                self.observeUserRealtime(uid: uid)
+//            })
+//            .disposed(by: disposeBag)
     }
     
     func transform() -> Output {
@@ -171,8 +168,7 @@ final class HomeViewModel: HomeViewModelType {
                 // 2. Storage에서도 삭제
                 return FirebaseStorageManager.shared.deleteImage(path: storagePath)
             }
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { success in
+            .bind(onNext: { success in
                 if success {
                     print("✅ 삭제 완료")
                 } else {
@@ -260,7 +256,7 @@ final class HomeViewModel: HomeViewModelType {
 
     /// 서버에서 그룹 정보 불러오기
     /// - Parameter groupId: 그룹Id
-    private func fetchGroup(groupId: String) {
+    func fetchGroup(groupId: String) {
         groupUsecase.fetchGroup(groupId: groupId)
             .bind(onNext: { result in
                 switch result {
@@ -290,10 +286,9 @@ final class HomeViewModel: HomeViewModelType {
 
         groupSnapshotDisposable = FirebaseAuthManager.shared.observeValueStream(path: path, type: HCGroupDTO.self)
             .compactMap { $0.toModel() }
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] group in
+            .bind(onNext: { [weak self] group in
                 guard let self = self else { return }
-                print("🔥 observeGroupRealtime 변경 감지됨: \(group)")
+                // print("🔥 observeGroupRealtime 변경 감지됨: \(group)")
                 self.group.accept(group)
                 
                 // 캐시 저장
@@ -303,6 +298,21 @@ final class HomeViewModel: HomeViewModelType {
                     .filter { $0.isToday }
                     .sorted(by: { $0.createdAt < $1.createdAt }) // 오래된 순
                 self.posts.accept(todayPosts)
+            })
+    }
+    
+    private func observeUserRealtime(uid: String) {
+        let path = "users/\(uid)"
+        
+        // 기존 구독 중단
+        userSnapshotDisposable?.dispose()
+        
+        userSnapshotDisposable = FirebaseAuthManager.shared.observeValueStream(path: path, type: UserDTO.self)
+            .compactMap { $0.toModel() }
+            .bind(onNext: { [weak self] user in
+                guard let self = self else { return }
+                self.user.accept(user)
+                print("🔥 observeUserRealtime 변경 감지됨: \(user)")
             })
     }
     
@@ -321,11 +331,15 @@ final class HomeViewModel: HomeViewModelType {
     @objc func stopObservingGroup() {
         groupSnapshotDisposable?.dispose()
         groupSnapshotDisposable = nil
-        print("🛑 그룹 실시간 스냅샷 종료됨")
+        
+        userSnapshotDisposable?.dispose()
+        userSnapshotDisposable = nil
+        print("🛑 그룹/유저 실시간 스냅샷 종료됨")
     }
 }
 
 final class StubHomeViewModel: HomeViewModelType {
+    
     var cameraType: CameraType
     let posts: BehaviorRelay<[Post]>
     let user: BehaviorRelay<User?>
@@ -373,7 +387,6 @@ final class StubHomeViewModel: HomeViewModelType {
     }
     
     func deleteComment(post: Post, commentId: String) {
-        ()
     }
     
     func uploadPost(image: UIImage) -> Observable<Bool> {
@@ -392,6 +405,10 @@ final class StubHomeViewModel: HomeViewModelType {
         let path = "users/\(user.uid)/profile.jpg"
 
         return FirebaseStorageManager.shared.uploadImage(image: image, path: path)
+    }
+    
+    func fetchGroup(groupId: String) {
+        
     }
 }
 

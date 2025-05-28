@@ -169,7 +169,7 @@ final class MembersViewController: UIViewController {
 
 #Preview {
     UINavigationController(rootViewController: MembersViewController(
-        memberViewModel: StubMemberViewModel(groupRelay: .init(value: .sampleGroup), membersRelay: .init(value: [User.empty(loginPlatform: .kakao)])),
+        memberViewModel: StubMemberViewModel(groupRelay: .init(value: .sampleGroup), membersRelay: .init(value: [User.empty(loginPlatform: .kakao), User.empty2(loginPlatform: .kakao)])),
         homeViewModel: StubHomeViewModel(previewPost: .samplePosts[0])))
 }
 
@@ -179,7 +179,7 @@ final class FamilyMemberCircleView: UIView {
     
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
+        // imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 30
         imageView.clipsToBounds = true
         imageView.tintColor = .gray
@@ -206,9 +206,13 @@ final class FamilyMemberCircleView: UIView {
         constraints()
         
         if let url = imageURL {
+            imageView.contentMode = .scaleAspectFill
             imageView.kf.setImage(with: url)
         } else {
+            imageView.contentMode = .scaleAspectFill
             imageView.image = UIImage(systemName: "person.fill")
+            // imageView.backgroundColor = .red
+            // imageView.transform = CGAffineTransform(translationX: 0, y: 0.scaled)
         }
         
         setUpTapGesture()
