@@ -50,6 +50,10 @@ final class LoginRepository: LoginRepositoryProtocol {
         return firebaseAuthManager.fetchUserInfo()
     }
     
+    func fetchUser(uid: String) -> Observable<User?> {
+        return firebaseAuthManager.fetchUser(uid: uid)
+    }
+    
     func updateUser(_ user: User) -> Observable<Result<Void, LoginError>> {
         let path = "users/\(user.uid)"
         let dto = user.toDTO()

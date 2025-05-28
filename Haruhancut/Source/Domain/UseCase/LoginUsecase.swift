@@ -15,6 +15,7 @@ protocol LoginUsecaseProtocol {
     func authenticateUser(prividerID: String, idToken: String, rawNonce: String?) -> Observable<Result<Void, LoginError>>
     func registerUserToRealtimeDatabase(user: User) -> Observable<Result<User, LoginError>>
     func fetchUserInfo() -> Observable<User?>
+    func fetchUser(uid: String) -> Observable<User?>
     func updateUser(_ user: User) -> Observable<Result<Void, LoginError>>
     func uploadImage(user: User, image: UIImage) -> Observable<Result<URL, LoginError>>
 }
@@ -60,6 +61,15 @@ final class LoginUsecase: LoginUsecaseProtocol {
         return repository.fetchUserInfo()
     }
     
+    
+    /// uid로 멤버 정보 불러오기
+    /// - Parameter uid: 유저 고유 식별자
+    /// - Returns: Observable<User?>
+    func fetchUser(uid: String) -> RxSwift.Observable<User?> {
+        return repository.fetchUser(uid: uid)
+    }
+    
+    
     /// 유저 업데이트
     /// - Parameter user: 유저
     /// - Returns: 성공유무
@@ -67,12 +77,19 @@ final class LoginUsecase: LoginUsecaseProtocol {
         return repository.updateUser(user)
     }
     
+    
+    /// 이미지 업로드
+    /// - Parameters:
+    ///   - user: 유저
+    ///   - image: 이미지
+    /// - Returns: 이미지url
     func uploadImage(user: User, image: UIImage) -> Observable<Result<URL, LoginError>> {
         return repository.uploadImage(user: user, image: image)
     }
 }
 
 final class StubLoginUsecase: LoginUsecaseProtocol {
+    
     func loginWIthKakao() -> Observable<Result<String, LoginError>> {
         return .just(.success("stub-token"))
     }
@@ -96,6 +113,17 @@ final class StubLoginUsecase: LoginUsecaseProtocol {
     }
     
     func fetchUserInfo() -> Observable<User?> {
+        return .just(
+            User(
+                uid: "testUser",
+                registerDate: .now,
+                loginPlatform: .kakao,
+                nickname: "관리자",
+                birthdayDate: .now, gender: .male,
+                isPushEnabled: true))
+    }
+    
+    func fetchUser(uid: String) -> Observable<User?> {
         return .just(
             User(
                 uid: "testUser",

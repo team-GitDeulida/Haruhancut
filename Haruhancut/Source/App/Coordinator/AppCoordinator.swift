@@ -171,19 +171,25 @@ final class HomeCoordinator: Coordinator {
     private let homeViewModel:  HomeViewModel
     private var groupViewModel: GroupViewModel?
     private let profileViewModel: ProfileViewModel
+    // private let memberViewModel: MemberViewModel
     
     // MARK: - 최초로 사용되는 순간에 딱 한 번만 초기화
-//    private lazy var profileViewModel: ProfileViewModel = {
-//        let sharedUserRelay = loginViewModel.user.compactMapToNonOptional()
-//        return ProfileViewModel(loginUsecase: DIContainer.shared.resolve(LoginUsecase.self), userRelay: sharedUserRelay)
-//    }()
+    private lazy var memberViewModel: MemberViewModel = {
+        let groupRelay = BehaviorRelay(value: homeViewModel.group.value!)
+        return MemberViewModel(loginUsecase: DIContainer.shared.resolve(LoginUsecase.self),
+                               groupRelay: groupRelay)
+    }()
     
-    init(navigationController: UINavigationController, loginViewModel: LoginViewModel, homeViewModel: HomeViewModel) {
+    init(navigationController: UINavigationController,
+         loginViewModel: LoginViewModel,
+         homeViewModel: HomeViewModel
+    ) {
         print("HomeCoordinator - 생성")
         self.navigationController = navigationController
         self.loginViewModel = loginViewModel
         self.homeViewModel = homeViewModel
         
+        // ProfileVM
         let userRelay = BehaviorRelay(value: loginViewModel.user.value!)
         self.profileViewModel = ProfileViewModel(
             loginUsecase: DIContainer.shared.resolve(LoginUsecase.self),
@@ -229,6 +235,7 @@ final class HomeCoordinator: Coordinator {
         let vc = HomeViewController(loginViewModel: loginViewModel, homeViewModel: homeViewModel)
         vc.coordinator = self
         navigationController.setViewControllers([vc], animated: true)
+        _ = memberViewModel
     }
     
     func startProfile() {
@@ -245,7 +252,8 @@ final class HomeCoordinator: Coordinator {
     }
     
     func startMembers() {
-        let membersViewController = MembersViewController(homeViewModel: homeViewModel)
+        // MemberVM
+        let membersViewController = MembersViewController(memberViewModel: memberViewModel, homeViewModel: homeViewModel)
         membersViewController.coordinator = self
         navigationController.pushViewController(membersViewController, animated: true)
     }
@@ -297,7 +305,6 @@ final class HomeCoordinator: Coordinator {
     func finishFlow() {
         parentCoordinator?.childDidFinish(self)
     }
-    
 }
 
 //final class CameraCoordinator: Coordinator {

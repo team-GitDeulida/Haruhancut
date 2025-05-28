@@ -27,6 +27,7 @@ final class ImagePreviewViewController: UIViewController, UIScrollViewDelegate {
         iv.contentMode = .scaleAspectFit
         iv.backgroundColor = .black
         iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.tintColor = .gray
         return iv
     }()
 

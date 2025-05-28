@@ -17,6 +17,7 @@
 		DF0E47EA2DE5A622009569C6 /* PostCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0E47E52DE5A622009569C6 /* PostCommentViewController.swift */; };
 		DF0E47EB2DE5A622009569C6 /* PostDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0E47E62DE5A622009569C6 /* PostDetailViewController.swift */; };
 		DF0E47F12DE5A774009569C6 /* MembersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0E47F02DE5A774009569C6 /* MembersViewController.swift */; };
+		DF10E8392DE7256900EFD23F /* MemberViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF10E8382DE7256900EFD23F /* MemberViewModel.swift */; };
 		DF156B742DAD60E500918EE6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF156B732DAD60E500918EE6 /* User.swift */; };
 		DF156B762DAD610B00918EE6 /* UserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF156B752DAD610B00918EE6 /* UserDTO.swift */; };
 		DF1577722DDC4B7100BEE272 /* ChattingViewSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF1577712DDC4B7100BEE272 /* ChattingViewSystem.swift */; };
@@ -106,6 +107,7 @@
 		DF0E47E52DE5A622009569C6 /* PostCommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCommentViewController.swift; sourceTree = "<group>"; };
 		DF0E47E62DE5A622009569C6 /* PostDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailViewController.swift; sourceTree = "<group>"; };
 		DF0E47F02DE5A774009569C6 /* MembersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembersViewController.swift; sourceTree = "<group>"; };
+		DF10E8382DE7256900EFD23F /* MemberViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberViewModel.swift; sourceTree = "<group>"; };
 		DF156B732DAD60E500918EE6 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		DF156B752DAD610B00918EE6 /* UserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDTO.swift; sourceTree = "<group>"; };
 		DF1577712DDC4B7100BEE272 /* ChattingViewSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChattingViewSystem.swift; sourceTree = "<group>"; };
@@ -222,6 +224,7 @@
 			isa = PBXGroup;
 			children = (
 				DF0E47F02DE5A774009569C6 /* MembersViewController.swift */,
+				DF10E8382DE7256900EFD23F /* MemberViewModel.swift */,
 			);
 			path = Members;
 			sourceTree = "<group>";
@@ -784,6 +787,7 @@
 				DF0C249D2DACF65F00022AB0 /* UIViewController+.swift in Sources */,
 				DF5F3E942D95C47700245C20 /* SceneDelegate.swift in Sources */,
 				DF661DF02DE44DB90028688F /* ProfileSettingViewController.swift in Sources */,
+				DF10E8392DE7256900EFD23F /* MemberViewModel.swift in Sources */,
 				DFF1CBE02DBAAEC800722B04 /* GroupEnterViewController.swift in Sources */,
 				DF1577722DDC4B7100BEE272 /* ChattingViewSystem.swift in Sources */,
 				DFDC82692DBD49D9003C597D /* GroupRepositoryProtocol.swift in Sources */,
@@ -814,7 +818,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 39;
+				CURRENT_PROJECT_VERSION = 40;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LGX4B4WC66;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -858,7 +862,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 39;
+				CURRENT_PROJECT_VERSION = 40;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LGX4B4WC66;
 				GENERATE_INFOPLIST_FILE = YES;

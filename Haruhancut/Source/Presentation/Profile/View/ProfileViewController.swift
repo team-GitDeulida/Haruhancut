@@ -137,6 +137,11 @@ final class ProfileViewController: UIViewController {
             target: self,
             action: #selector(test)
         )
+        
+        /// 자식 화면에서 뒤로가기
+        let backItem = UIBarButtonItem()
+        backItem.title = "프로필"
+        navigationItem.backBarButtonItem = backItem
     }
     
     @objc func test() {

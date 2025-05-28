@@ -26,6 +26,7 @@ protocol FirebaseAuthManagerProtocol {
     func authenticateUser(prividerID: String, idToken: String, rawNonce: String?) -> Observable<Result<Void, LoginError>>
     func registerUserToRealtimeDatabase(user: User) -> Observable<Result<User, LoginError>>
     func fetchUserInfo() -> Observable<User?>
+    func fetchUser(uid: String) -> Observable<User?>
     
     func createGroup(groupName: String) -> Observable<Result<(groupId: String, inviteCode: String), GroupError>>
     func updateUserGroupId(groupId: String) -> Observable<Result<Void, GroupError>>
@@ -148,6 +149,42 @@ extension FirebaseAuthManager {
 
             let userRef = self.databaseRef.child("users").child(uid)
             
+            userRef.observeSingleEvent(of: .value) { snapshot in
+                // 🔥 추가: value가 nil이면 (애초에 아예 없음)
+                guard snapshot.exists() else {
+                    print("🔸 유저 데이터 없음 (snapshot 없음)")
+                    observer.onNext(nil)
+                    observer.onCompleted()
+                    return
+                }
+                
+                // 🔥 추가: value 타입 확인
+                guard let dict = snapshot.value as? [String: Any] else {
+                    print("❌ 유저 데이터가 Dictionary가 아님. 타입: \(type(of: snapshot.value))")
+                    observer.onNext(nil)
+                    observer.onCompleted()
+                    return
+                }
+                
+                do {
+                    let data = try JSONSerialization.data(withJSONObject: dict, options: [])
+                    let dto = try JSONDecoder().decode(UserDTO.self, from: data)
+                    let user = dto.toModel()
+                    observer.onNext(user)
+                } catch {
+                    print("❌ 유저 디코딩 실패: \(error.localizedDescription)")
+                    observer.onNext(nil)
+                }
+                observer.onCompleted()
+            }
+            
+            return Disposables.create()
+        }
+    }
+    
+    func fetchUser(uid: String) -> RxSwift.Observable<User?> {
+        return Observable.create { observer in
+            let userRef = self.databaseRef.child("users").child(uid)
             userRef.observeSingleEvent(of: .value) { snapshot in
                 // 🔥 추가: value가 nil이면 (애초에 아예 없음)
                 guard snapshot.exists() else {

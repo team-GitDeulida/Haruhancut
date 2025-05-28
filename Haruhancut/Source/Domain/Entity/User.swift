@@ -52,10 +52,10 @@ extension User {
     // 필수 속성이 많은 Non-Optional 모델(User)을 "기본값으로라도 먼저 생성하고, 이후 점진적으로 값만 채워나가는 패턴"
     static func empty(loginPlatform: LoginPlatform) -> User {
         return User(
-            uid: "",
+            uid: "uid테스트",
             registerDate: Date(),                 // 현재 시간
             loginPlatform: loginPlatform,
-            nickname: "관리자",                         // 아직 입력 안 됨
+            nickname: "관리자",                     // 아직 입력 안 됨
             profileImageURL: nil,
             birthdayDate: Date.distantPast,       // 의미 없는 과거 값
             gender: .other,                       // 기본값 (비공개)
@@ -100,6 +100,16 @@ struct HCGroup: Encodable {
 }
 
 extension HCGroup {
+    static var emptyGroup: HCGroup {
+        return HCGroup(
+            groupId: "",
+            groupName: "",
+            createdAt: .now,
+            hostUserId: "",
+            inviteCode: "",
+            members: [:],
+            postsByDate: [:])
+    }
     static var sampleGroup: HCGroup {
         let posts = Post.samplePosts
         let grouped = posts.groupedByDate()
