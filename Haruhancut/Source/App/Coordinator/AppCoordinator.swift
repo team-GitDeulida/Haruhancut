@@ -238,6 +238,12 @@ final class HomeCoordinator: Coordinator {
         navigationController.pushViewController(profileViewController, animated: true)
     }
     
+    func navigateToSetting() {
+        let settingView = SettingViewController(homeViewModel: homeViewModel)
+        settingView.coordinator = self
+        self.navigationController.pushViewController(settingView, animated: true)
+    }
+    
     func startMembers() {
         let membersViewController = MembersViewController(homeViewModel: homeViewModel)
         membersViewController.coordinator = self

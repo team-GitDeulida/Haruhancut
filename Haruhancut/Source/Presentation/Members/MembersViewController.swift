@@ -61,7 +61,6 @@ final class MembersViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         makeUI()
         constraints()
     }
@@ -80,11 +79,6 @@ final class MembersViewController: UIViewController {
         NSLayoutConstraint.activate([
             titleStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
             titleStack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-//            textLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
-//            textLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-//            
-//            peopleLavel.topAnchor.constraint(equalTo: textLabel.topAnchor),
-//            peopleLavel.leadingAnchor.constraint(equalTo: textLabel.trailingAnchor, constant: 5)
         ])
     }
 }

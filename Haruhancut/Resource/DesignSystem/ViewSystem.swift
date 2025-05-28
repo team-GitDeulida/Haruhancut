@@ -100,17 +100,27 @@ final class BubbleView: UIView {
     }
 }
 
+// MARK: - 프로필 이미지 뷰 (카메라 버튼 + 원형 이미지 탭 가능)
 final class ProfileImageView: UIView {
 
+    // MARK: - UI Component
+    // 프로필 이미지 표시용 이미지 뷰
     private let imageView = UIImageView()
+    
+    // 카메라 버튼(이미지 우측 하단)
     private let cameraButton = UIButton(type: .system)
 
-    // 제약 그룹
+    // MARK: - Constraints
+    // 초기 아이콘 크기 제약(작은 아이콘 형태)
     private var iconSizeConstraints: [NSLayoutConstraint] = []
+    // 이미지가 전체를 채울 때 사용하는 제약
     private var fullSizeConstraints: [NSLayoutConstraint] = []
 
-    // 외부에서 이벤트 감지할 수 있도록 공개
+    // MARK: - 외부 콜백
+    // 카메라 버튼 탭 시 호출
     var onCameraTapped: (() -> Void)?
+    // 원형 전체 영역 탭 시 호출
+    var onProfileTapped: (() -> Void)?
 
     init(size: CGFloat = 100, iconSize: CGFloat = 50) {
         super.init(frame: .zero)
@@ -118,10 +128,11 @@ final class ProfileImageView: UIView {
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .Gray500
         layer.cornerRadius = size / 2
-        clipsToBounds = false // 이미지뷰만 잘리도록
+        clipsToBounds = false   // 이미지뷰만 원형으로 잘리도록
 
         setupImageView(iconSize: iconSize)
-        setupCameraButton()
+        setupCameraButton()     // 카메라 탭 제스처 추가
+        setUpTapGesture()       // 큰 원 영역 탭 제스처 추가
 
         NSLayoutConstraint.activate([
             widthAnchor.constraint(equalToConstant: size),
@@ -138,12 +149,12 @@ final class ProfileImageView: UIView {
         imageView.layer.cornerRadius = bounds.width / 2
     }
 
+    // 프로필 아이콘 이미지 뷰 설정
     private func setupImageView(iconSize: CGFloat) {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(systemName: "person.fill")
         imageView.tintColor = .gray
         imageView.contentMode = .scaleAspectFit
-//        imageView.clipsToBounds = true
 
         addSubview(imageView)
 
@@ -156,6 +167,7 @@ final class ProfileImageView: UIView {
         NSLayoutConstraint.activate(iconSizeConstraints)
     }
 
+    // 카메라 버튼 설정
     private func setupCameraButton() {
         cameraButton.translatesAutoresizingMaskIntoConstraints = false
         let config = UIImage.SymbolConfiguration(pointSize: 16, weight: .bold)
@@ -167,7 +179,6 @@ final class ProfileImageView: UIView {
         cameraButton.clipsToBounds = true
 
         addSubview(cameraButton)
-
         NSLayoutConstraint.activate([
             cameraButton.widthAnchor.constraint(equalToConstant: 32),
             cameraButton.heightAnchor.constraint(equalTo: cameraButton.widthAnchor),
@@ -177,9 +188,22 @@ final class ProfileImageView: UIView {
 
         cameraButton.addTarget(self, action: #selector(cameraTapped), for: .touchUpInside)
     }
-
+    
+    // 카메라 버튼 탭 시 호출
     @objc private func cameraTapped() {
         onCameraTapped?()
+    }
+    
+    // 프로필 전체 원형 뷰에 버튼 설정
+    private func setUpTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profileTapped))
+        self.addGestureRecognizer(tapGesture)
+        self.isUserInteractionEnabled = true
+    }
+    
+    // 프로필 원형 전체 탭 시 호출
+    @objc private func profileTapped() {
+        onProfileTapped?()
     }
 }
 
@@ -234,6 +258,12 @@ extension ProfileImageView {
                 print("❌ 이미지 로딩 실패: \(error.localizedDescription)")
             }
         }
+    }
+}
+
+extension ProfileImageView {
+    var image: UIImage? {
+        return imageView.image
     }
 }
 

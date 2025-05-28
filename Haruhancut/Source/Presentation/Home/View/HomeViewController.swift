@@ -122,14 +122,14 @@ final class HomeViewController: UIViewController {
                 self.emptyLabel.isHidden = !posts.isEmpty
                 
                 // 사진 추가하기 -> 오늘의 사진 추가 완료
-                if !posts.isEmpty {
+                // 포스트가 비어있지 않으면서 내가 작성판 포스트가 하나라도 있다면
+                if !posts.isEmpty && posts.contains(where: { $0.userId == self.homeViewModel.user.value?.uid }) {
                     self.bubbleView.text = "오늘 사진 추가 완료"
                     self.bubbleView.alpha = 0.6
                    
                 } else {
                     self.bubbleView.text = "사진 추가하기"
                 }
-                
             })
             .disposed(by: disposeBag)
         
@@ -209,7 +209,7 @@ final class HomeViewController: UIViewController {
         
         /// 좌측 네비게이션 버튼
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "person.3.fill"),
+            image: UIImage(systemName: "calendar"),
             style: .plain,
             target: self,
             action: #selector(startMembers)
@@ -335,9 +335,10 @@ extension UICollectionViewFlowLayout {
 }
 
 #Preview {
-    HomeViewController(
+    UINavigationController(rootViewController: HomeViewController(
         loginViewModel: LoginViewModel(loginUsecase: StubLoginUsecase()),
-        homeViewModel: HomeViewModel(loginUsecase: StubLoginUsecase(), groupUsecase: StubGroupUsecase(), userRelay: .init(value: User.empty(loginPlatform: .kakao))))
+        homeViewModel: HomeViewModel(loginUsecase: StubLoginUsecase(), groupUsecase: StubGroupUsecase(), userRelay: .init(value: User.empty(loginPlatform: .kakao)))))
+    
 }
 
 // true → false, false → true로 바꾸는 RxSwift용 map 헬퍼 함수

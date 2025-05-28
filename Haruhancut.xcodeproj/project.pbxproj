@@ -31,6 +31,8 @@
 		DF3CBB492DA809DB00AD5788 /* LoginRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBB482DA809DB00AD5788 /* LoginRepository.swift */; };
 		DF3CBB4D2DA80A6800AD5788 /* LoginRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBB4C2DA80A6800AD5788 /* LoginRepositoryProtocol.swift */; };
 		DF3CBB4F2DA814F100AD5788 /* LoginUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBB4E2DA814F100AD5788 /* LoginUsecase.swift */; };
+		DF437C192DE6DBC600B1DFB9 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF437C172DE6DBC600B1DFB9 /* SettingViewController.swift */; };
+		DF437C1A2DE6DBC600B1DFB9 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF437C182DE6DBC600B1DFB9 /* SettingViewModel.swift */; };
 		DF4962B52DACD2860001437B /* RacingSansOne-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DF4962B42DACD2860001437B /* RacingSansOne-Regular.ttf */; };
 		DF4962B62DACD2860001437B /* Pretendard-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = DF4962AE2DACD2860001437B /* Pretendard-ExtraLight.otf */; };
 		DF4962B72DACD2860001437B /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DF4962B22DACD2860001437B /* Pretendard-SemiBold.otf */; };
@@ -118,6 +120,8 @@
 		DF3CBB482DA809DB00AD5788 /* LoginRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRepository.swift; sourceTree = "<group>"; };
 		DF3CBB4C2DA80A6800AD5788 /* LoginRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRepositoryProtocol.swift; sourceTree = "<group>"; };
 		DF3CBB4E2DA814F100AD5788 /* LoginUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUsecase.swift; sourceTree = "<group>"; };
+		DF437C172DE6DBC600B1DFB9 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
+		DF437C182DE6DBC600B1DFB9 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		DF4962AA2DACD2860001437B /* NanumMyeongjo-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NanumMyeongjo-Regular.ttf"; sourceTree = "<group>"; };
 		DF4962AB2DACD2860001437B /* Pretendard-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Black.otf"; sourceTree = "<group>"; };
 		DF4962AC2DACD2860001437B /* Pretendard-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.otf"; sourceTree = "<group>"; };
@@ -273,6 +277,47 @@
 				DFDC82682DBD49D9003C597D /* GroupRepositoryProtocol.swift */,
 			);
 			path = RepositoryProtocol;
+			sourceTree = "<group>";
+		};
+		DF437C0D2DE6DB4700B1DFB9 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				DF947FC62DBE304E00D1E2FD /* ProfileViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		DF437C0E2DE6DB4A00B1DFB9 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DF947FC52DBE304E00D1E2FD /* ProfileViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DF437C132DE6DBA800B1DFB9 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DF437C172DE6DBC600B1DFB9 /* SettingViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DF437C142DE6DBA800B1DFB9 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				DF437C182DE6DBC600B1DFB9 /* SettingViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		DF437C152DE6DBA800B1DFB9 /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				DF437C132DE6DBA800B1DFB9 /* View */,
+				DF437C142DE6DBA800B1DFB9 /* ViewModel */,
+			);
+			path = Setting;
 			sourceTree = "<group>";
 		};
 		DF4962A92DACD2730001437B /* Fonts */ = {
@@ -484,8 +529,9 @@
 		DF947FC72DBE304E00D1E2FD /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				DF947FC52DBE304E00D1E2FD /* ProfileViewController.swift */,
-				DF947FC62DBE304E00D1E2FD /* ProfileViewModel.swift */,
+				DF437C152DE6DBA800B1DFB9 /* Setting */,
+				DF437C0D2DE6DB4700B1DFB9 /* ViewModel */,
+				DF437C0E2DE6DB4A00B1DFB9 /* View */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -690,6 +736,8 @@
 				DF0E47E92DE5A622009569C6 /* PostCell.swift in Sources */,
 				DF0E47EA2DE5A622009569C6 /* PostCommentViewController.swift in Sources */,
 				DF0E47EB2DE5A622009569C6 /* PostDetailViewController.swift in Sources */,
+				DF437C192DE6DBC600B1DFB9 /* SettingViewController.swift in Sources */,
+				DF437C1A2DE6DBC600B1DFB9 /* SettingViewModel.swift in Sources */,
 				DF947FC82DBE304E00D1E2FD /* ProfileViewController.swift in Sources */,
 				DF947FC92DBE304E00D1E2FD /* ProfileViewModel.swift in Sources */,
 				DF4B5BA62DAEBAD300A7ADD7 /* LoginViewModel.swift in Sources */,
@@ -766,7 +814,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 37;
+				CURRENT_PROJECT_VERSION = 39;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LGX4B4WC66;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -810,7 +858,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 37;
+				CURRENT_PROJECT_VERSION = 39;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LGX4B4WC66;
 				GENERATE_INFOPLIST_FILE = YES;
