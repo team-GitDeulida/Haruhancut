@@ -180,10 +180,17 @@ final class FamilyMemberCircleView: UIView {
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         // imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 30
+        // imageView.layer.cornerRadius = 30
         imageView.clipsToBounds = true
         imageView.tintColor = .gray
         return imageView
+    }()
+    
+    private lazy var circleView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .Gray300
+        view.clipsToBounds = true
+        return view
     }()
     
     private let nameLabel: UILabel = {
@@ -208,11 +215,11 @@ final class FamilyMemberCircleView: UIView {
         if let url = imageURL {
             imageView.contentMode = .scaleAspectFill
             imageView.kf.setImage(with: url)
+            imageView.transform = .identity // 변형 초기화!
         } else {
+            
             imageView.contentMode = .scaleAspectFill
             imageView.image = UIImage(systemName: "person.fill")
-            // imageView.backgroundColor = .red
-            // imageView.transform = CGAffineTransform(translationX: 0, y: 0.scaled)
         }
         
         setUpTapGesture()
@@ -222,9 +229,15 @@ final class FamilyMemberCircleView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        circleView.layer.cornerRadius = imageView.frame.width/2
+        imageView.layer.cornerRadius = imageView.frame.width/2
+    }
+    
     // MARK: - UI Component
     private func makeUI(name: String) {
-        [imageView, nameLabel].forEach {
+        [circleView, imageView, nameLabel].forEach {
             addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -233,10 +246,16 @@ final class FamilyMemberCircleView: UIView {
     
     private func constraints() {
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: topAnchor),
-            imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            imageView.widthAnchor.constraint(equalToConstant: 60),
-            imageView.heightAnchor.constraint(equalToConstant: 60),
+            
+            circleView.topAnchor.constraint(equalTo: topAnchor),
+            circleView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            circleView.widthAnchor.constraint(equalToConstant: 60),
+            circleView.heightAnchor.constraint(equalToConstant: 60),
+            
+            imageView.centerYAnchor.constraint(equalTo: circleView.centerYAnchor),
+            imageView.centerXAnchor.constraint(equalTo: circleView.centerXAnchor),
+            imageView.widthAnchor.constraint(equalTo: circleView.widthAnchor),
+            imageView.heightAnchor.constraint(equalTo: circleView.heightAnchor),
             
             nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 10),
             nameLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
