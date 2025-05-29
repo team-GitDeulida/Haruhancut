@@ -171,15 +171,14 @@ final class HomeCoordinator: Coordinator {
     private let homeViewModel:  HomeViewModel
     private var groupViewModel: GroupViewModel?
     private let profileViewModel: ProfileViewModel
-    // private let memberViewModel: MemberViewModel
     
     // MARK: - 최초로 사용되는 순간에 딱 한 번만 초기화
     private lazy var memberViewModel: MemberViewModel = {
         return MemberViewModel(loginUsecase: DIContainer.shared.resolve(LoginUsecase.self),
-                               membersRelay: homeViewModel.members)
+                               membersRelay: homeViewModel.members,
+                               groupRelay: homeViewModel.group.compactMapToNonOptional()
+        )
     }()
-    
-    
     
     init(navigationController: UINavigationController,
          loginViewModel: LoginViewModel,
@@ -191,7 +190,6 @@ final class HomeCoordinator: Coordinator {
         self.homeViewModel = homeViewModel
         
         // ProfileVM
-        // let userRelay = BehaviorRelay(value: )
         self.profileViewModel = ProfileViewModel(
             loginUsecase: DIContainer.shared.resolve(LoginUsecase.self),
             userRelay: loginViewModel.user

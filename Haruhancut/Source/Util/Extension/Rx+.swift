@@ -8,9 +8,15 @@
 import RxSwift
 import RxCocoa
 
-extension BehaviorRelay where Element == User? {
-    func compactMapToNonOptional() -> BehaviorRelay<User> {
-        let nonOptionalRelay = BehaviorRelay<User>(value: self.value!) // 강제 언래핑은 초기화 보장 시 가능
+/*
+서버에서 데이터를 받아오기 전까지는 nil이지만,
+뷰에서는 무조건 Non-Optional로 바인딩해서 쓰고 싶을 때.
+ */
+
+extension BehaviorRelay where Element: ExpressibleByNilLiteral {
+    /// Optional 타입의 BehaviorRelay를 Non-Optional 타입으로 변환 (초기값이 nil이 아니어야 함)
+    func compactMapToNonOptional<Wrapped>() -> BehaviorRelay<Wrapped> where Element == Wrapped? {
+        let nonOptionalRelay = BehaviorRelay<Wrapped>(value: self.value!)
         self
             .compactMap { $0 }
             .bind(to: nonOptionalRelay)
@@ -18,6 +24,28 @@ extension BehaviorRelay where Element == User? {
         return nonOptionalRelay
     }
 }
+
+//extension BehaviorRelay where Element == User? {
+//    func compactMapToNonOptional() -> BehaviorRelay<User> {
+//        let nonOptionalRelay = BehaviorRelay<User>(value: self.value!) // 강제 언래핑은 초기화 보장 시 가능
+//        self
+//            .compactMap { $0 }
+//            .bind(to: nonOptionalRelay)
+//            .disposed(by: DisposeBag())
+//        return nonOptionalRelay
+//    }
+//}
+//
+//extension BehaviorRelay where Element == HCGroup? {
+//    func compactMapToNonOptional() -> BehaviorRelay<HCGroup> {
+//        let nonOptionalRelay = BehaviorRelay<HCGroup>(value: self.value!) // 강제 언래핑은 초기화 보장 시 가능
+//        self
+//            .compactMap { $0 }
+//            .bind(to: nonOptionalRelay)
+//            .disposed(by: DisposeBag())
+//        return nonOptionalRelay
+//    }
+//}
 
 
 //// MARK: - BehaviorRelay<User?>를 → BehaviorRelay<User>로 바꾸는 함수

@@ -18,8 +18,8 @@ protocol HomeViewModelType {
     var posts: BehaviorRelay<[Post]> { get }
     var user: BehaviorRelay<User?> { get }
     var group: BehaviorRelay<HCGroup?> { get }
-    var cameraType: CameraType { get }
     var members: BehaviorRelay<[User]> { get }
+    var cameraType: CameraType { get }
     
     func transform() -> HomeViewModel.Output
     func addComment(post: Post, text: String)
