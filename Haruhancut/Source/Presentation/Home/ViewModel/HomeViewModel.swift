@@ -19,6 +19,7 @@ protocol HomeViewModelType {
     var user: BehaviorRelay<User?> { get }
     var group: BehaviorRelay<HCGroup?> { get }
     var cameraType: CameraType { get }
+    var members: BehaviorRelay<[User]> { get }
     
     func transform() -> HomeViewModel.Output
     func addComment(post: Post, text: String)
@@ -39,10 +40,12 @@ final class HomeViewModel: HomeViewModelType {
     let group = BehaviorRelay<HCGroup?>(value: nil)
     let posts = BehaviorRelay<[Post]>(value: [])
     var cameraType: CameraType
+    let members = BehaviorRelay<[User]>(value: [])
     
     // 스냅샷 구독
     private var groupSnapshotDisposable: Disposable?
     private var userSnapshotDisposable: Disposable?
+    private var memberSnapshotDisposables: [String: Disposable] = [:]
 
     var didUserPostToday: Observable<Bool> {
         return Observable.combineLatest(user, posts)
@@ -80,7 +83,7 @@ final class HomeViewModel: HomeViewModelType {
         /// 캐시 그룹 불러오기
         fetchDefaultGroup()
         
-        /// 그룹 스냅샷
+        // 그룹 스냅샷
         user
             .compactMap { $0?.groupId }
             .distinctUntilChanged()
@@ -90,15 +93,26 @@ final class HomeViewModel: HomeViewModelType {
             })
             .disposed(by: disposeBag)
         
-        // 유저 스냅셧
-//        user
-//            .compactMap { $0?.uid }
-//            .distinctUntilChanged()
-//            .subscribe(onNext: { [weak self] uid in
-//                guard let self = self else { return }
-//                self.observeUserRealtime(uid: uid)
-//            })
-//            .disposed(by: disposeBag)
+        // 유저 스냅샷
+        /*
+        user
+            .compactMap { $0?.uid }
+            .distinctUntilChanged()
+            .subscribe(onNext: { [weak self] uid in
+                guard let self = self else { return }
+                self.observeUserRealtime(uid: uid)
+            })
+            .disposed(by: disposeBag)
+         */
+        
+        // 멤버 스냅샷
+        group
+            .compactMap { $0?.members.map { $0.key } }
+            .distinctUntilChanged { $0 == $1 }
+            .subscribe(onNext: { [weak self] memberUIDs in
+                self?.observeAllMembersRealtime(memberUIDs: memberUIDs)
+            })
+            .disposed(by: disposeBag)
     }
     
     func transform() -> Output {
@@ -242,7 +256,7 @@ final class HomeViewModel: HomeViewModelType {
     
     private func fetchDefaultGroup() {
         if let cachedGroup = UserDefaultsManager.shared.loadGroup() {
-            print("✅ homeVM - 캐시에서 불러온 그룹: \(cachedGroup)")
+            // print("✅ homeVM - 캐시에서 불러온 그룹: \(cachedGroup)")
             self.group.accept(cachedGroup)
             
             // posts 업데이트
@@ -261,7 +275,7 @@ final class HomeViewModel: HomeViewModelType {
             .bind(onNext: { result in
                 switch result {
                 case .success(let group):
-                    print("✅ homeVM - 서버에서 불러온 그룹: \(group)")
+                    // print("✅ homeVM - 서버에서 불러온 그룹: \(group)")
                     self.group.accept(group)
                     UserDefaultsManager.shared.saveGroup(group)
                     
@@ -277,6 +291,7 @@ final class HomeViewModel: HomeViewModelType {
             .disposed(by: disposeBag)
     }
     
+    // MARK: - 그룹의 사진, 댓글 실시간 변경을 위한 스냅샷
     /// 서버의 데이터를 실시간으로 관찰
     /// - Parameter groupId: 그룹 Id
     private func observeGroupRealtime(groupId: String) {
@@ -301,6 +316,7 @@ final class HomeViewModel: HomeViewModelType {
             })
     }
     
+    // MARK: - 프로필 실시간 변경을 위한 스냅샷
     private func observeUserRealtime(uid: String) {
         let path = "users/\(uid)"
         
@@ -312,9 +328,60 @@ final class HomeViewModel: HomeViewModelType {
             .bind(onNext: { [weak self] user in
                 guard let self = self else { return }
                 self.user.accept(user)
-                print("🔥 observeUserRealtime 변경 감지됨: \(user)")
+                // print("🔥 observeUserRealtime 변경 감지됨: \(user)")
+                print("🔥 유저 변경 감지")
             })
     }
+    
+    // MARK: - Members 각 uid마다 observeStream으로 실시간 구독
+//    private func observeMembersRealtime(memberUIDs: [String]) {
+//        // 기존에 없는 UID는 구독 추가
+//        memberUIDs.forEach { uid in
+//            observeUserRealtime(uid: uid)
+//        }
+//        
+//        // 빠진 UID는 구독 해제 및 배열에서 제거
+//        let removedUIDs = Set(memberSnapshotDisposables.keys).subtracting(memberUIDs)
+//        removedUIDs.forEach { uid in
+//            memberSnapshotDisposables[uid]?.dispose()
+//            memberSnapshotDisposables.removeValue(forKey: uid)
+//        }
+//    }
+    
+    func observeAllMembersRealtime(memberUIDs: [String]) {
+        // 1. 신규 uid 구독 추가
+        memberUIDs.forEach { uid in
+            if memberSnapshotDisposables[uid] == nil {
+                let disposable = FirebaseAuthManager.shared.observeValueStream(path: "users/\(uid)", type: UserDTO.self)
+                    .compactMap { $0.toModel() }
+                    .subscribe(onNext: { [weak self] user in
+                        guard let self = self else { return }
+                        var current = self.members.value
+                        if let idx = current.firstIndex(where: { $0.uid == user.uid }) {
+                            current[idx] = user
+                        } else {
+                            current.append(user)
+                        }
+                        self.members.accept(current)
+                        print("🔥 members 업데이트 \(user.nickname)")
+                    })
+                memberSnapshotDisposables[uid] = disposable
+            }
+        }
+        // 2. 더 이상 없는 uid 구독 해제 및 members에서 제거
+        let removedUIDs = Set(memberSnapshotDisposables.keys).subtracting(memberUIDs)
+        removedUIDs.forEach { uid in
+            memberSnapshotDisposables[uid]?.dispose()
+            memberSnapshotDisposables.removeValue(forKey: uid)
+            var current = self.members.value
+            current.removeAll { $0.uid == uid }
+            self.members.accept(current)
+        }
+    }
+
+    
+    
+    
     
     func uploadProfileImage(_ image: UIImage) -> Observable<URL?> {
         guard let user = user.value else {
@@ -344,6 +411,7 @@ final class StubHomeViewModel: HomeViewModelType {
     let posts: BehaviorRelay<[Post]>
     let user: BehaviorRelay<User?>
     let group: BehaviorRelay<HCGroup?>
+    let members = BehaviorRelay<[User]>(value: [])
 
     init(previewPost: Post, cameraType: CameraType = .camera) {
         self.posts = BehaviorRelay(value: [previewPost])

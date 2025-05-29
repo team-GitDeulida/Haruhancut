@@ -111,10 +111,36 @@ final class ProfileViewController: UIViewController {
                 
                 // MARK: - 비동기 kf 이미지 설정
                 self.profileImageView.setImage(with: url)
-
-                print("여기 동작함")
             })
             .disposed(by: disposeBag)
+        
+        homeViewModel.user
+            .compactMap { $0?.nickname }
+            .distinctUntilChanged()
+            .bind(onNext: { [weak self] nickname in
+                guard let self = self else { return }
+                
+                self.nicknameLabel.text = nickname
+            })
+            .disposed(by: disposeBag)
+        
+//        homeViewModel.user
+//            .compactMap { $0 }
+//            .distinctUntilChanged { $0.uid == $1.uid && $0.nickname == $1.nickname && $0.profileImageURL == $1.profileImageURL }
+//            .bind(onNext: { [weak self] user in
+//                guard let self = self else { return }
+//                
+//                // 프로필 이미지 설정
+//                if let urlString = user.profileImageURL, let url = URL(string: urlString) {
+//                    self.profileImageView.setImage(with: url)
+//                }
+//                
+//                // 닉네임 설정
+//                self.nicknameLabel.text = user.nickname
+//
+//                print("닉네임 여기 동작함")
+//            })
+//            .disposed(by: disposeBag)
     }
     
     // MARK: - UI Setting

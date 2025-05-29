@@ -289,7 +289,7 @@ extension FirebaseAuthManager {
                     observer.onError(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "값이 존재하지 않음"]))
                     return
                 }
-                print("🔥 observeValue snapshot.value = \(value)")
+                // print("🔥 observeValue snapshot.value = \(value)")
                 
                 do {
                     let data = try JSONSerialization.data(withJSONObject: value, options: [])
@@ -327,7 +327,7 @@ extension FirebaseAuthManager {
                     print("❌ updateValue 실패: \(error.localizedDescription)")
                     observer.onNext(false)
                 } else {
-                    print("✅ updateValue 성공: \(path)")
+                    // print("✅ updateValue 성공: \(path)")
                     observer.onNext(true)
                 }
                 observer.onCompleted()

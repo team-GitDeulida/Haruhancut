@@ -89,7 +89,7 @@ final class HomeViewController: UIViewController {
         setupConstraints()
         bindViewModel()
         setupLongPressGesture()
-        print("✅ homeVC - \(homeViewModel.posts.value)")
+        // print("✅ homeVC - \(homeViewModel.posts.value)")
     }
     
     // 비동기 데이터 받아오면 UI에 반영

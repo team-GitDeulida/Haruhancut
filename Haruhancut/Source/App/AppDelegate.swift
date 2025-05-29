@@ -38,7 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // 알림 권한 호출
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
-            print("✅ 알림 권한: \(granted)")
+            // print("✅ 알림 권한: \(granted)")
             guard granted else { return }
             
             DispatchQueue.main.async {

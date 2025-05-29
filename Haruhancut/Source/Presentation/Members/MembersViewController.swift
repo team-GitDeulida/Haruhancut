@@ -16,7 +16,7 @@ final class MembersViewController: UIViewController {
     private let homeViewModel: HomeViewModelType
     private let memberViewModel: MemberViewModelType
     
-    private let disposBag = DisposeBag()
+    private let disposeBag = DisposeBag()
     
     init(memberViewModel: MemberViewModelType,
          homeViewModel: HomeViewModelType
@@ -123,6 +123,7 @@ final class MembersViewController: UIViewController {
     }
     
     private func bindMembers() {
+        
         memberViewModel.members
             .drive(onNext: { [weak self] members in
                 guard let self = self else { return }
@@ -163,15 +164,14 @@ final class MembersViewController: UIViewController {
                     }
                 }
             })
-            .disposed(by: disposBag)
+            .disposed(by: disposeBag)
     }
 }
 
 #Preview {
-    UINavigationController(rootViewController: MembersViewController(
-        memberViewModel: StubMemberViewModel(groupRelay: .init(value: .sampleGroup), membersRelay: .init(value: [User.empty(loginPlatform: .kakao), User.empty2(loginPlatform: .kakao)])),
-        homeViewModel: StubHomeViewModel(previewPost: .samplePosts[0])))
+    UINavigationController(rootViewController: MembersViewController(memberViewModel: StubMemberViewModel(), homeViewModel: StubHomeViewModel(previewPost: .samplePosts[0])))
 }
+
 
 
 // MARK: - 멤버 동그라미 뷰

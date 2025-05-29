@@ -175,10 +175,11 @@ final class HomeCoordinator: Coordinator {
     
     // MARK: - 최초로 사용되는 순간에 딱 한 번만 초기화
     private lazy var memberViewModel: MemberViewModel = {
-        // let groupRelay = BehaviorRelay(value: homeViewModel.group.value!)
         return MemberViewModel(loginUsecase: DIContainer.shared.resolve(LoginUsecase.self),
-                               groupRelay: homeViewModel.group)
+                               membersRelay: homeViewModel.members)
     }()
+    
+    
     
     init(navigationController: UINavigationController,
          loginViewModel: LoginViewModel,
