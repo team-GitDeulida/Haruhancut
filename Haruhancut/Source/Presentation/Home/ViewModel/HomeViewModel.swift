@@ -301,7 +301,7 @@ final class HomeViewModel: HomeViewModelType {
 
         groupSnapshotDisposable = FirebaseAuthManager.shared.observeValueStream(path: path, type: HCGroupDTO.self)
             .compactMap { $0.toModel() }
-            .bind(onNext: { [weak self] group in
+            .subscribe(onNext: { [weak self] group in
                 guard let self = self else { return }
                 // print("🔥 observeGroupRealtime 변경 감지됨: \(group)")
                 self.group.accept(group)
@@ -313,7 +313,16 @@ final class HomeViewModel: HomeViewModelType {
                     .filter { $0.isToday }
                     .sorted(by: { $0.createdAt < $1.createdAt }) // 오래된 순
                 self.posts.accept(todayPosts)
-            })
+            }, onError: { error in
+                print("❌ 사용자 정보 없음 캐시 삭제 진행")
+                self.user.accept(nil)
+                UserDefaultsManager.shared.removeUser()
+                UserDefaultsManager.shared.removeGroup()
+                
+                // 강제 로그아웃 유도
+                NotificationCenter.default.post(name: .userForceLoggedOut, object: nil)
+            }
+        )
     }
     
     // MARK: - 프로필 실시간 변경을 위한 스냅샷
@@ -325,12 +334,23 @@ final class HomeViewModel: HomeViewModelType {
         
         userSnapshotDisposable = FirebaseAuthManager.shared.observeValueStream(path: path, type: UserDTO.self)
             .compactMap { $0.toModel() }
-            .bind(onNext: { [weak self] user in
+            .subscribe(
+                onNext: { [weak self] user in
                 guard let self = self else { return }
                 self.user.accept(user)
                 // print("🔥 observeUserRealtime 변경 감지됨: \(user)")
                 print("🔥 유저 변경 감지")
-            })
+            },
+                onError: { error in
+                    print("❌ 사용자 정보 없음 캐시 삭제 진행")
+                    self.user.accept(nil)
+                    UserDefaultsManager.shared.removeUser()
+                    UserDefaultsManager.shared.removeGroup()
+                    
+                    // 강제 로그아웃 유도
+                    NotificationCenter.default.post(name: .userForceLoggedOut, object: nil)
+                }
+            )
     }
     
     // MARK: - Members 각 uid마다 observeStream으로 실시간 구독
@@ -354,7 +374,8 @@ final class HomeViewModel: HomeViewModelType {
             if memberSnapshotDisposables[uid] == nil {
                 let disposable = FirebaseAuthManager.shared.observeValueStream(path: "users/\(uid)", type: UserDTO.self)
                     .compactMap { $0.toModel() }
-                    .subscribe(onNext: { [weak self] user in
+                    .subscribe(
+                        onNext: { [weak self] user in
                         guard let self = self else { return }
                         var current = self.members.value
                         if let idx = current.firstIndex(where: { $0.uid == user.uid }) {
@@ -364,7 +385,17 @@ final class HomeViewModel: HomeViewModelType {
                         }
                         self.members.accept(current)
                         print("🔥 members 업데이트 \(user.nickname)")
-                    })
+                    },
+                        onError: { error in
+                            print("❌ 사용자 정보 없음 캐시 삭제 진행")
+                            self.user.accept(nil)
+                            UserDefaultsManager.shared.removeUser()
+                            UserDefaultsManager.shared.removeGroup()
+                            
+                            // 강제 로그아웃 유도
+                            NotificationCenter.default.post(name: .userForceLoggedOut, object: nil)
+                        }
+                    )
                 memberSnapshotDisposables[uid] = disposable
             }
         }
@@ -401,6 +432,11 @@ final class HomeViewModel: HomeViewModelType {
         
         userSnapshotDisposable?.dispose()
         userSnapshotDisposable = nil
+        
+        // 멤버 스냅샷 모두 종료
+        memberSnapshotDisposables.values.forEach { $0.dispose() }
+        memberSnapshotDisposables.removeAll()
+        
         print("🛑 그룹/유저 실시간 스냅샷 종료됨")
     }
 }

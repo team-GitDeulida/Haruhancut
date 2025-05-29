@@ -505,16 +505,26 @@ extension FirebaseAuthManager {
         return Observable.create { observer in
             let ref = self.databaseRef.child(path)
             let handle = ref.observe(.value) { snapshot in
+                
                 guard let value = snapshot.value else {
                     print("📛 실시간 observe: value 없음")
+                    observer.onError(NSError(domain: "firebase", code: -1, userInfo: [NSLocalizedDescriptionKey: "값이 없음"]))
                     return
                 }
+                
+                // 🔴 안전성: 직렬화 가능한 타입인지 검사
+               guard JSONSerialization.isValidJSONObject(value) else {
+                   observer.onError(NSError(domain: "firebase", code: -2, userInfo: [NSLocalizedDescriptionKey: "직렬화 불가능한 타입"]))
+                   return
+               }
+                
                 do {
                     let data = try JSONSerialization.data(withJSONObject: value, options: [])
                     let decoded = try JSONDecoder().decode(T.self, from: data)
                     observer.onNext(decoded)
                 } catch {
                     print("❌ observeValueStream 디코딩 실패: \(error.localizedDescription)")
+                    observer.onError(error) 
                 }
             }
 

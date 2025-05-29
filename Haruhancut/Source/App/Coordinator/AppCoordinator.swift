@@ -175,8 +175,7 @@ final class HomeCoordinator: Coordinator {
     // MARK: - 최초로 사용되는 순간에 딱 한 번만 초기화
     private lazy var memberViewModel: MemberViewModel = {
         return MemberViewModel(loginUsecase: DIContainer.shared.resolve(LoginUsecase.self),
-                               membersRelay: homeViewModel.members,
-                               groupRelay: homeViewModel.group.compactMapToNonOptional()
+                               membersRelay: homeViewModel.members
         )
     }()
     
