@@ -32,6 +32,9 @@
 		DF3CBB492DA809DB00AD5788 /* LoginRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBB482DA809DB00AD5788 /* LoginRepository.swift */; };
 		DF3CBB4D2DA80A6800AD5788 /* LoginRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBB4C2DA80A6800AD5788 /* LoginRepositoryProtocol.swift */; };
 		DF3CBB4F2DA814F100AD5788 /* LoginUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBB4E2DA814F100AD5788 /* LoginUsecase.swift */; };
+		DF3D258A2DED7A7500C68534 /* SegmentedControlSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3D25892DED7A7500C68534 /* SegmentedControlSystem.swift */; };
+		DF3D258D2DED7AAC00C68534 /* BubbleBoxSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3D258C2DED7AAC00C68534 /* BubbleBoxSystem.swift */; };
+		DF3D258F2DED7B1800C68534 /* UICollectionViewFlowLayout+.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3D258E2DED7B1800C68534 /* UICollectionViewFlowLayout+.swift */; };
 		DF437C192DE6DBC600B1DFB9 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF437C172DE6DBC600B1DFB9 /* SettingViewController.swift */; };
 		DF437C1A2DE6DBC600B1DFB9 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF437C182DE6DBC600B1DFB9 /* SettingViewModel.swift */; };
 		DF4962B52DACD2860001437B /* RacingSansOne-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DF4962B42DACD2860001437B /* RacingSansOne-Regular.ttf */; };
@@ -122,6 +125,9 @@
 		DF3CBB482DA809DB00AD5788 /* LoginRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRepository.swift; sourceTree = "<group>"; };
 		DF3CBB4C2DA80A6800AD5788 /* LoginRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRepositoryProtocol.swift; sourceTree = "<group>"; };
 		DF3CBB4E2DA814F100AD5788 /* LoginUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUsecase.swift; sourceTree = "<group>"; };
+		DF3D25892DED7A7500C68534 /* SegmentedControlSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedControlSystem.swift; sourceTree = "<group>"; };
+		DF3D258C2DED7AAC00C68534 /* BubbleBoxSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleBoxSystem.swift; sourceTree = "<group>"; };
+		DF3D258E2DED7B1800C68534 /* UICollectionViewFlowLayout+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionViewFlowLayout+.swift"; sourceTree = "<group>"; };
 		DF437C172DE6DBC600B1DFB9 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		DF437C182DE6DBC600B1DFB9 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		DF4962AA2DACD2860001437B /* NanumMyeongjo-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NanumMyeongjo-Regular.ttf"; sourceTree = "<group>"; };
@@ -352,6 +358,8 @@
 				DF35040F2DB39892002C1269 /* LabelSystem.swift */,
 				DF1577712DDC4B7100BEE272 /* ChattingViewSystem.swift */,
 				DF661DED2DE4342E0028688F /* ViewSystem.swift */,
+				DF3D25892DED7A7500C68534 /* SegmentedControlSystem.swift */,
+				DF3D258C2DED7AAC00C68534 /* BubbleBoxSystem.swift */,
 			);
 			path = DesignSystem;
 			sourceTree = "<group>";
@@ -471,6 +479,7 @@
 				DF4962C82DACEF140001437B /* TextField+.swift */,
 				DF0C249C2DACF65F00022AB0 /* UIViewController+.swift */,
 				DF0E47E02DE58FD2009569C6 /* Rx+.swift */,
+				DF3D258E2DED7B1800C68534 /* UICollectionViewFlowLayout+.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -742,6 +751,7 @@
 				DF437C192DE6DBC600B1DFB9 /* SettingViewController.swift in Sources */,
 				DF437C1A2DE6DBC600B1DFB9 /* SettingViewModel.swift in Sources */,
 				DF947FC82DBE304E00D1E2FD /* ProfileViewController.swift in Sources */,
+				DF3D258F2DED7B1800C68534 /* UICollectionViewFlowLayout+.swift in Sources */,
 				DF947FC92DBE304E00D1E2FD /* ProfileViewModel.swift in Sources */,
 				DF4B5BA62DAEBAD300A7ADD7 /* LoginViewModel.swift in Sources */,
 				DF218C7C2DD8E7D1000B0A61 /* TextViewSystem.swift in Sources */,
@@ -756,6 +766,7 @@
 				DF4962C72DACD96F0001437B /* UIColor+.swift in Sources */,
 				DF055ADC2DDDA1A900D7CB56 /* ImageUploadViewController.swift in Sources */,
 				DF5F3E5E2D95BE7000245C20 /* ViewController.swift in Sources */,
+				DF3D258A2DED7A7500C68534 /* SegmentedControlSystem.swift in Sources */,
 				DF3CBB4F2DA814F100AD5788 /* LoginUsecase.swift in Sources */,
 				DF0E47E12DE58FD2009569C6 /* Rx+.swift in Sources */,
 				DF2AE60A2DB218A7007779D9 /* HomeViewController.swift in Sources */,
@@ -774,6 +785,7 @@
 				DF2AE6172DB218FD007779D9 /* GroupViewController.swift in Sources */,
 				DF055ADA2DDDA0DA00D7CB56 /* ImagePreviewController.swift in Sources */,
 				DF4962C52DACD8A60001437B /* ColorSystem.swift in Sources */,
+				DF3D258D2DED7AAC00C68534 /* BubbleBoxSystem.swift in Sources */,
 				DF3CBB4D2DA80A6800AD5788 /* LoginRepositoryProtocol.swift in Sources */,
 				DF3504102DB39892002C1269 /* LabelSystem.swift in Sources */,
 				DF4962C92DACEF140001437B /* TextField+.swift in Sources */,
