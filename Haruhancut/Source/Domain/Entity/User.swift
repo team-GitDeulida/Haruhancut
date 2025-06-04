@@ -125,7 +125,7 @@ extension HCGroup {
             postsByDate: [:])
     }
     static var sampleGroup: HCGroup {
-        let posts = Post.samplePosts
+        let posts = Post.samplePosts+Post.samplePosts2
         let grouped = posts.groupedByDate()
         return HCGroup(groupId: "testGroupId",
                  groupName: "테스트 가족바",
@@ -212,6 +212,66 @@ extension Post {
              profileImageURL: nil,
              imageURL: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Gatto_europeo4.jpg/500px-Gatto_europeo4.jpg",
              createdAt: .koreanDate(year: 2025, month: 5, day: 16),
+             likeCount: 10,
+             comments: [
+                 "c4": Comment(
+                     commentId: "c4",
+                     userId: "anotherUser",
+                     nickname: "영선",
+                     profileImageURL: nil,
+                     text: "사진 너무 잘 나왔어요!",
+                     createdAt: .now)
+             ])
+    ]
+    
+    static var samplePosts2 = [
+        Post(postId: "postId1",
+             userId: "index",
+             nickname: "동현",
+             profileImageURL: nil,
+             imageURL: "https://upload.wikimedia.org/wikipedia/en/5/5f/Original_Doge_meme.jpg",
+             createdAt: .koreanDate(year: 2025, month: 5, day: 17),
+             likeCount: 10,
+             comments: [
+                 "c1": Comment(
+                     commentId: "c1",
+                     userId: "anotherUser",
+                     nickname: "영선",
+                     profileImageURL: nil,
+                     text: "귀여운 사진이네요!",
+                     createdAt: .now)
+             ]),
+        
+        Post(postId: "postId2",
+             userId: "anotherUser",
+             nickname: "동현1",
+             profileImageURL: nil,
+             imageURL: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Gatto_europeo4.jpg/500px-Gatto_europeo4.jpg",
+             createdAt: .koreanDate(year: 2025, month: 5, day: 17),
+             likeCount: 10,
+             comments: [
+                 "c2": Comment(
+                     commentId: "c2",
+                     userId: "index",
+                     nickname: "동현",
+                     profileImageURL: nil,
+                     text: "고양이 너무 사랑스럽다!",
+                     createdAt: .now),
+                 "c3": Comment(
+                     commentId: "c3",
+                     userId: "anotherUser",
+                     nickname: "영선",
+                     profileImageURL: nil,
+                     text: "진짜 귀엽다 ㅠㅠ",
+                     createdAt: .now)
+             ]),
+        
+        Post(postId: "postId3",
+             userId: "index",
+             nickname: "동현2",
+             profileImageURL: nil,
+             imageURL: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Gatto_europeo4.jpg/500px-Gatto_europeo4.jpg",
+             createdAt: .koreanDate(year: 2025, month: 5, day: 17),
              likeCount: 10,
              comments: [
                  "c4": Comment(

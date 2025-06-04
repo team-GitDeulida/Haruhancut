@@ -17,10 +17,10 @@ final class FeedViewController: UIViewController {
     var onPresent: ((UIViewController) -> Void)?
     
     weak var coordinator: HomeCoordinator?
-    private let homeViewModel: HomeViewModel
+    private let homeViewModel: HomeViewModelType
     private let disposeBag = DisposeBag()
     
-    init(homeViewModel: HomeViewModel) {
+    init(homeViewModel: HomeViewModelType) {
         self.homeViewModel = homeViewModel
         super.init(nibName: nil, bundle: nil)
     }

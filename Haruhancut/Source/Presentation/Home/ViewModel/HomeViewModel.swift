@@ -20,6 +20,7 @@ protocol HomeViewModelType {
     var group: BehaviorRelay<HCGroup?> { get }
     var members: BehaviorRelay<[User]> { get }
     var cameraType: CameraType { get }
+    var didUserPostToday: Observable<Bool> { get }
     
     func transform() -> HomeViewModel.Output
     func addComment(post: Post, text: String)
@@ -28,6 +29,7 @@ protocol HomeViewModelType {
     func stopObservingGroup()
     func uploadProfileImage(_ image: UIImage) -> Observable<URL?>
     func fetchGroup(groupId: String)
+    func deletePost(_ post: Post)
 }
 
 
@@ -448,12 +450,14 @@ final class StubHomeViewModel: HomeViewModelType {
     let user: BehaviorRelay<User?>
     let group: BehaviorRelay<HCGroup?>
     let members = BehaviorRelay<[User]>(value: [])
+    var didUserPostToday: Observable<Bool>
 
     init(previewPost: Post, cameraType: CameraType = .camera) {
         self.posts = BehaviorRelay(value: [previewPost])
         self.user = BehaviorRelay(value: User.empty(loginPlatform: .kakao))
         self.group = BehaviorRelay(value: HCGroup.sampleGroup)
         self.cameraType = cameraType
+        self.didUserPostToday = .just(false)
     }
 
     func transform() -> HomeViewModel.Output {
@@ -514,6 +518,8 @@ final class StubHomeViewModel: HomeViewModelType {
     func fetchGroup(groupId: String) {
         
     }
+    
+    func deletePost(_ post: Post) {}
 }
 
 
