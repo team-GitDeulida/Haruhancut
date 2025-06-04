@@ -9,11 +9,13 @@
 import UIKit
 import FSCalendar
 import Kingfisher
+import RxSwift
 
 final class CalendarViewController: UIViewController {
     
+    private let disposeBag = DisposeBag()
+    
     private var calendarViewHeightConstraint: NSLayoutConstraint!
-
     
     // MARK: - Callback
     var onPresent: ((UIViewController) -> Void)?
@@ -82,6 +84,7 @@ final class CalendarViewController: UIViewController {
         makeUI()
         constraints()
         calendarView.register(RectangleCalendarCell.self, forCellReuseIdentifier: "RectangleCalendarCell")
+        bindingViewModel()
         
         /*
         for (date, posts) in homeViewModel.group.value!.postsByDate {
@@ -112,6 +115,17 @@ final class CalendarViewController: UIViewController {
             // calendarView.heightAnchor.constraint(equalToConstant: 500)
             calendarViewHeightConstraint
         ])
+    }
+    
+    // MARK: - Bindig
+    private func bindingViewModel() {
+        /// 새로운 그룹 정보를 방출할 때 마다 캘린더 새로고침
+        homeViewModel.group
+            .bind(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.calendarView.reloadData()
+            })
+            .disposed(by: disposeBag)
     }
     
     /// 캘린더 뷰 생성 클로저 안에서 개별적으로 지정 달 이동/캘린더 리로드 등 상태 변경 시 다시 흰색으로 돌아옴 -> viewDidLayoutSubviews에서 요일색상 설정하자
@@ -222,6 +236,7 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCa
         // 오늘 날짜인지 비교해서 전달
         let calendar = Calendar.current
         cell.isToday = calendar.isDateInToday(date)
+        cell.isCurrentMonth = (position == .current)
         
         // 날짜 -> String(key) 변환
         let dateString = date.toDateKey()
@@ -261,6 +276,7 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCa
 final class RectangleCalendarCell: FSCalendarCell {
     
     var isToday: Bool = false
+    var isCurrentMonth: Bool = false
     
     private let cellImageView: UIImageView = {
         let view = UIImageView()
@@ -322,8 +338,8 @@ final class RectangleCalendarCell: FSCalendarCell {
 
         // titleLabel.font = .hcFont(.bold, size: 15.scaled)
         
-        // 4. 오늘이면 테두리 Stroke 추가
-        if isToday {
+        // 4. 오늘 && 현재월이면 테두리 Stroke 추가
+        if isToday && isCurrentMonth {
             cellImageView.layer.borderWidth = 3
             cellImageView.layer.borderColor = UIColor.hcColor.cgColor
         } else {

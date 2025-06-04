@@ -102,7 +102,7 @@ final class FeedViewController: UIViewController {
 
             // emptyLabel (가운데 정렬)
             emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -50.scaled)
         ])
     }
     
