@@ -56,6 +56,9 @@
 		DF4B5BA12DAEBACE00A7ADD7 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4B5B9C2DAEBACE00A7ADD7 /* LoginViewController.swift */; };
 		DF4B5BA22DAEBACE00A7ADD7 /* NicknameSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4B5B9D2DAEBACE00A7ADD7 /* NicknameSettingViewController.swift */; };
 		DF4B5BA62DAEBAD300A7ADD7 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4B5BA42DAEBAD300A7ADD7 /* LoginViewModel.swift */; };
+		DF4B72352DEFFECF009AB12A /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4B72342DEFFECF009AB12A /* FeedViewController.swift */; };
+		DF4B72372DEFFEF9009AB12A /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4B72362DEFFEF9009AB12A /* CalendarViewController.swift */; };
+		DF4EFDA22DF01698005CEFBA /* UIImage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4EFDA12DF01698005CEFBA /* UIImage+.swift */; };
 		DF590B662DAB843F00956E54 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DF590B652DAB843F00956E54 /* GoogleService-Info.plist */; };
 		DF590B682DAB8D9F00956E54 /* FirebaseAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF590B672DAB8D9F00956E54 /* FirebaseAuthManager.swift */; };
 		DF590B6A2DAB926600956E54 /* FirebaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF590B692DAB926600956E54 /* FirebaseError.swift */; };
@@ -66,6 +69,7 @@
 		DF5F3E942D95C47700245C20 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF5F3E912D95C47700245C20 /* SceneDelegate.swift */; };
 		DF661DEE2DE4342E0028688F /* ViewSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF661DED2DE4342E0028688F /* ViewSystem.swift */; };
 		DF661DF02DE44DB90028688F /* ProfileSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF661DEF2DE44DB90028688F /* ProfileSettingViewController.swift */; };
+		DF72F5B22DF003DD0095CF16 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = DF72F5B12DF003DD0095CF16 /* FSCalendar */; };
 		DF8603512DB00CFF008ADB69 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8603502DB00CFF008ADB69 /* UserDefaultsManager.swift */; };
 		DF947FC82DBE304E00D1E2FD /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF947FC52DBE304E00D1E2FD /* ProfileViewController.swift */; };
 		DF947FC92DBE304E00D1E2FD /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF947FC62DBE304E00D1E2FD /* ProfileViewModel.swift */; };
@@ -149,6 +153,9 @@
 		DF4B5B9C2DAEBACE00A7ADD7 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		DF4B5B9D2DAEBACE00A7ADD7 /* NicknameSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameSettingViewController.swift; sourceTree = "<group>"; };
 		DF4B5BA42DAEBAD300A7ADD7 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		DF4B72342DEFFECF009AB12A /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
+		DF4B72362DEFFEF9009AB12A /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
+		DF4EFDA12DF01698005CEFBA /* UIImage+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+.swift"; sourceTree = "<group>"; };
 		DF590B652DAB843F00956E54 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DF590B672DAB8D9F00956E54 /* FirebaseAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthManager.swift; sourceTree = "<group>"; };
 		DF590B692DAB926600956E54 /* FirebaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseError.swift; sourceTree = "<group>"; };
@@ -199,6 +206,7 @@
 				DFD269712DBB559D00F90C12 /* ScaleKit in Frameworks */,
 				DFC142912DBB538800EC6063 /* FirebaseStorage in Frameworks */,
 				DFC142842DBB533000EC6063 /* RxKakaoSDKFriend in Frameworks */,
+				DF72F5B22DF003DD0095CF16 /* FSCalendar in Frameworks */,
 				DFC1428B2DBB538800EC6063 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -239,6 +247,8 @@
 			isa = PBXGroup;
 			children = (
 				DF2AE6082DB218A7007779D9 /* HomeViewController.swift */,
+				DF4B72342DEFFECF009AB12A /* FeedViewController.swift */,
+				DF4B72362DEFFEF9009AB12A /* CalendarViewController.swift */,
 				DF0E47E72DE5A622009569C6 /* Post */,
 			);
 			path = View;
@@ -480,6 +490,7 @@
 				DF0C249C2DACF65F00022AB0 /* UIViewController+.swift */,
 				DF0E47E02DE58FD2009569C6 /* Rx+.swift */,
 				DF3D258E2DED7B1800C68534 /* UICollectionViewFlowLayout+.swift */,
+				DF4EFDA12DF01698005CEFBA /* UIImage+.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -666,6 +677,7 @@
 				DFD269702DBB559D00F90C12 /* ScaleKit */,
 				DFD096D42DC651E500DE909C /* Kingfisher */,
 				DFDDEAB92DDF5EA800408C27 /* FirebaseMessaging */,
+				DF72F5B12DF003DD0095CF16 /* FSCalendar */,
 			);
 			productName = Haruhancut;
 			productReference = DF66506C2D88023400820F1A /* Haruhancut.app */;
@@ -701,6 +713,7 @@
 				DFC142892DBB538800EC6063 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				DFD2696F2DBB559D00F90C12 /* XCRemoteSwiftPackageReference "ScaleKit" */,
 				DFD096D32DC651E500DE909C /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				DF72F5B02DF003DD0095CF16 /* XCRemoteSwiftPackageReference "FSCalendar" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = DF66506D2D88023400820F1A /* Products */;
@@ -766,6 +779,7 @@
 				DF4962C72DACD96F0001437B /* UIColor+.swift in Sources */,
 				DF055ADC2DDDA1A900D7CB56 /* ImageUploadViewController.swift in Sources */,
 				DF5F3E5E2D95BE7000245C20 /* ViewController.swift in Sources */,
+				DF4B72352DEFFECF009AB12A /* FeedViewController.swift in Sources */,
 				DF3D258A2DED7A7500C68534 /* SegmentedControlSystem.swift in Sources */,
 				DF3CBB4F2DA814F100AD5788 /* LoginUsecase.swift in Sources */,
 				DF0E47E12DE58FD2009569C6 /* Rx+.swift in Sources */,
@@ -774,6 +788,7 @@
 				DF3502E32DB36BBF002C1269 /* ButtonSystem.swift in Sources */,
 				DF055ADE2DDDB07B00D7CB56 /* FirebaseStorageManager.swift in Sources */,
 				DF156B742DAD60E500918EE6 /* User.swift in Sources */,
+				DF4B72372DEFFEF9009AB12A /* CalendarViewController.swift in Sources */,
 				DFA98D2D2DBB35AA00C22770 /* GroupHostViewController.swift in Sources */,
 				DF590B682DAB8D9F00956E54 /* FirebaseAuthManager.swift in Sources */,
 				DF590B6A2DAB926600956E54 /* FirebaseError.swift in Sources */,
@@ -781,6 +796,7 @@
 				DFD757AA2D9C2A74008C82DF /* DIContainer.swift in Sources */,
 				DFF1CBD82DBA8A5E00722B04 /* GroupViewModel.swift in Sources */,
 				DF947FCE2DBE30A400D1E2FD /* CameraViewModel.swift in Sources */,
+				DF4EFDA22DF01698005CEFBA /* UIImage+.swift in Sources */,
 				DF947FCF2DBE30A400D1E2FD /* CameraViewController.swift in Sources */,
 				DF2AE6172DB218FD007779D9 /* GroupViewController.swift in Sources */,
 				DF055ADA2DDDA0DA00D7CB56 /* ImagePreviewController.swift in Sources */,
@@ -830,7 +846,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 42;
+				CURRENT_PROJECT_VERSION = 43;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LGX4B4WC66;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -874,7 +890,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 42;
+				CURRENT_PROJECT_VERSION = 43;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LGX4B4WC66;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1053,6 +1069,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		DF72F5B02DF003DD0095CF16 /* XCRemoteSwiftPackageReference "FSCalendar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/WenchaoD/FSCalendar.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.8.4;
+			};
+		};
 		DFC142792DBB530100EC6063 /* XCRemoteSwiftPackageReference "lottie-spm" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/lottie-spm";
@@ -1096,6 +1120,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		DF72F5B12DF003DD0095CF16 /* FSCalendar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DF72F5B02DF003DD0095CF16 /* XCRemoteSwiftPackageReference "FSCalendar" */;
+			productName = FSCalendar;
+		};
 		DFC1427A2DBB530100EC6063 /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = DFC142792DBB530100EC6063 /* XCRemoteSwiftPackageReference "lottie-spm" */;
