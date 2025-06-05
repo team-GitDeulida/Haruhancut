@@ -310,11 +310,10 @@ final class HomeViewModel: HomeViewModelType {
                 
                 // 캐시 저장
                 UserDefaultsManager.shared.saveGroup(group)
-                let todayPosts = group.postsByDate
-                    .flatMap { $0.value }.filter { $0.isToday }
-                    .filter { $0.isToday }
+                let allPosts = group.postsByDate
+                    .flatMap { $0.value }
                     .sorted(by: { $0.createdAt < $1.createdAt }) // 오래된 순
-                self.posts.accept(todayPosts)
+                self.posts.accept(allPosts)
             }, onError: { error in
                 print("❌ 사용자 정보 없음 캐시 삭제 진행")
                 self.user.accept(nil)

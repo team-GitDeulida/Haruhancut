@@ -138,7 +138,7 @@ final class HomeViewController: UIViewController {
         
         /// 좌측 네비게이션 버튼
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "calendar"),
+            image: UIImage(systemName: "list.bullet"),
             style: .plain,
             target: self,
             action: #selector(startMembers)

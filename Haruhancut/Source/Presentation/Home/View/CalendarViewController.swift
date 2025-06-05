@@ -153,7 +153,6 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCa
         view.layoutIfNeeded()
     }
 
-    
     // 오늘 cell에 subtitle 생성
     /*
     func calendar(_ calendar: FSCalendar, subtitleFor date: Date) -> String? {
@@ -257,11 +256,16 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCa
     
     // 셀 터치 감지
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        
+        // 현재 월이 아니면 return
+        guard monthPosition == .current else { return }
+        
         let dateString = date.toDateKey()
         
         guard let posts = homeViewModel.group.value?.postsByDate[dateString], !posts.isEmpty else { return }
-        let imageUrls = posts.map { $0.imageURL }
-        let viewer = CalendarImageViewerViewController(imageUrls: imageUrls)
+        // let imageUrls = posts.map { $0.imageURL }
+        // let viewer = ImageScrollViewController(imageUrls: imageUrls, homeViewModel: homeViewModel)
+        let viewer = ImageScrollViewController(posts: posts, homeViewModel: homeViewModel, selectedDate: dateString)
         viewer.modalPresentationStyle = .fullScreen
         
         /// onPresent 콜백 호출
@@ -273,255 +277,362 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCa
     CalendarViewController(homeViewModel: StubHomeViewModel(previewPost: .samplePosts[0]))
 }
 
-final class RectangleCalendarCell: FSCalendarCell {
+final class ImageScrollViewController: UIViewController {
     
-    var isToday: Bool = false
-    var isCurrentMonth: Bool = false
+    private let disposeBag = DisposeBag()
+    private let homeViewModel: HomeViewModelType
+    private var posts: [Post]
+    private var currentIndex: Int = 0
+    private let selectedDate: String
     
-    private let cellImageView: UIImageView = {
-        let view = UIImageView()
-        view.contentMode = .scaleAspectFill
-        view.clipsToBounds = true
-        return view
-    }()
-    
-    private let selectedOverlay: UIView = {
-        let view = UIView()
-        view.backgroundColor = .clear
-        view.isUserInteractionEnabled = false
-        return view
-    }()
-
-    override init!(frame: CGRect) {
-        super.init(frame: frame)
-        makeUI()
-    }
-
-    required init!(coder: NSCoder!) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    private func makeUI() {
-        contentView.insertSubview(cellImageView, at: 0)
-        contentView.insertSubview(selectedOverlay, aboveSubview: cellImageView)
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        // 1. cellImageView와 selectedOverlay 똑같이 배치 (정중앙 정사각형)
-        let minSide = min(contentView.bounds.width, contentView.bounds.height) - 6
-        let frame = CGRect(
-            x: (contentView.bounds.width - minSide) / 2,
-            y: (contentView.bounds.height - minSide) / 2,
-            width: minSide,
-            height: minSide
-        )
-        cellImageView.frame = frame
-        cellImageView.layer.cornerRadius = minSide / 4
-        
-        selectedOverlay.frame = frame
-        selectedOverlay.layer.cornerRadius = minSide / 4
-        
-        // 2. 숫자(타이틀) 완전 정중앙!
-        let labelSize = titleLabel.intrinsicContentSize
-        titleLabel.frame = CGRect(
-            x: (contentView.bounds.width - labelSize.width) / 2,
-            y: (contentView.bounds.height - labelSize.height) / 2,
-            width: labelSize.width,
-            height: labelSize.height
-        )
-    
-        // 3. 선택시 오버레이만 반투명 빨간색, 아니면 투명
-        selectedOverlay.backgroundColor = isSelected
-            ? UIColor.hcColor.withAlphaComponent(0.4)
-            : .clear
-
-        // titleLabel.font = .hcFont(.bold, size: 15.scaled)
-        
-        // 4. 오늘 && 현재월이면 테두리 Stroke 추가
-        if isToday && isCurrentMonth {
-            cellImageView.layer.borderWidth = 3
-            cellImageView.layer.borderColor = UIColor.hcColor.cgColor
-        } else {
-            cellImageView.layer.borderWidth = 0
-        }
-    }
-
-    /// 기본 이미지 설정 방식
-    func setImage(image: UIImage?) {
-        self.cellImageView.image = image
-    }
-    
-    /// kingfisher 이미지 설정 방식
-    func setImage(url: String) {
-        guard let url = URL(string: url) else { return }
-        cellImageView.kf.setImage(with: url)
-    }
-    
-    /// 기본 이미지
-    func setGrayBox() {
-        cellImageView.image = nil
-        cellImageView.backgroundColor = .Gray500
-    }
-    
-    /// 기본 이미지
-    func setDarkGrayBox() {
-        cellImageView.image = nil
-        cellImageView.backgroundColor = .Gray700
-    }
-}
-
-final class CircleCalendarCell: FSCalendarCell {
-    let backImageView: UIImageView = {
-        let view = UIImageView()
-        view.contentMode = .scaleAspectFill
-        view.clipsToBounds = true
-        return view
-    }()
-    
-    // 선택 시 반투명 빨간색 오버레이
-    let selectedOverlay: UIView = {
-        let v = UIView()
-        v.backgroundColor = .clear
-        v.isUserInteractionEnabled = false
-        return v
-    }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        contentView.insertSubview(backImageView, at: 0)
-        contentView.insertSubview(selectedOverlay, aboveSubview: backImageView)
-    }
-    
-    required init(coder aDecoder: NSCoder!) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        let minSide = min(contentView.bounds.width, contentView.bounds.height) - 6
-        let frame = CGRect(
-            x: (contentView.bounds.width - minSide) / 2,
-            y: (contentView.bounds.height - minSide) / 2,
-            width: minSide,
-            height: minSide
-        )
-        backImageView.frame = frame
-        backImageView.layer.cornerRadius = minSide / 2
-        
-        // 오버레이도 동일한 프레임과 둥글기
-        selectedOverlay.frame = frame
-        selectedOverlay.layer.cornerRadius = minSide / 2
-        
-        let labelSize = titleLabel.intrinsicContentSize
-        titleLabel.frame = CGRect(
-            x: (contentView.bounds.width - labelSize.width) / 2,
-            y: (contentView.bounds.height - labelSize.height) / 2,
-            width: labelSize.width,
-            height: labelSize.height
-        )
-        
-        // 선택시 오버레이만 반투명 빨간색, 아니면 투명
-        selectedOverlay.backgroundColor = isSelected
-            ? UIColor.red.withAlphaComponent(0.4) // ← 적당히 조절
-            : .clear
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        backImageView.image = nil
-        selectedOverlay.backgroundColor = .clear
-    }
-}
-
-
-final class CalendarImageViewerViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    private let imageUrls: [String]
-    private let collectionView: UICollectionView
-
-    // 닫기 버튼
-    private let closeButton: UIButton = {
-        let btn = UIButton(type: .system)
-        btn.setTitle("닫기", for: .normal)
-        btn.titleLabel?.font = .boldSystemFont(ofSize: 20)
-        btn.tintColor = .white
-        btn.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-        btn.layer.cornerRadius = 20
-        return btn
-    }()
-
-    init(imageUrls: [String]) {
-        self.imageUrls = imageUrls
+    // MARK: - UI Component
+    private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = 0
-        layout.itemSize = UIScreen.main.bounds.size
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        layout.minimumLineSpacing = 40
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        view.isPagingEnabled = true
+        view.showsHorizontalScrollIndicator = false
+        view.backgroundColor = .clear
+        view.register(ImageCell.self, forCellWithReuseIdentifier: "ImageCell")
+        return view
+    }()
+    
+    private lazy var closeButton: UIButton = {
+        let btn = UIButton()
+        btn.setTitle("닫기", for: .normal)
+        btn.setTitleColor(.white, for: .normal)
+        btn.titleLabel?.font = .boldSystemFont(ofSize: 18)
+        btn.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
+        return btn
+    }()
+    
+    private lazy var commentButton: HCCommentButton = {
+        let button = HCCommentButton(image: UIImage(systemName: "message")!, count: 0)
+        return button
+    }()
+    
+    init(posts: [Post], homeViewModel: HomeViewModelType, selectedDate: String) {
+        self.posts = posts
+        self.homeViewModel = homeViewModel
+        self.selectedDate = selectedDate
         super.init(nibName: nil, bundle: nil)
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.isPagingEnabled = true
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = .black
-        collectionView.register(CalendarImageCell.self, forCellWithReuseIdentifier: "CalendarImageCell")
+        self.commentButton.setCount(posts[currentIndex].comments.count)
     }
-
-    required init?(coder: NSCoder) {
-        fatalError()
-    }
-
+    
+    // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black
-        view.addSubview(collectionView)
-        view.addSubview(closeButton)
-
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        closeButton.translatesAutoresizingMaskIntoConstraints = false
-
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        makeUI()
+        constraints()
+        bindViewModel()
+    }
+    
+    // MARK: - UI Setting
+    private func makeUI() {
+        view.backgroundColor = .background
+        
+        [collectionView, closeButton, commentButton].forEach {
+            view.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+    }
+    
+    private func constraints() {
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            // MARK: - 캘린더
+            // 위치
+            collectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            collectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -20),
+            
+            // 크기
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-
-            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            collectionView.heightAnchor.constraint(equalTo: collectionView.widthAnchor),
+            
+            // MARK: - 닫기
+            // 위치
+            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
+            
+            // 크기
             closeButton.widthAnchor.constraint(equalToConstant: 60),
-            closeButton.heightAnchor.constraint(equalToConstant: 40)
+            closeButton.heightAnchor.constraint(equalToConstant: 40),
+            
+            // MARK: - 댓글
+            commentButton.topAnchor.constraint(equalTo: collectionView.bottomAnchor),
+            commentButton.trailingAnchor.constraint(equalTo: collectionView.trailingAnchor, constant: -20)
         ])
-
-        closeButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
     }
-
-    @objc private func closeTapped() {
+    
+    private func bindViewModel() {
+        // print("[DEBUG] 선택된 날짜 posts:", self.posts)
+        commentButton.rx.tap
+            .asDriver()
+            .drive(onNext: { [weak self] in
+                guard let self = self else { return }
+                // print("[DEBUG] 댓글 버튼 클릭, 현재 index의 post:", self.posts[self.currentIndex])
+                let commentVC = PostCommentViewController(homeViewModel: homeViewModel, post: posts[self.currentIndex])
+                commentVC.modalPresentationStyle = .pageSheet
+                self.present(commentVC, animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+//        homeViewModel.group
+//            .compactMap { $0?.postsByDate[self.selectedDate] }
+//            .asDriver(onErrorDriveWith: .empty())
+//            .drive(onNext: { [weak self] latestPosts in
+//                guard let self = self else { return }
+//                self.posts = latestPosts
+//                // print("[DEBUG] latestPosts 확인: ", latestPosts)
+//                self.collectionView.reloadData()
+//                if self.posts.indices.contains(self.currentIndex) {
+//                    let post = self.posts[self.currentIndex]
+//                    self.commentButton.setCount(post.comments.count)
+//                }
+//            })
+//            .disposed(by: disposeBag)
+    }
+    
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc func closeTapped() {
         dismiss(animated: true)
-    }
-
-    // MARK: - CollectionView DataSource
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return imageUrls.count
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CalendarImageCell", for: indexPath) as! CalendarImageCell
-        cell.setKFImage(url: imageUrls[indexPath.item])
-        return cell
     }
 }
 
-final class CalendarImageCell: UICollectionViewCell {
+/*
+final class ImageScrollViewController: UIViewController {
+    
+    private let disposeBag = DisposeBag()
+    private let homeViewModel: HomeViewModelType
+    private var posts: [Post]
+    private var currentIndex: Int = 0
+    // private let imageUrls: [String]
+    
+    // MARK: - UI Component
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 40
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        view.isPagingEnabled = true
+        view.showsHorizontalScrollIndicator = false
+        view.backgroundColor = .clear
+        view.register(ImageCell.self, forCellWithReuseIdentifier: "ImageCell")
+        return view
+    }()
+    
+    private lazy var closeButton: UIButton = {
+        let btn = UIButton()
+        btn.setTitle("닫기", for: .normal)
+        btn.setTitleColor(.white, for: .normal)
+        btn.titleLabel?.font = .boldSystemFont(ofSize: 18)
+        btn.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
+        return btn
+    }()
+    
+    private lazy var commentButton: HCCommentButton = {
+        let button = HCCommentButton(image: UIImage(systemName: "message")!, count: 0)
+        return button
+    }()
+    
+//    init(imageUrls: [String], homeViewModel: HomeViewModelType) {
+//        self.imageUrls = imageUrls
+//        self.homeViewModel = homeViewModel
+//        super.init(nibName: nil, bundle: nil)
+//    }
+    init(posts: [Post], homeViewModel: HomeViewModelType) {
+        self.posts = posts
+        self.homeViewModel = homeViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    // MARK: - LifeCycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        makeUI()
+        constraints()
+        bindViewModel()
+    }
+    
+    // MARK: - UI Setting
+    private func makeUI() {
+        view.backgroundColor = .background
+        
+        [collectionView, closeButton, commentButton].forEach {
+            view.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+    }
+    
+    private func constraints() {
+        NSLayoutConstraint.activate([
+            
+            // MARK: - 캘린더
+            // 위치
+            collectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            collectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -20),
+            
+            // 크기
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.heightAnchor.constraint(equalTo: collectionView.widthAnchor),
+            
+            // MARK: - 닫기
+            // 위치
+            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
+            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
+            
+            // 크기
+            closeButton.widthAnchor.constraint(equalToConstant: 60),
+            closeButton.heightAnchor.constraint(equalToConstant: 40),
+            
+            // MARK: - 댓글
+            commentButton.topAnchor.constraint(equalTo: collectionView.bottomAnchor),
+            commentButton.trailingAnchor.constraint(equalTo: collectionView.trailingAnchor, constant: -20)
+        ])
+    }
+    
+    private func bindViewModel() {
+        commentButton.rx.tap
+            .asDriver()
+            .drive(onNext: { [weak self] in
+                guard let self = self else { return }
+                let commentVC = PostCommentViewController(homeViewModel: homeViewModel, post: posts[currentIndex])
+                commentVC.modalPresentationStyle = .pageSheet
+                self.present(commentVC, animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        // 게시물 업데이트 감지 후 댓글 수 반영 및 이미지 갱신
+        homeViewModel.posts
+            .compactMap { [weak self] (posts: [Post]) -> Post? in
+                guard let self = self else { return nil }
+                let currentIndex = self.currentIndex
+                // 현재 인덱스 범위 체크 (Crash 방지)
+                guard self.posts.indices.contains(currentIndex) else { return nil }
+                let targetPostId = self.posts[currentIndex].postId
+                // posts에서 해당 postId를 가진 post 찾기
+                return posts.first(where: { $0.postId == targetPostId })
+            }
+            .distinctUntilChanged { $0.comments.count == $1.comments.count }
+            .asDriver(onErrorDriveWith: .empty())
+            .drive(onNext: { [weak self] updatedPost in
+                guard let self = self else { return }
+                self.posts[self.currentIndex] = updatedPost
+                self.commentButton.setCount(updatedPost.comments.count)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc func closeTapped() {
+        dismiss(animated: true)
+    }
+}
+*/
+ 
+extension ImageScrollViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return posts.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCell", for: indexPath) as! ImageCell
+       
+        let post = posts[indexPath.item]
+        cell.setKFImage(url: post.imageURL)
+        
+        // MARK: - 이미지 콜백
+        cell.onImageTap = { [weak self] image in
+            guard let self = self else { return }
+            guard let image = image else { return }
+            let previewVC = ImagePreviewViewController(image: image)
+            previewVC.modalPresentationStyle = .fullScreen
+            self.present(previewVC, animated: true)
+        }
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = collectionView.bounds.width - 40 // 좌우 20 여백
+        return CGSize(width: width, height: width)
+    }
+    
+    // 스크롤시 currentIndex 카운팅
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let pageWidth = collectionView.frame.width
+        let offsetX = collectionView.contentOffset.x
+        let index = Int(round(offsetX / pageWidth))
+        currentIndex = index
+
+        // ⭐️ 댓글 수 즉시 반영
+        /// posts 배열에 현재 curidx가 포함되어 있는가 체크 (예: 사진이 3장인데 currentIndex가 0, 1, 2 중 하나인지)
+        if posts.indices.contains(currentIndex) {
+            /// 현재 보고 있는 사진 post객체를 가져옴
+            let post = posts[currentIndex]
+            commentButton.setCount(post.comments.count)
+        }
+    }
+}
+
+final class ImageCell: UICollectionViewCell {
     private let imageView: UIImageView = {
         let iv = UIImageView()
-        iv.contentMode = .scaleAspectFit
-        iv.backgroundColor = .black
+        iv.contentMode = .scaleAspectFill
+        iv.layer.cornerRadius = 15
         iv.clipsToBounds = true
+        iv.backgroundColor = .secondarySystemBackground
         return iv
     }()
+    
+    // MARK: - 이미지 터치 콟백
+    var onImageTap: ((UIImage?) -> Void)?
+    
+    /// UIView(그리고 UICollectionViewCell, UITableViewCell 등) 생성자(Initializer) 중 하나
+    /// UIKit의 거의 모든 View, Cell, Layout은 “프로그래밍으로” 만들 때 init(frame: CGRect)라는 생성자를 사용
+    /// frame
+    /// “이 View가 superview(상위 뷰)에서 어느 위치, 어느 크기로 들어갈지”를 의미
+    /// 보통 코드로 View를 만들 때 직접 frame을 넘겨주거나, 오토레이아웃을 쓰면 frame: .zero로 두고, 제약조건(Constraints)으로 나중에 크기/위치를 결정
+    /// 커스텀 셀을 만들 때 반드시 required init?(coder:)와 override init(frame: CGRect) 이 두 개를 구현해야 함
+    /// override init(frame: CGRect)는 "코드로 뷰(혹은 셀)를 만들 때, 초기화(셋업) 하는 생성자"다!
+    ///  frame: .zero로 넣고 오토레이아웃 쓰는 건 “처음엔 크기 0, 실제 사이즈는 나중에 constraints로 결정”이라는 의미
     override init(frame: CGRect) {
         super.init(frame: frame)
+        makeUI()
+        constraints()
+        imageCallback()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func imageCallback() {
+        imageView.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        imageView.addGestureRecognizer(tap)
+    }
+    
+    private func makeUI() {
+        contentView.backgroundColor = .clear
         contentView.addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    private func constraints() {
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
@@ -529,143 +640,14 @@ final class CalendarImageCell: UICollectionViewCell {
             imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
     }
-    required init?(coder: NSCoder) {
-        fatalError()
-    }
+    
     func setKFImage(url: String) {
-        if let u = URL(string: url) {
-            imageView.kf.setImage(with: u)
+        if let url = URL(string: url) {
+            imageView.kf.setImage(with: url)
         }
     }
-}
-
-
-/*
-
-final class ImageViewerViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    private let imageUrls: [String]
-    private let collectionView: UICollectionView
-    let horizontalInset: CGFloat = 20
-    let itemSpacing: CGFloat = 16
-
-    // 닫기 버튼
-    private let closeButton: UIButton = {
-        let btn = UIButton(type: .system)
-        btn.setTitle("닫기", for: .normal)
-        btn.titleLabel?.font = .boldSystemFont(ofSize: 20)
-        btn.tintColor = .white
-        btn.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-        btn.layer.cornerRadius = 20
-        return btn
-    }()
-
-    init(imageUrls: [String]) {
-        self.imageUrls = imageUrls
-
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = 0
-        layout.sectionInset = .zero
-
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.isPagingEnabled = true
-
-        super.init(nibName: nil, bundle: nil)
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.isPagingEnabled = true
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = .clear
-        collectionView.register(ImageViewerCell.self, forCellWithReuseIdentifier: "ImageViewerCell")
-    }
-
-    required init?(coder: NSCoder) { fatalError() }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .background
-
-        view.addSubview(collectionView)
-        view.addSubview(closeButton)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        closeButton.translatesAutoresizingMaskIntoConstraints = false
-
-        NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-
-            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
-            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
-            closeButton.widthAnchor.constraint(equalToConstant: 60),
-            closeButton.heightAnchor.constraint(equalToConstant: 40)
-        ])
-
-        closeButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
-    }
-
-    @objc private func closeTapped() {
-        dismiss(animated: true)
-    }
-
-    // MARK: - CollectionView DataSource
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return imageUrls.count
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageViewerCell", for: indexPath) as! ImageViewerCell
-        cell.setKFImage(url: imageUrls[indexPath.item])
-        return cell
-    }
-
-    // 셀 크기 동적으로 (세로 중앙, 가로 20여백, 정사각형)
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        let width = collectionView.bounds.width - 40
-//        let height = width // 정사각형
-//        return CGSize(width: width, height: height)
-//    }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let totalSpacing = (horizontalInset * 2) + (itemSpacing * CGFloat(imageUrls.count - 1))
-        let width = collectionView.bounds.width - (horizontalInset * 2)
-        // 필요에 따라 width 더 줄이기(예: 여러 장 보이게)
-        return CGSize(width: width, height: width) // 정사각형
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        // 상하 여백, 좌우 20
-        let verticalMargin = (collectionView.bounds.height - (collectionView.bounds.width - 40)) / 2
-        return UIEdgeInsets(top: max(20, verticalMargin), left: 20, bottom: max(20, verticalMargin), right: 20)
+    
+    @objc private func handleTap() {
+        onImageTap?(imageView.image)
     }
 }
-
-final class ImageViewerCell: UICollectionViewCell {
-    private let imageView: UIImageView = {
-        let iv = UIImageView()
-        iv.contentMode = .scaleAspectFill
-        iv.clipsToBounds = true
-        iv.layer.cornerRadius = 15
-        iv.backgroundColor = .secondarySystemBackground
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        return iv
-    }()
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        contentView.backgroundColor = .clear
-        contentView.addSubview(imageView)
-        NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-        ])
-    }
-    required init?(coder: NSCoder) { fatalError() }
-    func setKFImage(url: String) {
-        if let u = URL(string: url) {
-            imageView.kf.setImage(with: u)
-        }
-    }
-}
-*/
