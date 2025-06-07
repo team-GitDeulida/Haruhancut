@@ -32,6 +32,13 @@ final class SettingViewController: UIViewController {
         button.setTitle("로그아웃", for: .normal)
         return button
     }()
+    
+    private lazy var mySwitch: UISwitch = {
+        let sw = UISwitch()
+        sw.onTintColor = .systemBlue
+        sw.isOn = false
+        return sw
+    }()
 
     // MARK: - LifeCycle
     override func viewDidLoad() {
@@ -45,7 +52,7 @@ final class SettingViewController: UIViewController {
     private func makeUI() {
         view.backgroundColor = .background
         
-        [logoutBtn].forEach {
+        [logoutBtn, mySwitch].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -55,13 +62,20 @@ final class SettingViewController: UIViewController {
         NSLayoutConstraint.activate([
             logoutBtn.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             logoutBtn.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            mySwitch.topAnchor.constraint(equalTo: logoutBtn.bottomAnchor, constant: 20),
+            mySwitch.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
     
     // MARK: - Binding
     private func bindViewModel() {
         // Input: 버튼 탭 이벤트를 viewModel로 전달
-        let input = SettingViewModel.Input(logoutTapped: logoutBtn.rx.tap.asObservable())
+        let input = SettingViewModel.Input(logoutTapped: logoutBtn.rx.tap.asObservable(),
+                                           switchToggled: mySwitch.rx.isOn
+                                                            .distinctUntilChanged() // 연속 같은 값은 무시
+                                                            .asObservable()
+        )
         
         // Output: transform으로부터 결과 스트림 반환
         let output = viewModel.transform(input: input)

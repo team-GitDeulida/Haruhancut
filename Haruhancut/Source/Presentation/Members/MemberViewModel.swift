@@ -44,7 +44,7 @@ final class StubMemberViewModel: MemberViewModelType {
 //    var groupRelay = BehaviorRelay<HCGroup>(value: .emptyGroup)
 //    var group: Driver<HCGroup> { groupRelay.asDriver() }
     
-    var membersRelay = BehaviorRelay<[User]>(value: [User.empty(loginPlatform: .kakao)])
+    var membersRelay = BehaviorRelay<[User]>(value: [User.empty(loginPlatform: .kakao), User.empty(loginPlatform: .kakao), User.empty(loginPlatform: .kakao)])
     var members: Driver<[User]> { membersRelay.asDriver() }
 }
 

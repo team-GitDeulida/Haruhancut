@@ -17,6 +17,9 @@ final class SettingViewModel {
     struct Input {
         // 로그아웃 버튼 탭이벤트
         let logoutTapped: Observable<Void>
+        
+        // 스위치 on/off 이벤트
+        let switchToggled: Observable<Bool>
     }
     
     // View에 전달할 출력 데이터 정의
@@ -44,6 +47,12 @@ final class SettingViewModel {
                 }
                 // 에러가 발생하더라도 UI가 멈추지 않고 기본 오류값으로 처리
             }.asDriver(onErrorJustReturn: .failure(.logoutError))
+        
+        input.switchToggled
+            .subscribe(onNext: { isOn in
+                print("ViewModel에서 처리: 기능 \(isOn ? "활성화" : "비활성화")")
+            })
+            .disposed(by: disposeBag)
         
         // View에서 사용할 Output rntjd
         return Output(logoutResult: result)

@@ -96,9 +96,9 @@ final class ImageUploadViewController: UIViewController {
         homeViewModel.uploadPost(image: image)
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] success in
+                self?.coordinator?.backToHome()
                 if success {
                     print("✅ 업로드 성공 - 홈 이동")
-                    self?.coordinator?.backToHome()
                 } else {
                     print("❌ 업로드 실패")
                 }

@@ -46,7 +46,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         
-        
         // 카카오톡 설정
         if let nativeAppKey: String = Bundle.main.infoDictionary?["KAKAO_NATIVE_APP_KEY"] as? String {
             RxKakaoSDK.initSDK(appKey: nativeAppKey, loggingEnable: false)
@@ -88,7 +87,11 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     // 백그라운드에서 푸시 알림을 탭했을 때 실행
     func application(_ application: UIApplication,
                      didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        print("APNS token: \(deviceToken)")
+        
+        // 1) Data → 16진수 문자열 변환
+        let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
+        let tokenString = tokenParts.joined()
+        print("APNS token: \(tokenString)")
         Messaging.messaging().apnsToken = deviceToken
     }
     
@@ -131,5 +134,28 @@ extension AppDelegate {
         let groupRepository = GroupRepository(firebaseAuthManager: firebaseAuthManager)
         let groupUsecase = GroupUsecase(repository: groupRepository)
         DIContainer.shared.register(GroupUsecase.self, dependency: groupUsecase)
+    }
+}
+
+extension AppDelegate {
+    
+    // MARK: - FCM 토큰 생성 함수
+    func generateFCMToken() {
+        Messaging.messaging().token() { token, error in
+            if let error = error {
+                print("FCM 토큰 생성 중 오류 발생: \(error.localizedDescription)")
+            }
+            
+            /// 로직
+        }
+    }
+    
+    // MARK: - 토큰을 기기에서 삭제
+    func deleteFCMToken() {
+        Messaging.messaging().deleteToken { error in
+            if let error = error {
+                print("FCM 토큰 삭제 중 오류 발생: \(error.localizedDescription)")
+            }
+        }
     }
 }
