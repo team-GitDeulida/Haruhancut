@@ -117,7 +117,7 @@ final class FeedViewController: UIViewController {
 //            .disposed(by: disposeBag)
         
         // 포스트 바인딩
-        homeViewModel.transform().posts
+        homeViewModel.transform().todayPosts
             .drive(collectionView.rx.items(
                 cellIdentifier: PostCell.identifier,
                 cellType: PostCell.self)
@@ -127,7 +127,7 @@ final class FeedViewController: UIViewController {
             .disposed(by: disposeBag)
         
         // 포스트가 비었을 때 emptyLabel 보이게 동작
-        homeViewModel.transform().posts
+        homeViewModel.transform().todayPosts
             .drive(onNext: { [weak self] posts in
                 guard let self = self else { return }
                 
@@ -152,7 +152,6 @@ final class FeedViewController: UIViewController {
             .drive(onNext: { [weak self] post in
                 guard let self = self else { return }
                 self.startPostDetail(post: post)
-                // print("✅ 셀 선택됨: \(post.postId)")
             })
             .disposed(by: disposeBag)
         
@@ -178,7 +177,6 @@ final class FeedViewController: UIViewController {
     
     /// 카메라 화면 이동
     @objc private func startCamera() {
-//        coordinator?.startCamera()
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 
         // 📷 사진 촬영
@@ -255,12 +253,21 @@ extension FeedViewController {
 
     @objc private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
         guard gesture.state == .began else { return } // 제스처가 시작될 때만 처리
-
         let location = gesture.location(in: collectionView)
         guard let indexPath = collectionView.indexPathForItem(at: location),
               indexPath.item < homeViewModel.posts.value.count else { return }
+        
+        // 1) 오늘 날짜 포스트만 뽑아서
+        let todayPosts = homeViewModel.posts
+            .value
+            .filter { $0.isToday }
 
-        let post = homeViewModel.posts.value[indexPath.item]
+        // 2) indexPath.item이 오늘 포스트 배열 범위 안에 있는지 체크
+        guard indexPath.item < todayPosts.count else { return }
+
+        // 3) 거기서 해당 post를 꺼내서
+        let post = todayPosts[indexPath.item]
+        print(post)
         
         // 다른 사람 포스트면 삭제 불가
         guard post.userId == homeViewModel.user.value?.uid else {

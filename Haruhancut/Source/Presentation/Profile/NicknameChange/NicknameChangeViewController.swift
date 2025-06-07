@@ -125,7 +125,7 @@ final class NicknameChangeViewController: UIViewController {
                     self.navigationController?.popViewController(animated: true)
                 case .failure(let error):
                     // print("닉네임 변경 실패:", error)
-                    AlertManager.showAlert(on: self, title: "에러", message: "닉네임 변경 실패")
+                    AlertManager.showAlert(on: self, title: "에러: \(error)", message: "닉네임 변경 실패")
                 }
             })
             .disposed(by: disposeBag)

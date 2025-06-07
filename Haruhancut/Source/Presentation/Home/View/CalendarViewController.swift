@@ -85,17 +85,6 @@ final class CalendarViewController: UIViewController {
         constraints()
         calendarView.register(RectangleCalendarCell.self, forCellReuseIdentifier: "RectangleCalendarCell")
         bindingViewModel()
-        
-        /*
-        for (date, posts) in homeViewModel.group.value!.postsByDate {
-            print("key: \(date)")
-            print("value: ")
-            for post in posts {
-                print(post.imageURL)
-            }
-            print("\n\n\n")
-        }
-         */
     }
     
     // MARK: - UI Setting
@@ -395,6 +384,22 @@ final class ImageScrollViewController: UIViewController {
                 }
             })
             .disposed(by: disposeBag)
+        
+//        let output = homeViewModel.transform()
+//        output.allPostsByDate
+//            .map { $0[self.selectedDate] ?? [] }
+//            .drive(onNext: { [weak self] latestPosts in
+//                guard let self = self else { return }
+//                self.posts = latestPosts
+//                self.collectionView.reloadData()
+//                
+//                print()
+//                if self.posts.indices.contains(self.currentIndex) {
+//                    let post = self.posts[self.currentIndex]
+//                    self.commentButton.setCount(post.comments.count)
+//                }
+//            })
+//            .disposed(by: disposeBag)
     }
     
     required init(coder: NSCoder) {
@@ -405,143 +410,6 @@ final class ImageScrollViewController: UIViewController {
         dismiss(animated: true)
     }
 }
-
-/*
-final class ImageScrollViewController: UIViewController {
-    
-    private let disposeBag = DisposeBag()
-    private let homeViewModel: HomeViewModelType
-    private var posts: [Post]
-    private var currentIndex: Int = 0
-    // private let imageUrls: [String]
-    
-    // MARK: - UI Component
-    private lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = 40
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
-        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        view.isPagingEnabled = true
-        view.showsHorizontalScrollIndicator = false
-        view.backgroundColor = .clear
-        view.register(ImageCell.self, forCellWithReuseIdentifier: "ImageCell")
-        return view
-    }()
-    
-    private lazy var closeButton: UIButton = {
-        let btn = UIButton()
-        btn.setTitle("닫기", for: .normal)
-        btn.setTitleColor(.white, for: .normal)
-        btn.titleLabel?.font = .boldSystemFont(ofSize: 18)
-        btn.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
-        return btn
-    }()
-    
-    private lazy var commentButton: HCCommentButton = {
-        let button = HCCommentButton(image: UIImage(systemName: "message")!, count: 0)
-        return button
-    }()
-    
-//    init(imageUrls: [String], homeViewModel: HomeViewModelType) {
-//        self.imageUrls = imageUrls
-//        self.homeViewModel = homeViewModel
-//        super.init(nibName: nil, bundle: nil)
-//    }
-    init(posts: [Post], homeViewModel: HomeViewModelType) {
-        self.posts = posts
-        self.homeViewModel = homeViewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    // MARK: - LifeCycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        makeUI()
-        constraints()
-        bindViewModel()
-    }
-    
-    // MARK: - UI Setting
-    private func makeUI() {
-        view.backgroundColor = .background
-        
-        [collectionView, closeButton, commentButton].forEach {
-            view.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
-        }
-    }
-    
-    private func constraints() {
-        NSLayoutConstraint.activate([
-            
-            // MARK: - 캘린더
-            // 위치
-            collectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            collectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -20),
-            
-            // 크기
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.heightAnchor.constraint(equalTo: collectionView.widthAnchor),
-            
-            // MARK: - 닫기
-            // 위치
-            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
-            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
-            
-            // 크기
-            closeButton.widthAnchor.constraint(equalToConstant: 60),
-            closeButton.heightAnchor.constraint(equalToConstant: 40),
-            
-            // MARK: - 댓글
-            commentButton.topAnchor.constraint(equalTo: collectionView.bottomAnchor),
-            commentButton.trailingAnchor.constraint(equalTo: collectionView.trailingAnchor, constant: -20)
-        ])
-    }
-    
-    private func bindViewModel() {
-        commentButton.rx.tap
-            .asDriver()
-            .drive(onNext: { [weak self] in
-                guard let self = self else { return }
-                let commentVC = PostCommentViewController(homeViewModel: homeViewModel, post: posts[currentIndex])
-                commentVC.modalPresentationStyle = .pageSheet
-                self.present(commentVC, animated: true)
-            })
-            .disposed(by: disposeBag)
-        
-        // 게시물 업데이트 감지 후 댓글 수 반영 및 이미지 갱신
-        homeViewModel.posts
-            .compactMap { [weak self] (posts: [Post]) -> Post? in
-                guard let self = self else { return nil }
-                let currentIndex = self.currentIndex
-                // 현재 인덱스 범위 체크 (Crash 방지)
-                guard self.posts.indices.contains(currentIndex) else { return nil }
-                let targetPostId = self.posts[currentIndex].postId
-                // posts에서 해당 postId를 가진 post 찾기
-                return posts.first(where: { $0.postId == targetPostId })
-            }
-            .distinctUntilChanged { $0.comments.count == $1.comments.count }
-            .asDriver(onErrorDriveWith: .empty())
-            .drive(onNext: { [weak self] updatedPost in
-                guard let self = self else { return }
-                self.posts[self.currentIndex] = updatedPost
-                self.commentButton.setCount(updatedPost.comments.count)
-            })
-            .disposed(by: disposeBag)
-    }
-    
-    required init(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    @objc func closeTapped() {
-        dismiss(animated: true)
-    }
-}
-*/
  
 extension ImageScrollViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

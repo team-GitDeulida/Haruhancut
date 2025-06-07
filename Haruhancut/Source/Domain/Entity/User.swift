@@ -159,7 +159,9 @@ extension Post {
 
 extension Array where Element == Post {
     func groupedByDate() -> [String: [Post]] {
-        return Dictionary(grouping: self) { $0.createdAt.toKoreanDateString() }
+        return Dictionary(grouping: self) { post in
+            post.createdAt.toDateKey()
+        }
     }
 }
 

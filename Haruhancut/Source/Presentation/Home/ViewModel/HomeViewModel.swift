@@ -58,8 +58,9 @@ final class HomeViewModel: HomeViewModelType {
     }
     
     struct Output {
-        let posts: Driver<[Post]>
+        let todayPosts: Driver<[Post]>
         let groupName: Driver<String>
+        let allPostsByDate: Driver<[String: [Post]]>
     }
     
     init(loginUsecase: LoginUsecaseProtocol, groupUsecase: GroupUsecaseProtocol, userRelay: BehaviorRelay<User?>, cameraType: CameraType = .camera) {
@@ -119,15 +120,22 @@ final class HomeViewModel: HomeViewModelType {
     
     func transform() -> Output {
         
+        // 1) 오늘 것만
         let todayPosts = posts
             .map { $0.filter { $0.isToday } }
             .asDriver(onErrorJustReturn: [])
         
+        // 2) 그룹 이름
         let groupName = group
             .map { $0?.groupName ?? "그룹 없음" }
             .asDriver(onErrorJustReturn: "그룹 없음")
         
-        return Output(posts: todayPosts, groupName: groupName)
+        // 3) 전체 포스트 맵(날짜 → [Post])
+        let allPostsByDate = group
+            .map { $0?.postsByDate ?? [:] }
+            .asDriver(onErrorJustReturn: [:])
+        
+        return Output(todayPosts: todayPosts, groupName: groupName, allPostsByDate: allPostsByDate)
     }
     
     /// 포스트 추가 함수
@@ -176,11 +184,13 @@ final class HomeViewModel: HomeViewModelType {
         let dateKey = post.createdAt.toDateKey()
         let dbPath = "groups/\(groupId)/postsByDate/\(dateKey)/\(post.postId)"
         let storagePath = "groups/\(groupId)/images/\(post.postId).jpg"
-
+        
         // 1. DB에서 삭제
         FirebaseAuthManager.shared.deleteValue(path: dbPath)
             .flatMap { success -> Observable<Bool> in
                 guard success else { return .just(false) }
+                
+                
                 // 2. Storage에서도 삭제
                 return FirebaseStorageManager.shared.deleteImage(path: storagePath)
             }
@@ -461,8 +471,8 @@ final class StubHomeViewModel: HomeViewModelType {
 
     func transform() -> HomeViewModel.Output {
         return HomeViewModel.Output(
-            posts: posts.asDriver(onErrorJustReturn: []),
-            groupName: group.map { $0?.groupName ?? "그룹 없음" }.asDriver(onErrorJustReturn: "그룹 없음")
+            todayPosts: posts.asDriver(onErrorJustReturn: []),
+            groupName: group.map { $0?.groupName ?? "그룹 없음" }.asDriver(onErrorJustReturn: "그룹 없음"), allPostsByDate: .just([:])
         )
     }
     

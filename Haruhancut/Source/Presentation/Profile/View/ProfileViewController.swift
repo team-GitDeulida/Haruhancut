@@ -10,28 +10,14 @@ import RxSwift
 import Kingfisher
 
 final class ProfileViewController: UIViewController {
-    
-    private let disposeBag = DisposeBag()
-    
     weak var coordinator: HomeCoordinator?
-
+    private let disposeBag = DisposeBag()
     private let profileViewModel: ProfileViewModelType
     private let homeViewModel: HomeViewModelType
     private let loginViewModel: LoginViewModelType
     private var loadingView: UIView?
     
-    init(profileViewModel: ProfileViewModelType, homeViewModel: HomeViewModelType, loginViewModel: LoginViewModelType) {
-        self.profileViewModel = profileViewModel
-        self.homeViewModel = homeViewModel
-        self.loginViewModel = loginViewModel 
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    // MARK: - UI Component
+    // MARK: - UI
     private lazy var profileImageView: ProfileImageView = {
         let imageView = ProfileImageView(size: 100, iconSize: 60)
             
@@ -91,6 +77,41 @@ final class ProfileViewController: UIViewController {
         
         return stack
     }()
+    
+    private lazy var collectionView: UICollectionView = {
+        let spacing: CGFloat = 1
+        let columns: CGFloat = 3
+
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumInteritemSpacing = spacing
+        layout.minimumLineSpacing = spacing
+        layout.sectionInset = .zero
+
+        // 셀 너비 계산
+        let totalSpacing = (columns - 1) * spacing
+        let itemWidth = (UIScreen.main.bounds.width - totalSpacing) / columns
+        
+        // 높이를 너비의 1.5배로 설정
+        layout.itemSize = CGSize(width: itemWidth, height: itemWidth * 1.5)
+
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.register(ProfilePostCell.self, forCellWithReuseIdentifier: ProfilePostCell.identifier)
+        cv.backgroundColor = .clear
+        return cv
+    }()
+
+
+    
+    init(profileViewModel: ProfileViewModelType, homeViewModel: HomeViewModelType, loginViewModel: LoginViewModelType) {
+        self.profileViewModel = profileViewModel
+        self.homeViewModel = homeViewModel
+        self.loginViewModel = loginViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - LifeCycle
     override func viewDidLoad() {
@@ -124,39 +145,56 @@ final class ProfileViewController: UIViewController {
                 self.nicknameLabel.text = nickname
             })
             .disposed(by: disposeBag)
+
         
-//        homeViewModel.user
-//            .compactMap { $0 }
-//            .distinctUntilChanged { $0.uid == $1.uid && $0.nickname == $1.nickname && $0.profileImageURL == $1.profileImageURL }
-//            .bind(onNext: { [weak self] user in
-//                guard let self = self else { return }
-//                
-//                // 프로필 이미지 설정
-//                if let urlString = user.profileImageURL, let url = URL(string: urlString) {
-//                    self.profileImageView.setImage(with: url)
-//                }
-//                
-//                // 닉네임 설정
-//                self.nicknameLabel.text = user.nickname
-//
-//                print("닉네임 여기 동작함")
-//            })
-//            .disposed(by: disposeBag)
+        let output = homeViewModel.transform()
+        // allPostsByDate -> [Post]로 변환
+        output.allPostsByDate
+            .map { dict -> [Post] in
+                // 1) 날짜 키 내림차순 정렬
+                let sortedKeys = dict.keys.sorted(by: >)
+                // 2) 각 키의 [Post]를 꺼내서 하나의 배열로 합치기
+                return sortedKeys
+                    .compactMap { dict[$0] }
+                    .flatMap { $0 }
+                    .filter { $0.userId == self.homeViewModel.user.value?.uid }
+            }
+            .drive(collectionView.rx.items(
+                cellIdentifier: ProfilePostCell.identifier,
+                cellType: ProfilePostCell.self)
+            ) { _, post, cell in
+                cell.configure(with: post)
+            }
+            .disposed(by: disposeBag)
+        
+        // 포스트 터치 바인딩
+        collectionView.rx.modelSelected(Post.self)
+            .asDriver()
+            .drive(onNext: { [weak self] post in
+                guard let self = self else { return }
+                self.startPostDetail(post: post)
+            })
+            .disposed(by: disposeBag)
     }
     
     // MARK: - UI Setting
     private func makeUI() {
         view.backgroundColor = .mainBlack
         
-        [hStack].forEach {
+        [hStack, collectionView].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         NSLayoutConstraint.activate([
-            hStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),
+            hStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
             hStack.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            hStack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)
+            hStack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            
+            collectionView.topAnchor.constraint(equalTo: hStack.bottomAnchor, constant: 50),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
     
@@ -180,6 +218,11 @@ final class ProfileViewController: UIViewController {
     
     @objc func navigateToNicknameSetting() {
         coordinator?.startNicknameChange()
+    }
+    
+    /// 포스트 화면 이동
+    private func startPostDetail(post: Post) {
+        coordinator?.startPostDetail(post: post)
     }
 }
 
@@ -241,7 +284,6 @@ extension ProfileViewController {
     private func setPopGestureEnabled(_ enabled: Bool) {
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = enabled
     }
-
     
     private func showLoadingIndicator() {
         guard let rootView = self.navigationController?.view ?? self.view else { return }
@@ -290,10 +332,10 @@ extension ProfileViewController {
      }
 }
 
-#Preview {
-    ProfileSettingViewController(
-        loginViewModel: LoginViewModel(loginUsecase: StubLoginUsecase()))
-}
+//#Preview {
+//    ProfileSettingViewController(
+//        loginViewModel: LoginViewModel(loginUsecase: StubLoginUsecase()))
+//}
 
 
 

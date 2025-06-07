@@ -110,7 +110,6 @@ final class HomeViewController: UIViewController {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
-
     }
     
     private func setupConstraints() {

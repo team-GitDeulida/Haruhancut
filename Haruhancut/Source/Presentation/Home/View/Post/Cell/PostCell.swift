@@ -42,20 +42,6 @@ final class PostCell: UICollectionViewCell {
         return label
     }()
     
-    // 셀 생성자: 이미지 뷰와 라벨을 셀에 추가
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        
-//        contentView.addSubview(imageView)
-//        imageView.addSubview(titleLabel)
-//        
-//        contentView.addSubview(titleLabel)
-//        imageView.frame = contentView.bounds
-//        titleLabel.frame = CGRect(x: 0,
-//                                  y: contentView.bounds.height - 30, // 아래쪽에 고정
-//                                  width: contentView.bounds.width,
-//                                  height: 30)
-//    }
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -68,16 +54,6 @@ final class PostCell: UICollectionViewCell {
             imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, constant: 0), // 정사각형 + 30
         ])
-        
-        // 2. titleLabel은 imageView 내부 하단에 붙이기
-//        imageView.addSubview(titleLabel)
-//        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            titleLabel.leadingAnchor.constraint(equalTo: imageView.leadingAnchor),
-//            titleLabel.trailingAnchor.constraint(equalTo: imageView.trailingAnchor),
-//            titleLabel.bottomAnchor.constraint(equalTo: imageView.bottomAnchor),
-//            titleLabel.heightAnchor.constraint(equalToConstant: 30)
-//        ])
         
         // 3. testLabel을 imageView 밖 (contentView의 하단 좌측)으로 추가
         contentView.addSubview(nicknameLabel)
@@ -93,10 +69,7 @@ final class PostCell: UICollectionViewCell {
             timeLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 14),
             timeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
         ])
-        
     }
-
-
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -111,6 +84,44 @@ final class PostCell: UICollectionViewCell {
         imageView.kf.setImage(with: url)
     }
 }
+
+final class ProfilePostCell: UICollectionViewCell {
+    static let identifier = "ProfilePostCell"
+    
+    // 이미지 뷰: 셀의 배경 이미지를 보여줌
+    private let imageView: UIImageView = {
+        let iv = UIImageView()
+        iv.contentMode = .scaleAspectFill           // 셀 채우되 비율 유지
+        iv.clipsToBounds = true                     // 셀 밖 이미지 자르기
+        return iv
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        // 1. imageView를 contentView에 추가하고 전체 고정
+        contentView.addSubview(imageView)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            imageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
+    }
+
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // 외부에서 데이터를 받아 셀 구성
+    func configure(with post: Post) {
+        let url = URL(string: post.imageURL)
+        imageView.kf.setImage(with: url)
+    }
+}
+
 
 #Preview {
     PostCell()
