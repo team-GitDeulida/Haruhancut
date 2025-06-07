@@ -243,7 +243,13 @@ final class HomeCoordinator: Coordinator {
         navigationController.pushViewController(profileViewController, animated: true)
     }
     
-    func navigateToSetting() {
+    func startNicknameChange() {
+        let nicknameChangeViewController = NicknameChangeViewController(loginViewModel: loginViewModel)
+        nicknameChangeViewController.coordinator = self
+        navigationController.pushViewController(nicknameChangeViewController, animated: true)
+    }
+    
+    func startSetting() {
         let settingView = SettingViewController(homeViewModel: homeViewModel)
         settingView.coordinator = self
         self.navigationController.pushViewController(settingView, animated: true)

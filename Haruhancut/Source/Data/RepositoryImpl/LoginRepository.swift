@@ -54,15 +54,14 @@ final class LoginRepository: LoginRepositoryProtocol {
         return firebaseAuthManager.fetchUser(uid: uid)
     }
     
-    func updateUser(_ user: User) -> Observable<Result<Void, LoginError>> {
+    func updateUser(_ user: User) -> Observable<Result<User, LoginError>> {
         let path = "users/\(user.uid)"
         let dto = user.toDTO()
         
         return firebaseAuthManager.updateValue(path: path, value: dto)
-            .map { success -> Result<Void, LoginError> in
+            .map { success -> Result<User, LoginError> in
                 if success {
-                    UserDefaultsManager.shared.saveUser(user)
-                    return .success(())
+                    return .success(user)
                 } else {
                     return .failure(.signUpError)
                 }

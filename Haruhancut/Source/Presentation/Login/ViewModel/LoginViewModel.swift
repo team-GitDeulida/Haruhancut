@@ -18,8 +18,9 @@ import RxKakaoSDKAuth
 import KakaoSDKAuth
 import UIKit
 
+
 protocol LoginViewModelType {
-    
+    func transform(input: LoginViewModel.NicknameChangeInput) ->LoginViewModel.NicknameChangeOutput
 }
 
 final class LoginViewModel: LoginViewModelType {
@@ -56,7 +57,7 @@ final class LoginViewModel: LoginViewModelType {
         let kakaoLoginTapped: Observable<Void>
         let appleLoginTapped: Observable<Void>
     }
-    
+
     struct LoginOutput {
         let loginResult: Driver<Result<Void, LoginError>>
     }
@@ -183,7 +184,7 @@ final class LoginViewModel: LoginViewModelType {
          let nicknameText: Observable<String>
          let nextBtnTapped: Observable<Void>
     }
-    
+
     struct NicknameOutput {
         let moveToBirthday: Driver<Void>
         let isNicknameValid: Driver<Bool>
@@ -284,7 +285,8 @@ final class LoginViewModel: LoginViewModelType {
                                         case .success(let url):
                                             var updatedUser = user
                                             updatedUser.profileImageURL = url.absoluteString
-                                            return self.updateUser(user: updatedUser)
+                                            UserDefaultsManager.shared.saveUser(updatedUser)
+                                            return .just(.success(()))
                                         case .failure(let error):
                                             return .just(.failure(error))
                                         }
@@ -316,13 +318,65 @@ final class LoginViewModel: LoginViewModelType {
     }
     
     private func updateUser(user: User) -> Observable<Result<Void, LoginError>> {
-        UserDefaultsManager.shared.saveUser(user)
-        return loginUsecase.updateUser(user)
+        loginUsecase
+            .updateUser(user)
+            .map { [weak self] result -> Result<Void, LoginError> in
+                if case .success(let user) = result {
+                    self?.user.accept(user)
+                    UserDefaultsManager.shared.saveUser(user)
+                }
+                return result.mapToVoid()
+            }
+    }
+}
+
+extension LoginViewModel {
+    struct NicknameChangeInput {
+         let nicknameText: Observable<String>
+         let endBtnTapped: Observable<Void>
+    }
+
+    struct NicknameChangeOutput {
+        let isNicknameValid: Driver<Bool>
+        let nicknameChangeResult: Driver<Result<Void, LoginError>>
+    }
+    
+    func transform(input: NicknameChangeInput) -> NicknameChangeOutput {
+        
+        // 닉네임 유효성
+        let isNicknameValid = input.nicknameText
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines).count != 0 }
+            .distinctUntilChanged() // 중복된 값은 무시하고 변경될 때만 아래로 전달
+            .asDriver(onErrorJustReturn: false) // 에러 발생 시에도 false를 대신 방출
+        
+        let endBtnTapped = input.endBtnTapped
+            .withLatestFrom(input.nicknameText)
+            .flatMapLatest { [weak self] newNickname -> Observable<Result<Void, LoginError>> in
+                print("🚀 flatMapLatest 진입, newNick =", newNickname)
+                guard let self = self,
+                      var currentUser = self.user.value else {
+                    return Observable.just(.failure(.noUser))
+                }
+                
+                currentUser.nickname = newNickname
+                self.user.accept(currentUser)
+                
+                return self.loginUsecase
+                    .updateUser(currentUser)
+                    .map { $0.mapToVoid() }
+            }
+        
+        let nicknameChangeResult = endBtnTapped
+            .asDriver(onErrorJustReturn: .failure(.noUser))
+        
+        return NicknameChangeOutput(isNicknameValid: isNicknameValid, nicknameChangeResult: nicknameChangeResult)
     }
 }
 
 final class StubLoginViewModel: LoginViewModelType {
-    
+    func transform(input: LoginViewModel.NicknameChangeInput) ->LoginViewModel.NicknameChangeOutput {
+        return .init(isNicknameValid: .just(false), nicknameChangeResult: .just(.success(())))
+    }
 }
 
 public extension Result {

@@ -79,11 +79,12 @@ final class ProfileViewController: UIViewController {
         let button = UIButton()
         button.setImage(UIImage(systemName: "pencil"), for: .normal)
         button.tintColor = .mainWhite
+        button.addTarget(self, action: #selector(navigateToNicknameSetting), for: .touchUpInside)
         return button
     }()
     
     private lazy var hStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [profileImageView, nicknameLabel, UIView(), editButton])
+        let stack = UIStackView(arrangedSubviews: [profileImageView, UIView(), nicknameLabel, UIView(), editButton])
         stack.axis = .horizontal
         stack.spacing = 12
         stack.alignment = .center
@@ -164,7 +165,7 @@ final class ProfileViewController: UIViewController {
             image: UIImage(systemName: "gearshape.fill"),
             style: .plain,
             target: self,
-            action: #selector(test)
+            action: #selector(navigateToSetting)
         )
         
         /// 자식 화면에서 뒤로가기
@@ -173,8 +174,12 @@ final class ProfileViewController: UIViewController {
         navigationItem.backBarButtonItem = backItem
     }
     
-    @objc func test() {
-        coordinator?.navigateToSetting()
+    @objc func navigateToSetting() {
+        coordinator?.startSetting()
+    }
+    
+    @objc func navigateToNicknameSetting() {
+        coordinator?.startNicknameChange()
     }
 }
 

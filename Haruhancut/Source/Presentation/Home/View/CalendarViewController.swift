@@ -318,7 +318,7 @@ final class ImageScrollViewController: UIViewController {
         self.homeViewModel = homeViewModel
         self.selectedDate = selectedDate
         super.init(nibName: nil, bundle: nil)
-        self.commentButton.setCount(posts[currentIndex].comments.count)
+        // self.commentButton.setCount(posts[currentIndex].comments.count)
     }
     
     // MARK: - LifeCycle
@@ -381,20 +381,20 @@ final class ImageScrollViewController: UIViewController {
             })
             .disposed(by: disposeBag)
         
-//        homeViewModel.group
-//            .compactMap { $0?.postsByDate[self.selectedDate] }
-//            .asDriver(onErrorDriveWith: .empty())
-//            .drive(onNext: { [weak self] latestPosts in
-//                guard let self = self else { return }
-//                self.posts = latestPosts
-//                // print("[DEBUG] latestPosts 확인: ", latestPosts)
-//                self.collectionView.reloadData()
-//                if self.posts.indices.contains(self.currentIndex) {
-//                    let post = self.posts[self.currentIndex]
-//                    self.commentButton.setCount(post.comments.count)
-//                }
-//            })
-//            .disposed(by: disposeBag)
+        homeViewModel.group
+            .compactMap { $0?.postsByDate[self.selectedDate] }
+            .asDriver(onErrorDriveWith: .empty())
+            .drive(onNext: { [weak self] latestPosts in
+                guard let self = self else { return }
+                self.posts = latestPosts
+                // print("[DEBUG] latestPosts 확인: ", latestPosts)
+                self.collectionView.reloadData()
+                if self.posts.indices.contains(self.currentIndex) {
+                    let post = self.posts[self.currentIndex]
+                    self.commentButton.setCount(post.comments.count)
+                }
+            })
+            .disposed(by: disposeBag)
     }
     
     required init(coder: NSCoder) {

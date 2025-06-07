@@ -16,7 +16,7 @@ protocol LoginUsecaseProtocol {
     func registerUserToRealtimeDatabase(user: User) -> Observable<Result<User, LoginError>>
     func fetchUserInfo() -> Observable<User?>
     func fetchUser(uid: String) -> Observable<User?>
-    func updateUser(_ user: User) -> Observable<Result<Void, LoginError>>
+    func updateUser(_ user: User) -> Observable<Result<User, LoginError>>
     func uploadImage(user: User, image: UIImage) -> Observable<Result<URL, LoginError>>
 }
 
@@ -73,7 +73,7 @@ final class LoginUsecase: LoginUsecaseProtocol {
     /// 유저 업데이트
     /// - Parameter user: 유저
     /// - Returns: 성공유무
-    func updateUser(_ user: User) -> Observable<Result<Void, LoginError>> {
+    func updateUser(_ user: User) -> Observable<Result<User, LoginError>> {
         return repository.updateUser(user)
     }
     
@@ -134,7 +134,7 @@ final class StubLoginUsecase: LoginUsecaseProtocol {
                 isPushEnabled: true))
     }
     
-    func updateUser(_ user: User) -> RxSwift.Observable<Result<Void, LoginError>> {
+    func updateUser(_ user: User) -> RxSwift.Observable<Result<User, LoginError>> {
         return .empty()
     }
     

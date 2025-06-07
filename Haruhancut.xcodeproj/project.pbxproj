@@ -192,6 +192,14 @@
 		DFF576A62DB0D87B007BEADA /* AppleLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		DFA140C82DF3FF1A001EE9BF /* NicknameChange */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = NicknameChange;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		DF6650692D88023400820F1A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -565,6 +573,7 @@
 		DF947FC72DBE304E00D1E2FD /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				DFA140C82DF3FF1A001EE9BF /* NicknameChange */,
 				DF437C152DE6DBA800B1DFB9 /* Setting */,
 				DF437C0D2DE6DB4700B1DFB9 /* ViewModel */,
 				DF437C0E2DE6DB4A00B1DFB9 /* View */,
@@ -682,6 +691,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				DFA140C82DF3FF1A001EE9BF /* NicknameChange */,
 			);
 			name = Haruhancut;
 			packageProductDependencies = (
@@ -870,7 +882,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 45;
+				CURRENT_PROJECT_VERSION = 46;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LGX4B4WC66;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -914,7 +926,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 45;
+				CURRENT_PROJECT_VERSION = 46;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LGX4B4WC66;
 				GENERATE_INFOPLIST_FILE = YES;

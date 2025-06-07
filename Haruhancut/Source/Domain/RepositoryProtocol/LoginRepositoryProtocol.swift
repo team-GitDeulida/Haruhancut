@@ -16,6 +16,6 @@ protocol LoginRepositoryProtocol {
     func registerUserToRealtimeDatabase(user: User) -> Observable<Result<User, LoginError>>
     func fetchUserInfo() -> Observable<User?>
     func fetchUser(uid: String) -> Observable<User?>
-    func updateUser(_ user: User) -> Observable<Result<Void, LoginError>>
+    func updateUser(_ user: User) -> Observable<Result<User, LoginError>>
     func uploadImage(user: User, image: UIImage) -> Observable<Result<URL, LoginError>>
 }
