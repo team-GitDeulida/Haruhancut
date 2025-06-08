@@ -250,7 +250,7 @@ final class HomeCoordinator: Coordinator {
     }
     
     func startSetting() {
-        let settingView = SettingViewController(homeViewModel: homeViewModel)
+        let settingView = SettingViewController(homeViewModel: homeViewModel, settingViewModel: SettingViewModel(user: homeViewModel.user.value!, loginUsecase: DIContainer.shared.resolve(LoginUsecase.self)))
         settingView.coordinator = self
         self.navigationController.pushViewController(settingView, animated: true)
     }

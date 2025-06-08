@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Firebase
 
 enum CameraType {
     case camera
@@ -83,6 +84,51 @@ final class HomeViewModel: HomeViewModelType {
             .bind(to: user)
             .disposed(by: disposeBag)
         
+        
+//        userRelay
+//            .compactMap { $0 }
+//            .take(1)
+//            .subscribe(onNext: { [weak self] user in
+//                guard var user = self?.user.value else { return }
+//
+//                Messaging.messaging().token { fcmToken, error in
+//                    if let error = error {
+//                        print("❌ FCM 토큰 가져오기 실패: \(error.localizedDescription)")
+//                        return
+//                    }
+//                    
+//                    guard let newToken = fcmToken else {
+//                        print("❌ FCM 토큰이 nil입니다")
+//                        return
+//                    }
+//
+//                    // 기존 토큰과 비교
+//                    if user.fcmToken == newToken {
+//                        print("✅ 기존 토큰과 동일 → 저장 생략")
+//                        return
+//                    }
+//
+//                    // 토큰 반영
+//                    user.fcmToken = newToken
+//
+//                    // UseCase를 통한 업데이트
+//                    self?.loginUsecase.updateUser(user)
+//                        .subscribe(onNext: { result in
+//                            switch result {
+//                            case .success(let updatedUser):
+//                                print("✅ updateUser 성공: \(updatedUser.nickname)")
+//                                UserDefaultsManager.shared.saveUser(updatedUser)
+//                                self?.user.accept(updatedUser)
+//                            case .failure(let error):
+//                                print("❌ updateUser 실패: \(error)")
+//                            }
+//                        })
+//                        .disposed(by: self?.disposeBag ?? DisposeBag())
+//                }
+//            })
+//            .disposed(by: disposeBag)
+
+        
         /// 캐시 그룹 불러오기
         fetchDefaultGroup()
         
@@ -116,6 +162,12 @@ final class HomeViewModel: HomeViewModelType {
                 self?.observeAllMembersRealtime(memberUIDs: memberUIDs)
             })
             .disposed(by: disposeBag)
+        
+        
+    }
+    
+    func updateUser(user: User) -> Observable<Result<User, LoginError>> {
+        return loginUsecase.updateUser(user)
     }
     
     func transform() -> Output {
@@ -363,6 +415,7 @@ final class HomeViewModel: HomeViewModelType {
                 }
             )
     }
+    
     
     // MARK: - Members 각 uid마다 observeStream으로 실시간 구독
 //    private func observeMembersRealtime(memberUIDs: [String]) {

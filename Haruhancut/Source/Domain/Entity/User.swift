@@ -25,6 +25,7 @@ struct User: Encodable { /// Swift객체 -> Json(서버로 보낼때)
     let loginPlatform: LoginPlatform
     var nickname: String
     var profileImageURL: String?
+    var fcmToken: String?
     var birthdayDate: Date
     var gender: Gender
     var isPushEnabled: Bool
@@ -41,6 +42,7 @@ extension User {
             loginPlatform: loginPlatform.rawValue,
             nickname: nickname,
             profileImageURL: profileImageURL,
+            fcmToken: fcmToken,
             birthdayDate: formatter.string(from: birthdayDate),
             gender: gender.rawValue,
             isPushEnabled: isPushEnabled,
@@ -356,6 +358,7 @@ struct UserDTO: Codable { /// Json -> Swift 객체(서버 응답용)
     let loginPlatform: String?
     let nickname: String?
     let profileImageURL: String?
+    let fcmToken: String?
     let birthdayDate: String?
     let gender: String?
     let isPushEnabled: Bool?
@@ -388,6 +391,7 @@ extension UserDTO {
             loginPlatform: loginPlatform,
             nickname: nickname,
             profileImageURL: profileImageURL,
+            fcmToken: fcmToken,
             birthdayDate: birthdayDate,
             gender: gender,
             isPushEnabled: isPushEnabled,

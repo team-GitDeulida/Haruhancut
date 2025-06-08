@@ -15,15 +15,17 @@ import FirebaseAuth
 import RxKakaoSDKCommon
 //import RxKakaoSDKAuth
 import KakaoSDKAuth
-
 import Foundation
 
 // 알람 관련
 import FirebaseMessaging
 import UserNotifications
 
+import RxSwift
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    var disposeBag = DisposeBag()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -102,18 +104,71 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 }
 
 extension AppDelegate: MessagingDelegate {
-    // 파이어베이스 MessagingDelegate 설정
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-        print("Firebase registration token: \(String(describing: fcmToken))")
-
-        let dataDict: [String: String] = ["token": fcmToken ?? ""]
-        NotificationCenter.default.post(
-            name: Notification.Name("FCMToken"),
-            object: nil,
-            userInfo: dataDict
-        )
+        print("🔥 받은 FCM 토큰: \(String(describing: fcmToken))")
+        if let token = fcmToken {
+            UserDefaults.standard.set(token, forKey: "localFCMToken")
+        }
     }
 }
+
+
+//extension AppDelegate: MessagingDelegate {
+//    // 파이어베이스 MessagingDelegate 설정
+//    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+//        print("Firebase registration token: \(String(describing: fcmToken))")
+//
+////        let dataDict: [String: String] = ["token": fcmToken ?? ""]
+////        NotificationCenter.default.post(
+////            name: Notification.Name("FCMToken"),
+////            object: nil,
+////            userInfo: dataDict
+////        )
+//    }
+//}
+
+
+/*
+extension AppDelegate: MessagingDelegate {
+    // MARK: 바뀐 방식 - DIContainer로 직접 UseCase 호출하여 저장
+    // Firebase에서 새로운 FCM 토큰을 발급받았을 때 호출됨
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+        print("✅ FCM 토큰 수신: \(String(describing: fcmToken))")
+        
+        // 👉 UserDefaults에 저장된 현재 유저 정보를 불러옴
+        guard var user = UserDefaultsManager.shared.loadUser(),
+              let token = fcmToken else { return }
+
+        // 👉 이미 저장된 토큰과 같으면 저장 생략
+        if user.fcmToken == token {
+            print("✅ 기존과 동일한 토큰 → 저장 생략")
+            return
+        }
+
+        // ✅ 토큰을 user 모델에 반영
+        user.fcmToken = token
+
+        // 👉 DIContainer에서 UseCase를 가져와 updateUser 호출
+        // 서버(DB)에 FCM 토큰을 저장하는 용도
+        DIContainer.shared.resolve(LoginUsecase.self)
+            .updateUser(user)
+            .subscribe(onNext: { result in
+                switch result {
+                case .success(let updated):
+                    // ✅ 업데이트된 유저 정보도 캐시에 반영 (UserDefaults)
+                    UserDefaultsManager.shared.saveUser(updated)
+                    print("✅ FCM 토큰 저장 완료 (업데이트된 유저: \(updated.nickname))")
+                case .failure(let error):
+                    print("❌ FCM 토큰 저장 실패: \(error)")
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+}
+*/
+
+
+
 
 
 /*
@@ -136,26 +191,26 @@ extension AppDelegate {
         DIContainer.shared.register(GroupUsecase.self, dependency: groupUsecase)
     }
 }
-
-extension AppDelegate {
-    
-    // MARK: - FCM 토큰 생성 함수
-    func generateFCMToken() {
-        Messaging.messaging().token() { token, error in
-            if let error = error {
-                print("FCM 토큰 생성 중 오류 발생: \(error.localizedDescription)")
-            }
-            
-            /// 로직
-        }
-    }
-    
-    // MARK: - 토큰을 기기에서 삭제
-    func deleteFCMToken() {
-        Messaging.messaging().deleteToken { error in
-            if let error = error {
-                print("FCM 토큰 삭제 중 오류 발생: \(error.localizedDescription)")
-            }
-        }
-    }
-}
+//
+//extension AppDelegate {
+//    
+//    // MARK: - FCM 토큰 생성 함수
+//    func generateFCMToken() {
+//        Messaging.messaging().token() { token, error in
+//            if let error = error {
+//                print("FCM 토큰 생성 중 오류 발생: \(error.localizedDescription)")
+//            }
+//            
+//            /// 로직
+//        }
+//    }
+//    
+//    // MARK: - 토큰을 기기에서 삭제
+//    func deleteFCMToken() {
+//        Messaging.messaging().deleteToken { error in
+//            if let error = error {
+//                print("FCM 토큰 삭제 중 오류 발생: \(error.localizedDescription)")
+//            }
+//        }
+//    }
+//}

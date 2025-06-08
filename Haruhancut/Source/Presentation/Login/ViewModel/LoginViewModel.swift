@@ -8,6 +8,7 @@
 import Foundation
 import FirebaseAuth
 import FirebaseDatabase
+import FirebaseMessaging
 
 import RxSwift
 import RxCocoa
@@ -61,6 +62,35 @@ final class LoginViewModel: LoginViewModelType {
     struct LoginOutput {
         let loginResult: Driver<Result<Void, LoginError>>
     }
+
+    private func syncFCMTokenWithServerIfNeeded(currentUser: User) {
+        guard let localToken = UserDefaults.standard.string(forKey: "localFCMToken") else {
+            print("⚠️ 로컬에 저장된 토큰 없음")
+            return
+        }
+        
+        let serverToken = currentUser.fcmToken ?? ""
+
+        if serverToken != localToken {
+            print("🔄 서버와 토큰 불일치: 서버=\(currentUser.fcmToken ?? "nil") / 로컬=\(localToken) → 업데이트 시도")
+            var updatedUser = currentUser
+            updatedUser.fcmToken = localToken
+
+            updateUser(user: updatedUser)
+                .subscribe(onNext: { result in
+                    switch result {
+                    case .success:
+                        print("✅ 서버 토큰 동기화 완료")
+                    case .failure(let error):
+                        print("❌ 토큰 동기화 실패: \(error)")
+                    }
+                })
+                .disposed(by: disposeBag)
+        } else {
+            print("✅ 서버와 로컬 토큰 일치")
+        }
+    }
+
     
     /// UI와 바인딩할 목적이면 return 아니면 내부에샤 input.xxx진행
     func transform(input: LoginInput) -> LoginOutput {
@@ -166,6 +196,9 @@ final class LoginViewModel: LoginViewModelType {
                     // print("✅ loginVM - 서버에서 불러온 유저: \(user)")
                     self.user.accept(user)
                     UserDefaultsManager.shared.saveUser(user)
+                    
+                    // MARK: - FCM 토큰 동기화
+                    self.syncFCMTokenWithServerIfNeeded(currentUser: user)
                 } else {
                     print("❌ 사용자 정보 없음 캐시 삭제 진행")
                     self.user.accept(nil)
@@ -254,6 +287,64 @@ final class LoginViewModel: LoginViewModelType {
     
     func transform(input: ProfileInput) -> ProfileOutput {
         
+      let signUpResult = signUpResultRelay
+        .asDriver(onErrorJustReturn: .failure(.signUpError))
+      
+      input.nextBtnTapped
+        .withLatestFrom(input.selectedImage)
+        .flatMapLatest { [weak self] image -> Observable<Result<Void, LoginError>> in
+          guard let self = self,
+                let currentUser = self.user.value else {
+            return .just(.failure(.signUpError))
+          }
+          
+          // 1) FCM 토큰 발급
+            return self.generateFCMToken()
+            .flatMapLatest { token -> Observable<Result<Void, LoginError>> in
+              // 2) User 모델에 토큰 저장
+              var userWithToken = currentUser
+              userWithToken.fcmToken = token
+              self.user.accept(userWithToken)
+              
+              // 3) 기존 회원가입 + 이미지 업로드 로직
+              return self.registerUser(user: userWithToken)
+                .flatMap { result -> Observable<Result<Void, LoginError>> in
+                  switch result {
+                  case .success:
+                    guard let user = self.user.value else {
+                      return .just(.failure(.signUpError))
+                    }
+                    if let image = image {
+                      return self.loginUsecase
+                        .uploadImage(user: user, image: image)
+                        .flatMap { uploadResult -> Observable<Result<Void, LoginError>> in
+                          switch uploadResult {
+                          case .success(let url):
+                            var updated = user
+                            updated.profileImageURL = url.absoluteString
+                            UserDefaultsManager.shared.saveUser(updated)
+                            return .just(.success(()))
+                          case .failure(let error):
+                            return .just(.failure(error))
+                          }
+                        }
+                    } else {
+                      return .just(.success(()))
+                    }
+                  case .failure(let error):
+                    return .just(.failure(error))
+                  }
+                }
+            }
+        }
+        .bind(to: signUpResultRelay)
+        .disposed(by: disposeBag)
+      
+      return ProfileOutput(signUpResult: signUpResult)
+    }
+    
+    func transform_save(input: ProfileInput) -> ProfileOutput {
+        
         let signUpResult = signUpResultRelay
             .asDriver(onErrorJustReturn: .failure(.signUpError))
         
@@ -327,6 +418,23 @@ final class LoginViewModel: LoginViewModelType {
                 }
                 return result.mapToVoid()
             }
+    }
+    
+    // MARK: - FCM 토큰 생성 함수
+    func generateFCMToken() -> Observable<String> {
+        return Observable.create { observer in
+            Messaging.messaging().token { token, error in
+                if let error = error {
+                    observer.onError(error)
+                } else if let token = token {
+                    observer.onNext(token)
+                    observer.onCompleted()
+                } else {
+                    observer.onError(NSError(domain: "FCMToken", code: -1, userInfo: [NSLocalizedDescriptionKey: "토큰이 없습니다"]))
+                }
+            }
+            return Disposables.create()
+        }
     }
 }
 

@@ -14,6 +14,7 @@ final class UserDefaultsManager {
     private let userKey = "cachedUser"
     private let signupKey = "isSignupCompleted"
     private let groupKey = "cachedGroup"
+    private let notificationKey = "notificationsEnabled"
 
     // MARK: - 유저
     // 저장
@@ -54,6 +55,15 @@ final class UserDefaultsManager {
     func removeGroup() {
         UserDefaults.standard.removeObject(forKey: groupKey)
         print("캐시 그룹 삭제: \(String(describing: self.loadGroup()))")
+    }
+    
+    // MARK: - 알람
+    func setNotificationEnabled(enabled: Bool) {
+        UserDefaults.standard.set(enabled, forKey: notificationKey)
+    }
+    
+    func loadNotificationEnabled() -> Bool {
+        return UserDefaults.standard.bool(forKey: notificationKey)
     }
 }
 

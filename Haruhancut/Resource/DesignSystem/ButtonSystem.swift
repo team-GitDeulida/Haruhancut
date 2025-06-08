@@ -74,7 +74,7 @@ final class HCNextButton: UIButton {
     
     private func configure(title: String) {
         var config = UIButton.Configuration.filled()
-        config.title = "완료"
+        config.title = title
         config.baseForegroundColor = .mainBlack
         config.baseBackgroundColor = .mainWhite
         
