@@ -147,6 +147,7 @@ struct PhotoWidgets: Widget {
             }
             .supportedFamilies([
                 .systemSmall,
+                .systemMedium,
                 .accessoryCircular,
                 .accessoryRectangular,
                 .accessoryInline
