@@ -56,4 +56,23 @@ final class AlertManager {
         let cancel = UIAlertAction(title: cancelTitle, style: .cancel)
         showAlert(on: vc, title: title, message: message, actions: [confirm, cancel])
     }
+    
+    
+//    static func showConfirmation(
+//        on vc: UIViewController,
+//        title: String,
+//        message: String,
+//        confirmTitle: String = "확인",
+//        cancelTitle: String = "취소",
+//        confirmHandler: (() -> Void)? = nil
+//    ) {
+//        // 1) 확인 버튼 (기본 .default 스타일)
+//        let confirm = UIAlertAction(title: confirmTitle, style: .default) { _ in
+//            confirmHandler?()
+//        }
+//        // 2) 취소 버튼을 .destructive 스타일로 변경
+//        let cancel = UIAlertAction(title: cancelTitle, style: .destructive)
+//        
+//        showAlert(on: vc, title: title, message: message, actions: [confirm, cancel])
+//    }
 }

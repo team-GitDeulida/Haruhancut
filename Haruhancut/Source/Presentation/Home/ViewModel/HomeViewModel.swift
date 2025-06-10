@@ -9,6 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import Firebase
+import WidgetKit
 
 enum CameraType {
     case camera
@@ -207,6 +208,8 @@ final class HomeViewModel: HomeViewModelType {
         let dateKey = Date().toDateKey()
         let storagePath = "groups/\(groupId)/images/\(postId).jpg"
         let dbPath = "groups/\(groupId)/postsByDate/\(dateKey)/\(postId)"
+        print("storagePath: \(storagePath)")
+        print("dbPath: \(dbPath)")
 
         return FirebaseStorageManager.shared.uploadImage(image: image, path: storagePath)
             .flatMap { url -> Observable<Bool> in
@@ -226,6 +229,15 @@ final class HomeViewModel: HomeViewModelType {
                 )
 
                 return FirebaseAuthManager.shared.setValue(path: dbPath, value: post.toDTO())
+                    .do { success in
+                        if success {
+                            // 1) 파이어베이스 저장 성공시 컨테이너에 오늘 사진 저장
+                            PhotoWidgetManager.shared.saveTodayImage(image, identifier: postId)
+                            
+                            // 2) 저장 직후 위젯 타임라인 강제 갱신
+                            WidgetCenter.shared.reloadTimelines(ofKind: "PhotoWidget")
+                        }
+                    }
             }
     }
     
@@ -249,6 +261,14 @@ final class HomeViewModel: HomeViewModelType {
             .bind(onNext: { success in
                 if success {
                     print("✅ 삭제 완료")
+                    // 2) 컨테이너에서도 파일 삭제
+                    PhotoWidgetManager.shared.deleteImage(
+                       dateKey: dateKey,
+                       identifier: post.postId
+                    )
+                    
+                    // 2) 삭제 직후 위젯 타임라인 강제 갱신
+                    WidgetCenter.shared.reloadTimelines(ofKind: "PhotoWidget")
                 } else {
                     print("❌ 삭제 실패")
                 }
@@ -372,10 +392,48 @@ final class HomeViewModel: HomeViewModelType {
                 
                 // 캐시 저장
                 UserDefaultsManager.shared.saveGroup(group)
+                
+                // 1) posts를 날짜별로 정렬하여 포스트 변수에 바인딩
                 let allPosts = group.postsByDate
                     .flatMap { $0.value }
                     .sorted(by: { $0.createdAt < $1.createdAt }) // 오래된 순
                 self.posts.accept(allPosts)
+                
+                // MARK: -
+                // 2) 최신 포스트 체크후 위젯 컨테이너에 없으면 저장한다
+                // 위젯에 저장되지 않은 오늘 포스트 이미지 자동 저장
+                if let todayPost = allPosts.last(where: { $0.isToday }) {
+                    let dateKey = todayPost.createdAt.toDateKey()
+
+                    // 1. 해당 이미지가 위젯 컨테이너에 저장되어 있는지 확인
+                    if let containerURL = FileManager.default
+                        .containerURL(forSecurityApplicationGroupIdentifier: PhotoWidgetManager.shared.appGroupID)?
+                        .appendingPathComponent("Photos", isDirectory: true)
+                        .appendingPathComponent(dateKey, isDirectory: true) {
+
+                        let existingFiles = (try? FileManager.default.contentsOfDirectory(at: containerURL, includingPropertiesForKeys: nil)) ?? []
+                        let alreadySaved = existingFiles.contains { $0.lastPathComponent.contains(todayPost.postId) }
+
+                        // 2. 저장되어 있지 않다면 서버에서 이미지 다운로드 후 저장
+                        if !alreadySaved, let imageURL = URL(string: todayPost.imageURL) {
+                            URLSession.shared.dataTask(with: imageURL) { data, _, error in
+                                if let data = data, let image = UIImage(data: data) {
+                                    PhotoWidgetManager.shared.saveTodayImage(image, identifier: todayPost.postId)
+
+                                    // 저장 후 위젯 리로드
+                                    WidgetCenter.shared.reloadTimelines(ofKind: "PhotoWidget")
+                                } else {
+                                    print("❌ 이미지 다운로드 실패 또는 변환 실패: \(error?.localizedDescription ?? "Unknown error")")
+                                }
+                            }.resume()
+                        }
+                    }
+                }
+
+                
+                
+
+                
             }, onError: { error in
                 print("❌ 사용자 정보 없음 캐시 삭제 진행")
                 self.user.accept(nil)

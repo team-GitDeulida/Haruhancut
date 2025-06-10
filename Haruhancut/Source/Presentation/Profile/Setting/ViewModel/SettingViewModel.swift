@@ -15,11 +15,11 @@ protocol SettingViewModelType {
     func alertOn()
     func alertOff()
     func updateUser(user: User) -> Observable<Result<Void, LoginError>>
+    func deleteUser(uid: String) -> Driver<Bool>
 }
 
 final class SettingViewModel: SettingViewModelType
 {
-    
     private let loginUsecase: LoginUsecaseProtocol
     var user: User
     
@@ -41,13 +41,13 @@ final class SettingViewModel: SettingViewModelType
         
         // 셀 이벤트
         let cellSelected: Observable<IndexPath>
+        
     }
     
     // View에 전달할 출력 데이터 정의
     struct Output {
         /// 로그아웃 성공 또는 실패에 대한 결과 스트림(Driver를 사용하여 메인스레드에서 UI 바인딩에 안전하게 처리)
         let logoutResult: Driver<Result<Void, LoginError>>
-        
         let notificationResult: Driver<Bool>   // 토글 처리 결과
         let selectionResult: Driver<IndexPath> // 셀 선택 통보
     }
@@ -84,6 +84,8 @@ final class SettingViewModel: SettingViewModelType
                 // print("VM: cell selected → section:\(indexPath.section), row:\(indexPath.row)")
             })
             .asDriver(onErrorDriveWith: .empty())
+        
+
         
         return Output(
             logoutResult: logoutResult,
@@ -205,6 +207,11 @@ final class SettingViewModel: SettingViewModelType
                 return result.mapToVoid()
             }
     }
+    
+    func deleteUser(uid: String) -> Driver<Bool> {
+        return loginUsecase.deleteUser(uid: uid).asDriver(onErrorJustReturn: false)
+    }
+    
 }
 
 final class StubSettingViewModel: SettingViewModelType {
@@ -222,6 +229,10 @@ final class StubSettingViewModel: SettingViewModelType {
     
     func updateUser(user: User) -> Observable<Result<Void, LoginError>> {
         return .just(.success(()))
+    }
+    
+    func deleteUser(uid: String) -> Driver<Bool> {
+        return .just(false)
     }
 }
 

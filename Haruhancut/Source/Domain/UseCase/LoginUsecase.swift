@@ -17,6 +17,7 @@ protocol LoginUsecaseProtocol {
     func fetchUserInfo() -> Observable<User?>
     func fetchUser(uid: String) -> Observable<User?>
     func updateUser(_ user: User) -> Observable<Result<User, LoginError>>
+    func deleteUser(uid: String) -> Observable<Bool>
     func uploadImage(user: User, image: UIImage) -> Observable<Result<URL, LoginError>>
 }
 
@@ -78,6 +79,14 @@ final class LoginUsecase: LoginUsecaseProtocol {
     }
     
     
+    /// 유조 석제
+    /// - Parameter uid: 유저 고유 식별자
+    /// - Returns: 삭제 유무
+    func deleteUser(uid: String) -> Observable<Bool> {
+        return repository.deleteUser(uid: uid)
+    }
+    
+    
     /// 이미지 업로드
     /// - Parameters:
     ///   - user: 유저
@@ -135,6 +144,10 @@ final class StubLoginUsecase: LoginUsecaseProtocol {
     }
     
     func updateUser(_ user: User) -> RxSwift.Observable<Result<User, LoginError>> {
+        return .empty()
+    }
+    
+    func deleteUser(uid: String) -> Observable<Bool> {
         return .empty()
     }
     

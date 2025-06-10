@@ -57,13 +57,25 @@ install_fastlane: install_homebrew
 	@echo "Installing fastlane via Homebrew..."
 	@brew install fastlane || true
 	@echo "✅ fastlane 설치 완료 (Homebrew 사용)"
-	
+
+# 최초 한번은 직접 실행
+# fastlane match appstore --app_identifier "com.indextrown.Haruhancut.WidgetExtension"
+# fastlane match development --app_identifier "com.indextrown.Haruhancut.WidgetExtension"
+
+# 만약 기능 추가시
+# fastlane match development --force
+# fastlane match appstore --force   
+
 # 인증서 다운로드 (readonly 모드)
+# @fastlane match development --readonly false
+# @fastlane match appstore --readonly false
 fetch_certs: install_fastlane
 	@echo "Fetching development certificates..."
-	@fastlane match development --readonly false
+	@fastlane match development --readonly 
+	@fastlane match development --app_identifier "com.indextrown.Haruhancut.WidgetExtension" --readonly
 	@echo "Fetching appstore certificates..."
-	@fastlane match appstore --readonly false
+	@fastlane match appstore --readonly 
+	@fastlane match appstore --app_identifier "com.indextrown.Haruhancut.WidgetExtension" --readonly
 	@echo "✅ 인증서 가져오기 완료"
 
 # -------------------------
@@ -71,3 +83,21 @@ fetch_certs: install_fastlane
 # -------------------------
 all: download-privates fetch_certs
 	@echo "✅ 모든 작업 완료"
+
+
+
+# -------------------------
+# 에러 발생시 아래 코드 실행(권한 포함해 새로 생성·갱신하는 명령)
+# rovisioning profile "match AppStore com.indextrown.Haruhancut.WidgetExtension" doesn't support the group.com.indextrown.Haruhancut.WidgetExtension App Group.
+# -------------------------
+
+# bundle exec fastlane match development \
+#   --app_identifier "com.indextrown.Haruhancut.WidgetExtension" \
+#   --force_for_new_certificates \
+#   --include_all_certificates
+
+# bundle exec fastlane match appstore \
+#   --app_identifier "com.indextrown.Haruhancut.WidgetExtension" \
+#   --force_for_new_certificates \
+#   --include_all_certificates
+

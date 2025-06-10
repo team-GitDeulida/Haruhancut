@@ -8,6 +8,7 @@ import UIKit
 import FirebaseAuth
 import RxSwift
 import UserNotifications
+import SafariServices
 
 final class SettingViewController: UIViewController {
     
@@ -15,13 +16,15 @@ final class SettingViewController: UIViewController {
     private let notificationToggleSubject = PublishSubject<Bool>()
     private let cellSelectedSubject     = PublishSubject<IndexPath>()
     
+    private let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
+    
     // 1. 섹션별 데이터
-    private var sections = [
+    private lazy var sections = [
         SettingSection(header: "앱 설정", options: [
             .toggle(title: "알림 설정", isOn: UserDefaultsManager.shared.loadNotificationEnabled()),
         ]),
           SettingSection(header: "정보", options: [
-            .version(title: "버전 정보", detail: "1.2.3"),
+            .version(title: "버전 정보", detail: "\(appVersion)"),
             .privacyPolicy(title: "개인정보처리방침")
           ]),
           SettingSection(header: "계정 관리", options: [
@@ -94,6 +97,7 @@ final class SettingViewController: UIViewController {
     }
     
     private func bindViewModel() {
+                
         let input = SettingViewModel.Input(
             logoutTapped: logoutButton.rx.tap.asObservable(),
             notificationToggled: notificationToggleSubject.asObservable(),
@@ -152,11 +156,28 @@ final class SettingViewController: UIViewController {
                 case .version:
                     print("버전 정보 보기")
                 case .privacyPolicy:
-                    print("개인정보처리방침 보기")
+                    guard let url = URL(string: "https://ray-the-pioneer.notion.site/1f0dcbdd5d934735b81a590398f8e70d?pvs=4") else { return }
+                    let safariVC = SFSafariViewController(url: url)
+                    self.present(safariVC, animated: true)
                 case .logout:
                     print("로그아웃 클릭됨")
                 case .withdraw:
                     print("회원 탈퇴 클릭됨")
+                    AlertManager.showConfirmation(on: self, title: "회원탈퇴", message: "정말로 탈퇴하시겠습니까?") { [weak self] in
+                        guard let self = self else { return }
+                        let uid = self.settingViewModel.user.uid
+                        
+                        self.settingViewModel.deleteUser(uid: uid)
+                            .drive(onNext: { [weak self] success in
+                                if success {
+                                    self?.coordinator?.showLogin()
+                                } else {
+                                    // 탈퇴 실패 시 에러 알림
+                                    AlertManager.showError(on: self!, message: "회원 탈퇴에 실패했습니다.")
+                                }
+                            })
+                            .disposed(by: self.disposeBag)
+                    }
                 }
             })
             .disposed(by: disposeBag)
