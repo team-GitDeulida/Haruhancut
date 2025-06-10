@@ -293,7 +293,7 @@ struct Comment: Encodable {
     let commentId: String
     let userId: String
     let nickname: String
-    let profileImageURL: String?
+    var profileImageURL: String?
     let text: String
     let createdAt: Date
 }

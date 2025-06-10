@@ -44,7 +44,6 @@ final class PostCommentViewController: UIViewController {
         self.homeViewModel = homeViewModel
         self.post = post
         super.init(nibName: nil, bundle: nil)
-        // print(post)
     }
     
     required init?(coder: NSCoder) {
@@ -106,9 +105,18 @@ final class PostCommentViewController: UIViewController {
                 guard let self = self else { return }
                 guard let latestPost = posts.first(where: { $0.postId == self.post.postId }) else { return }
 
+                // 댓글을 최신순 정렬
                 let sorted = latestPost.comments
                     .sorted { $0.value.createdAt < $1.value.createdAt }
-                    .map { (commentId: $0.key, comment: $0.value) }
+                    .map { (commentId, comment) -> (String, Comment) in
+                        var updatedComment = comment
+                        
+                        // ✅ 모든 댓글에 대해 userId로 members에서 사용자 찾기
+                        if let user = self.homeViewModel.members.value.first(where: { $0.uid == comment.userId }) {
+                            updatedComment.profileImageURL = user.profileImageURL
+                        }
+                        return (commentId: commentId, comment: updatedComment)
+                    }
                 
                 self.comments = sorted // [(key, Comment)]
                 self.tableView.reloadData()

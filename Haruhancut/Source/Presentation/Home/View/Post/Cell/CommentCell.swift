@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class CommentCell: UITableViewCell {
     
@@ -99,6 +100,19 @@ final class CommentCell: UITableViewCell {
         nicknameLabel.text = comment.nickname                    // 작성자
         contentLabel.text = comment.text                         // 댓글 내용
         timeLabel.text = comment.createdAt.toRelativeString()    // "몇분 전", "몇시간 전" 표시
+        
+        // 댓글 프로필 이미지 관련
+        if let urlString = comment.profileImageURL,
+           let url = URL(string: urlString) {
+            profileImageView.contentMode = .scaleAspectFill
+            profileImageView.tintColor = nil // ✅ template tint 제거
+            profileImageView.image = nil     // ✅ 기본 아이콘 제거
+            profileImageView.kf.setImage(with: url)
+        } else {
+            profileImageView.contentMode = .center
+            profileImageView.image = UIImage(systemName: "person")
+            profileImageView.tintColor = .mainWhite
+        }
     }
 }
 
