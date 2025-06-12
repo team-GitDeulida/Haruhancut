@@ -32,7 +32,6 @@ final class LoginViewController: UIViewController {
     private let loginViewModel: LoginViewModel
     
     // MARK: - UI Components
-    
     let animationView: LottieAnimationView = {
         let lottie = LottieAnimationView(name: "LottieCamera")
         return lottie
@@ -55,13 +54,72 @@ final class LoginViewController: UIViewController {
         return st
     }()
     
+    private let titleLabel: UILabel = {
+        let label = HCLabel(type: .custom(text: "하루한컷",
+                                          font: .hcFont(.bold, size: 20.scaled),
+                                          color: .mainWhite))
+        return label
+    }()
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         makeUI()
         bindViewModel()
-        animationView.play()
+        // animationView.play()
         // observeUserState()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        checkTutorialStatus()
+        animationView.play()
+        
+        /*
+        animationView.play { [weak self] finished in
+            guard finished else { return }
+            UIView.animate(withDuration: 0.5) {
+                self?.titleLabel.alpha = 1
+            }
+        }
+         */
+        
+        
+        // 2. 초기 상태: 오른쪽에서 약간 이동 + 투명
+        /*
+        titleLabel.alpha = 0
+        titleLabel.transform = CGAffineTransform(translationX: 40, y: 0)
+
+        animationView.play { [weak self] finished in
+            guard finished else { return }
+            
+            UIView.animate(
+                withDuration: 0.6,
+                delay: 0,
+                usingSpringWithDamping: 0.6,
+                initialSpringVelocity: 0.8,
+                options: [.curveEaseInOut],
+                animations: {
+                    self?.titleLabel.alpha = 1
+                    self?.titleLabel.transform = .identity
+                }
+            )
+        }
+         */
+
+        
+        // UserDefaults.standard.set(false, forKey: "Tutorial")
+    }
+    
+    private func checkTutorialStatus() {
+        let userDefaults = UserDefaults.standard
+        let hasCompletedTutorial = userDefaults.bool(forKey: "Tutorial")
+        
+        if !hasCompletedTutorial {
+            let onboardingVC = OnboardingViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
+            onboardingVC.modalPresentationStyle = .fullScreen
+            present(onboardingVC, animated: false)
+        }
     }
     
     // MARK: - Setup UI
@@ -73,12 +131,12 @@ final class LoginViewController: UIViewController {
         animationView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             // 위치
-            animationView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 220),
+            animationView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 220.scaled),
             animationView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             // 크기
-            animationView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            animationView.heightAnchor.constraint(equalToConstant: 200)
+            animationView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20.scaled),
+            animationView.heightAnchor.constraint(equalToConstant: 200.scaled)
         ])
         
         // 스택뷰 -> 뷰에 추가
@@ -88,9 +146,17 @@ final class LoginViewController: UIViewController {
         // 오토레이아웃 제약 추가
         NSLayoutConstraint.activate([
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
-            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            stackView.heightAnchor.constraint(equalToConstant: 130)
+            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50.scaled),
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20.scaled),
+            stackView.heightAnchor.constraint(equalToConstant: 130.scaled)
+        ])
+        
+        view.addSubview(titleLabel)
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(equalTo: animationView.bottomAnchor, constant: 20.scaled),
+            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
     

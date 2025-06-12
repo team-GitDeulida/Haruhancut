@@ -104,6 +104,8 @@
 		DFDDEABD2DDF659400408C27 /* AlarmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFDDEABB2DDF659400408C27 /* AlarmManager.swift */; };
 		DFDE0EA12DF17534000703CA /* CommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFDE0E9E2DF17534000703CA /* CommentCell.swift */; };
 		DFDE0EA22DF17534000703CA /* PostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFDE0E9F2DF17534000703CA /* PostCell.swift */; };
+		DFE433092DFAB55A00D2E9EA /* NicknameChangeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFE433072DFAB55A00D2E9EA /* NicknameChangeViewController.swift */; };
+		DFE4330C2DFAB56300D2E9EA /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFE4330A2DFAB56300D2E9EA /* Onboarding.swift */; };
 		DFF1CBD82DBA8A5E00722B04 /* GroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFF1CBD62DBA8A5E00722B04 /* GroupViewModel.swift */; };
 		DFF1CBE02DBAAEC800722B04 /* GroupEnterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFF1CBDD2DBAAEC800722B04 /* GroupEnterViewController.swift */; };
 		DFF576A72DB0D87B007BEADA /* AppleLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFF576A62DB0D87B007BEADA /* AppleLoginManager.swift */; };
@@ -220,6 +222,8 @@
 		DFDDEABB2DDF659400408C27 /* AlarmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmManager.swift; sourceTree = "<group>"; };
 		DFDE0E9E2DF17534000703CA /* CommentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentCell.swift; sourceTree = "<group>"; };
 		DFDE0E9F2DF17534000703CA /* PostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCell.swift; sourceTree = "<group>"; };
+		DFE433072DFAB55A00D2E9EA /* NicknameChangeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameChangeViewController.swift; sourceTree = "<group>"; };
+		DFE4330A2DFAB56300D2E9EA /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
 		DFF1CBD62DBA8A5E00722B04 /* GroupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewModel.swift; sourceTree = "<group>"; };
 		DFF1CBDD2DBAAEC800722B04 /* GroupEnterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupEnterViewController.swift; sourceTree = "<group>"; };
 		DFF576A62DB0D87B007BEADA /* AppleLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginManager.swift; sourceTree = "<group>"; };
@@ -242,11 +246,6 @@
 				DF668DC42DF80C3100EC2FAB /* Exceptions for "WidgetExtension" folder in "WidgetExtensionExtension" target */,
 			);
 			path = WidgetExtension;
-			sourceTree = "<group>";
-		};
-		DFA140C82DF3FF1A001EE9BF /* NicknameChange */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = NicknameChange;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -523,6 +522,7 @@
 		DF5F3E7D2D95BECF00245C20 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				DFE4330B2DFAB56300D2E9EA /* Onboarding */,
 				DF0E47ED2DE5A6C4009569C6 /* Members */,
 				DF6BBA182D972048002A344F /* Login */,
 				DF2AE6142DB218E4007779D9 /* Group */,
@@ -636,7 +636,7 @@
 		DF947FC72DBE304E00D1E2FD /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				DFA140C82DF3FF1A001EE9BF /* NicknameChange */,
+				DFE433082DFAB55A00D2E9EA /* NicknameChange */,
 				DF437C152DE6DBA800B1DFB9 /* Setting */,
 				DF437C0D2DE6DB4700B1DFB9 /* ViewModel */,
 				DF437C0E2DE6DB4A00B1DFB9 /* View */,
@@ -726,6 +726,22 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
+		DFE433082DFAB55A00D2E9EA /* NicknameChange */ = {
+			isa = PBXGroup;
+			children = (
+				DFE433072DFAB55A00D2E9EA /* NicknameChangeViewController.swift */,
+			);
+			path = NicknameChange;
+			sourceTree = "<group>";
+		};
+		DFE4330B2DFAB56300D2E9EA /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				DFE4330A2DFAB56300D2E9EA /* Onboarding.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
 		DFF1CBD72DBA8A5E00722B04 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -759,9 +775,6 @@
 			);
 			dependencies = (
 				DF668DC22DF80C3100EC2FAB /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				DFA140C82DF3FF1A001EE9BF /* NicknameChange */,
 			);
 			name = Haruhancut;
 			packageProductDependencies = (
@@ -922,6 +935,7 @@
 				DF3CBB4F2DA814F100AD5788 /* LoginUsecase.swift in Sources */,
 				DF0E47E12DE58FD2009569C6 /* Rx+.swift in Sources */,
 				DF2AE60A2DB218A7007779D9 /* HomeViewController.swift in Sources */,
+				DFE433092DFAB55A00D2E9EA /* NicknameChangeViewController.swift in Sources */,
 				DF4962C12DACD6840001437B /* FontSystem.swift in Sources */,
 				DF3502E32DB36BBF002C1269 /* ButtonSystem.swift in Sources */,
 				DF055ADE2DDDB07B00D7CB56 /* FirebaseStorageManager.swift in Sources */,
@@ -931,6 +945,7 @@
 				DF590B682DAB8D9F00956E54 /* FirebaseAuthManager.swift in Sources */,
 				DF590B6A2DAB926600956E54 /* FirebaseError.swift in Sources */,
 				DF8603512DB00CFF008ADB69 /* UserDefaultsManager.swift in Sources */,
+				DFE4330C2DFAB56300D2E9EA /* Onboarding.swift in Sources */,
 				DFD757AA2D9C2A74008C82DF /* DIContainer.swift in Sources */,
 				DFF1CBD82DBA8A5E00722B04 /* GroupViewModel.swift in Sources */,
 				DF947FCE2DBE30A400D1E2FD /* CameraViewModel.swift in Sources */,

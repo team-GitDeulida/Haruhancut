@@ -117,21 +117,25 @@ struct PhotoWIdgetView: View {
     ]
     
     var body: some View {
-        if let data = entry.imageData, let ui = UIImage(data: data) {
-            Image(uiImage: ui)
+        if let data = entry.imageData,
+            let original = UIImage(data: data),
+            let resized = original.resized(to: CGSize(width: 200, height: 200))
+        {
+            Image(uiImage: resized)
                 .resizable()
                 .scaledToFill()
                 .widgetURL(URL(string: "myapp://photo/\(entry.date.timeIntervalSince1970)"))
                 .widgetBackground(.clear)
         } else {
+            Color.black
+                .widgetBackground(.clear)
             // 사진이 없으면 플레이스홀더
-            Image("placeholder")
-                .resizable()
-                .scaledToFill()
-                .widgetBackground(.black)
+//            Image(systemName: "progress.indicator")
+//                .resizable()
+//                .scaledToFill()
+//                .widgetBackground(.black)
         }
     }
-
 }
 
 // 5) @main 진입점: StaticConfiguration으로 선언
@@ -179,4 +183,13 @@ extension DateFormatter {
         df.dateFormat = "yyyy-MM-dd"
         return df
     }()
+}
+
+extension UIImage {
+    func resized(to: CGSize) -> UIImage? {
+        let renderer = UIGraphicsImageRenderer(size: to)
+        return renderer.image { _ in
+            self.draw(in: CGRect(origin: .zero, size: to))
+        }
+    }
 }

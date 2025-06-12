@@ -442,14 +442,15 @@ final class MembersViewController: UIViewController {
     
     private func shareInvitation(inviteCode: String) {
         // 1) 초대 메시지
+        let inviteURL = "https://www.notion.so/210db9e736cf80d4b3a8c7e077e6325f?source=copy_link"
         let message = """
 우리 가족 그룹에 초대할게요!
 초대코드: \(inviteCode)
+앱이 궁금하다면 👉 
+\(inviteURL)
 """
-        let inviteURL = "https://www.naver.com"
-        
         // 2) UIActivityViewController 생성
-        let items: [Any] = [message, inviteURL]
+        let items: [Any] = [message]
         let activityVC = UIActivityViewController(activityItems: items, applicationActivities: nil)
         
         // 3) iPad 대응(팝오버 위치)
@@ -523,7 +524,7 @@ final class AddMemberCircleView: UIView {
             hStack.bottomAnchor.constraint(equalTo: bottomAnchor),
             
             // circle 크기
-            circleView.widthAnchor.constraint(equalToConstant: 60),
+            circleView.widthAnchor.constraint(equalToConstant: 60.scaled),
             circleView.heightAnchor.constraint(equalTo: circleView.widthAnchor),
             
             // plusImage 중앙

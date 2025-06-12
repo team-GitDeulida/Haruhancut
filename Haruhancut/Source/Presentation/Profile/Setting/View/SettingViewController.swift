@@ -25,7 +25,8 @@ final class SettingViewController: UIViewController {
         ]),
           SettingSection(header: "정보", options: [
             .version(title: "버전 정보", detail: "\(appVersion)"),
-            .privacyPolicy(title: "개인정보처리방침")
+            .privacyPolicy(title: "개인정보처리방침"),
+            .announce(title: "공지사항")
           ]),
           SettingSection(header: "계정 관리", options: [
             .withdraw(title: "회원 탈퇴")
@@ -54,7 +55,7 @@ final class SettingViewController: UIViewController {
         tv.register(SettingCell.self, forCellReuseIdentifier: "SettingCell")
         tv.dataSource = self
         tv.delegate = self
-        tv.rowHeight = 50
+        tv.rowHeight = 40
         tv.separatorStyle = .none
         return tv
     }()
@@ -156,7 +157,11 @@ final class SettingViewController: UIViewController {
                 case .version:
                     print("버전 정보 보기")
                 case .privacyPolicy:
-                    guard let url = URL(string: "https://ray-the-pioneer.notion.site/1f0dcbdd5d934735b81a590398f8e70d?pvs=4") else { return }
+                    guard let url = URL(string: "https://www.notion.so/210db9e736cf81bca378c1c8a69a35f1?source=copy_link") else { return }
+                    let safariVC = SFSafariViewController(url: url)
+                    self.present(safariVC, animated: true)
+                case .announce:
+                    guard let url = URL(string: "https://www.notion.so/210db9e736cf8197bb31dbb71ed7a39c?source=copy_link") else { return }
                     let safariVC = SFSafariViewController(url: url)
                     self.present(safariVC, animated: true)
                 case .logout:
@@ -323,6 +328,7 @@ enum SettingOption {
     case toggle(title: String, isOn: Bool)        // 알림 설정 같은 토글
     case version(title: String, detail: String)   // 버전 정보
     case privacyPolicy(title: String)             // 개인정보처리방침
+    case announce(title: String)                  // 공지사항
     case logout(title: String)                    // 로그아웃
     case withdraw(title: String)                  // 회원 탈퇴
 
@@ -332,6 +338,7 @@ enum SettingOption {
         case let .toggle(title, _),
              let .version(title, _),
              let .privacyPolicy(title),
+             let .announce(title),
              let .logout(title),
              let .withdraw(title):
             return title
