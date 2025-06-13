@@ -68,15 +68,44 @@ final class AppCoordinator: Coordinator {
         }
     }
     
+    
     /// protocol
     func start() {
         print("AppCoordinator - start()")
+        checkAppVersionIfNeeded()
+        
         if isLoggedIn {
             startHomeCoordinator()
         } else {
             startLoginFlowCoordinator()
         }
     }
+    
+    // MARK: - 버전 확인
+    private func checkAppVersionIfNeeded() {
+        VersionManager.shared.checkForAppUpdates(bundleId: Bundle.main.bundleIdentifier ?? "") { [weak self] needsUpdate, latestVersion in
+            guard needsUpdate, let latest = latestVersion else { return }
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                
+                // 현재 화면의 topViewController를 가져와서 present
+                if let topVC = self.navigationController.topViewController {
+                    let alert = UIAlertController(
+                        title: "업데이트 알림",
+                        message: "최신 버전(\(latest))이 출시되었습니다. 앱스토어에서 업데이트 해주세요.",
+                        preferredStyle: .alert
+                    )
+                    alert.addAction(UIAlertAction(title: "업데이트", style: .default) { _ in
+                        if let url = URL(string: Constants.Appstore.appstoreURL) {
+                            UIApplication.shared.open(url)
+                        }
+                    })
+                    topVC.present(alert, animated: true)
+                }
+            }
+        }
+    }
+
     
     func startLoginFlowCoordinator() {
         let coordinator = LoginFlowCoordinator(navigationController: navigationController,

@@ -214,7 +214,7 @@ final class SettingViewController: UIViewController {
     func showNotificationPermissionAlert() {
         let alert = UIAlertController(
             title: "알림이 비활성화되어 있어요",
-            message: "알림을 받으려면 설정에서 권한을 허용해주세요.",
+            message: "알림을 받으려면 설정 > 하루한컷에서 접근 권한을 허용해주세요.",
             preferredStyle: .alert
         )
         alert.addAction(UIAlertAction(title: "설정으로 이동", style: .default, handler: { _ in

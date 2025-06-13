@@ -45,7 +45,8 @@ platform :ios do
       scheme: "Haruhancut",
       export_options: {
         provisioningProfiles: {
-          "com.indextrown.Haruhancut" => "match AppStore com.indextrown.Haruhancut"
+          "com.indextrown.Haruhancut" => "match AppStore com.indextrown.Haruhancut",
+          "com.indextrown.Haruhancut.WidgetExtension" => "match AppStore com.indextrown.Haruhancut.WidgetExtension"
         }
       }
     )

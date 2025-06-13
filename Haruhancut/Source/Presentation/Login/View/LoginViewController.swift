@@ -111,6 +111,12 @@ final class LoginViewController: UIViewController {
         // UserDefaults.standard.set(false, forKey: "Tutorial")
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+//        checkVersion()
+    }
+
+    
     private func checkTutorialStatus() {
         let userDefaults = UserDefaults.standard
         let hasCompletedTutorial = userDefaults.bool(forKey: "Tutorial")
@@ -199,6 +205,28 @@ final class LoginViewController: UIViewController {
                 }
             }.disposed(by: disposeBag)
     }
+    
+//    // MARK: - 버전 확인
+//    private func checkVersion() {
+//        VersionManager.shared.checkForAppUpdates(bundleId: Bundle.main.bundleIdentifier ?? "") { needsUpdate, latestVersion in
+//                DispatchQueue.main.async {
+//                    if needsUpdate, let latest = latestVersion {
+//                        let alert = UIAlertController(
+//                            title: "업데이트 알림",
+//                            message: "최신 버전(\(latest))이 출시되었습니다. 앱스토어에서 업데이트 해주세요.",
+//                            preferredStyle: .alert
+//                        )
+//                        alert.addAction(UIAlertAction(title: "업데이트", style: .default) { _ in
+//                            if let url = URL(string: Constants.Appstore.appstoreURL) {
+//                                UIApplication.shared.open(url)
+//                            }
+//                        })
+//                        // alert.addAction(UIAlertAction(title: "나중에", style: .cancel))
+//                        self.present(alert, animated: true)
+//                    }
+//                }
+//            }
+//    }
     
     /// 앱 실행 직후 or 유저 정보가 변할 때
 //    private func observeUserState() {

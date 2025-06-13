@@ -26,6 +26,8 @@
 		DF3502E32DB36BBF002C1269 /* ButtonSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3502E22DB36BBF002C1269 /* ButtonSystem.swift */; };
 		DF35040E2DB388B8002C1269 /* TextFieldSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF35040D2DB388B8002C1269 /* TextFieldSystem.swift */; };
 		DF3504102DB39892002C1269 /* LabelSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF35040F2DB39892002C1269 /* LabelSystem.swift */; };
+		DF38522F2DFC007D00E05B8B /* VersionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF38522E2DFC007D00E05B8B /* VersionManager.swift */; };
+		DF3852322DFC03F500E05B8B /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3852312DFC03F500E05B8B /* Constant.swift */; };
 		DF3CBA1D2DA8079600AD5788 /* KakaoLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBA1C2DA8079600AD5788 /* KakaoLoginManager.swift */; };
 		DF3CBB492DA809DB00AD5788 /* LoginRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBB482DA809DB00AD5788 /* LoginRepository.swift */; };
 		DF3CBB4D2DA80A6800AD5788 /* LoginRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CBB4C2DA80A6800AD5788 /* LoginRepositoryProtocol.swift */; };
@@ -62,7 +64,6 @@
 		DF590B662DAB843F00956E54 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DF590B652DAB843F00956E54 /* GoogleService-Info.plist */; };
 		DF590B682DAB8D9F00956E54 /* FirebaseAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF590B672DAB8D9F00956E54 /* FirebaseAuthManager.swift */; };
 		DF590B6A2DAB926600956E54 /* FirebaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF590B692DAB926600956E54 /* FirebaseError.swift */; };
-		DF5F3E5E2D95BE7000245C20 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF5F3E5A2D95BE7000245C20 /* ViewController.swift */; };
 		DF5F3E8E2D95C47400245C20 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DF5F3E8A2D95C47400245C20 /* Assets.xcassets */; };
 		DF5F3E8F2D95C47400245C20 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF5F3E8C2D95C47400245C20 /* LaunchScreen.storyboard */; };
 		DF5F3E932D95C47700245C20 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF5F3E902D95C47700245C20 /* AppDelegate.swift */; };
@@ -155,6 +156,8 @@
 		DF3502E22DB36BBF002C1269 /* ButtonSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonSystem.swift; sourceTree = "<group>"; };
 		DF35040D2DB388B8002C1269 /* TextFieldSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldSystem.swift; sourceTree = "<group>"; };
 		DF35040F2DB39892002C1269 /* LabelSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelSystem.swift; sourceTree = "<group>"; };
+		DF38522E2DFC007D00E05B8B /* VersionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionManager.swift; sourceTree = "<group>"; };
+		DF3852312DFC03F500E05B8B /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		DF3CBA1C2DA8079600AD5788 /* KakaoLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginManager.swift; sourceTree = "<group>"; };
 		DF3CBB482DA809DB00AD5788 /* LoginRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRepository.swift; sourceTree = "<group>"; };
 		DF3CBB4C2DA80A6800AD5788 /* LoginRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRepositoryProtocol.swift; sourceTree = "<group>"; };
@@ -192,7 +195,6 @@
 		DF590B672DAB8D9F00956E54 /* FirebaseAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthManager.swift; sourceTree = "<group>"; };
 		DF590B692DAB926600956E54 /* FirebaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseError.swift; sourceTree = "<group>"; };
 		DF5F3E572D95BE7000245C20 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DF5F3E5A2D95BE7000245C20 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		DF5F3E8A2D95C47400245C20 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DF5F3E8B2D95C47400245C20 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DF5F3E902D95C47700245C20 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -480,7 +482,6 @@
 				DF9AEF162DA422A400466CC6 /* Config.xcconfig */,
 				DF5F3E8D2D95C47400245C20 /* Resource */,
 				DF5F3E7F2D95BECF00245C20 /* Source */,
-				DF5F3E5A2D95BE7000245C20 /* ViewController.swift */,
 				DF5F3E572D95BE7000245C20 /* Info.plist */,
 			);
 			path = Haruhancut;
@@ -558,6 +559,7 @@
 		DF5F3E852D95C11B00245C20 /* Constant */ = {
 			isa = PBXGroup;
 			children = (
+				DF3852312DFC03F500E05B8B /* Constant.swift */,
 			);
 			path = Constant;
 			sourceTree = "<group>";
@@ -713,6 +715,7 @@
 			children = (
 				DFDDEABB2DDF659400408C27 /* AlarmManager.swift */,
 				DF6CCDA12DF83EAD00A299A7 /* PahtoWidgetManager.swift */,
+				DF38522E2DFC007D00E05B8B /* VersionManager.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -910,6 +913,8 @@
 				DF437C192DE6DBC600B1DFB9 /* SettingViewController.swift in Sources */,
 				DF437C1A2DE6DBC600B1DFB9 /* SettingViewModel.swift in Sources */,
 				DF947FC82DBE304E00D1E2FD /* ProfileViewController.swift in Sources */,
+				DF3852322DFC03F500E05B8B /* Constant.swift in Sources */,
+				DF38522F2DFC007D00E05B8B /* VersionManager.swift in Sources */,
 				DF3D258F2DED7B1800C68534 /* UICollectionViewFlowLayout+.swift in Sources */,
 				DF947FC92DBE304E00D1E2FD /* ProfileViewModel.swift in Sources */,
 				DF4B5BA62DAEBAD300A7ADD7 /* LoginViewModel.swift in Sources */,
@@ -929,7 +934,6 @@
 				DF57A93F2DF1506900D9535E /* RectangleCalendarCell.swift in Sources */,
 				DF4962C72DACD96F0001437B /* UIColor+.swift in Sources */,
 				DF055ADC2DDDA1A900D7CB56 /* ImageUploadViewController.swift in Sources */,
-				DF5F3E5E2D95BE7000245C20 /* ViewController.swift in Sources */,
 				DF4B72352DEFFECF009AB12A /* FeedViewController.swift in Sources */,
 				DF3D258A2DED7A7500C68534 /* SegmentedControlSystem.swift in Sources */,
 				DF3CBB4F2DA814F100AD5788 /* LoginUsecase.swift in Sources */,
@@ -1014,7 +1018,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 49;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LGX4B4WC66;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1033,7 +1037,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.indextrown.Haruhancut;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1058,7 +1062,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 49;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LGX4B4WC66;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1077,7 +1081,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.indextrown.Haruhancut;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1222,7 +1226,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 49;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LGX4B4WC66;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1235,7 +1239,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.indextrown.Haruhancut.WidgetExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1259,7 +1263,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 49;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LGX4B4WC66;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1272,7 +1276,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.indextrown.Haruhancut.WidgetExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

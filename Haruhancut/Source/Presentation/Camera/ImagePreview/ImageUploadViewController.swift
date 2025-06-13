@@ -93,12 +93,20 @@ final class ImageUploadViewController: UIViewController {
     }
     
     @objc private func uploadAndBackToHome() {
+        
+        // 버튼 비활성화
+        uploadButton.isEnabled = false
+        uploadButton.alpha = 0.5
+        
         homeViewModel.uploadPost(image: image)
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] success in
-                self?.coordinator?.backToHome()
+                guard let self = self else { return }
+                self.coordinator?.backToHome()
                 if success {
                     print("✅ 업로드 성공 - 홈 이동")
+                    self.uploadButton.isEnabled = true
+                    self.uploadButton.alpha = 1.0
                 } else {
                     print("❌ 업로드 실패")
                 }

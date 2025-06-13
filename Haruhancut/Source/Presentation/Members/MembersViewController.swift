@@ -446,8 +446,12 @@ final class MembersViewController: UIViewController {
         let message = """
 우리 가족 그룹에 초대할게요!
 초대코드: \(inviteCode)
+
 앱이 궁금하다면 👉 
 \(inviteURL)
+
+앱 설치하기 🍎
+\(Constants.Appstore.appstoreURL)
 """
         // 2) UIActivityViewController 생성
         let items: [Any] = [message]

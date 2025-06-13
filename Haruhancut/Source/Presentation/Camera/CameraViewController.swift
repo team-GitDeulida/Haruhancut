@@ -280,6 +280,8 @@ import AVFoundation
 final class CameraViewController: UIViewController {
     
     weak var coordinator: HomeCoordinator?
+    
+    // MARK: - 업ㅋ
 
     // private let cameraViewModel = CameraViewModel()
     private var captureSession: AVCaptureSession?               // 카메라 세션 객체
@@ -364,6 +366,28 @@ final class CameraViewController: UIViewController {
     
     // MARK: - 카메라 설정
     private func setupCamera() {
+        
+        // 0. 권한 체크
+        switch AVCaptureDevice.authorizationStatus(for: .video) {
+        case .authorized:
+            break
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in
+                if granted {
+                    self?.setupCamera() // 다시 시도
+                } else {
+                    DispatchQueue.main.async {
+                        self?.showCameraPermissionAlert()
+                    }
+                }
+            }
+        default:
+            DispatchQueue.main.async {
+                self.showCameraPermissionAlert()
+            }
+            return
+        }
+        
         // 1. 세션 설정
         let session = AVCaptureSession()
         session.sessionPreset = .photo // 고해상도 사진 모드
@@ -429,6 +453,25 @@ final class CameraViewController: UIViewController {
         if previewLayer?.frame != cameraView.bounds {
             previewLayer?.frame = cameraView.bounds
         }
+    }
+    
+    // MARK: - 알람
+    private func showCameraPermissionAlert() {
+        
+        /// 설정창으로 이동
+        let settingsAction = UIAlertAction(title: "설정으로 이동", style: .default) { _ in
+            if let url = URL(string: UIApplication.openSettingsURLString),
+               UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url)
+            }
+        }
+        
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel)
+        
+        AlertManager.showAlert(on: self,
+                               title: "카메라 접근 권한 필요",
+                               message: "카메라를 사용하려면 설정 > 하루한컷에서 접근 권한을 허용해주세요.",
+                               actions: [cancelAction, settingsAction])
     }
 }
 
